@@ -32,7 +32,8 @@ const routes = [
       {
         path: '/theme/typography',
         name: 'Typography',
-        component: () => import('@/views/theme/Typography.vue'),
+        component: () =>
+          import('@/views/dictionary/Building/BuildingDictionary.vue'),
       },
       {
         path: '/base',

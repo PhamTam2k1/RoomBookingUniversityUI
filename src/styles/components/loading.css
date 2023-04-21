@@ -1,0 +1,35 @@
+.t-loading {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: -115px;
+  left: 0;
+  z-index: 100000000;
+  background-color: #0000004f;
+  display: none;
+}
+.show-loading {
+  display: block !important;
+}
+
+.t-loader {
+  position: absolute;
+  top: calc(55% - 50px);
+  left: 50%;
+  /* transform: translate(-50%, -50%); */
+  width: 45px;
+  height: 45px;
+  border: none;
+  background: transparent url("../../assets/images/loading.svg") no-repeat center;
+  background-size: 100%;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+
+
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

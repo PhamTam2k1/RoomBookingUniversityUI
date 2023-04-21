@@ -1,0 +1,147 @@
+
+.el-input__prefix-inner>:last-child {
+  margin-right: 0px !important;
+}
+.el-input__wrapper {
+  border-radius: 2px!important;
+  border: 1px solid #babec5;
+  flex-direction: row-reverse;
+   display: inline-flex; 
+   flex-grow: 1; 
+   align-items: center; 
+  justify-content: center;
+  padding: 1px 4px 1px 9px;
+  box-shadow: none;
+}
+.el-input__wrapper:hover {
+  box-shadow: none;
+}
+.el-picker-panel__icon-btn:hover {
+  color: #099DDC !important;
+}
+.el-date-table td.today .el-date-table-cell__text {
+  color:  #099DDC !important;
+ font-family: Notosans Bold;
+}
+.el-date-table td .el-date-table-cell .el-date-table-cell__text {
+  font-size: 14px;
+
+}
+.el-date-table th {
+  padding: 5px;
+  font-size: 12px;
+  color: #099DDC !important;
+  font-weight: 1000;
+  border-bottom: solid 1px var(--el-border-color-lighter);
+  font-family: Notosans Bold;
+}
+.el-date-picker__header-label {
+  font-size: 15px;
+  font-family: 'NOTOSANS BOLD';
+  color:  #099DDC !important;
+}
+.el-date-table td.current:not(.disabled) .el-date-table-cell__text {
+  color: #fff !important;
+  font-weight: 700;
+  background-color: #099DDC !important;
+}
+.el-date-picker__prev-btn {
+  float: left;
+  font-size: 20px;
+
+}
+.el-picker-panel__icon-btn {
+  font-size: 14px;
+  color: #099DDC !important;
+  border: 0;
+  background: 0 0;
+  cursor: pointer;
+  outline: 0;
+  margin-top: 4px !important;
+}
+.el-icon {
+  height: 1.5em !important;
+  width: 1.5em !important;
+}
+.el-icon svg{
+  height: 1.5em !important;
+  width: 1.5em !important;
+}
+.el-date-table td {
+
+  padding: 0px !important;
+
+}
+.el-date-picker__header {
+  margin: 12px 25px;
+ 
+}
+.el-date-table td.available:hover {
+  color: #099DDC !important;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__wrapper {
+  width: 166px !important;
+  height: var(--el-input-height,var(--el-component-size));
+}
+
+.el-input__suffix-inner {
+  pointer-events: all;
+  display: none !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-input__wrapper.is-focus{
+  border: 1px solid #099DDC;
+  box-shadow: none
+  ;
+}
+.el-input__wrapper {
+  padding: 6px 1px 4px 11px !important;
+  height: 34px;
+   /* border: none !important; */
+}
+::placeholder {
+  font-style: italic;
+}
+span.el-input__prefix:hover {
+  background-color: #ddd;
+  padding-left: 0px;
+  height: 30px;
+  width: 32px;
+  margin-bottom: 2px;
+}
+.el-input__prefix-inner {
+  pointer-events: all;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 3px;
+}
+
+.el-input__prefix {
+
+  width: 32px;
+  height: 32px;
+
+}
+.el-input__prefix-inner>:first-child, .el-input__prefix-inner>:first-child.el-input__icon {
+  margin-left: 5px !important; 
+  margin-bottom: 5px !important;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__wrapper {
+
+  /* border: 1px solid #bbb; */
+  border-radius: 2px;
+
+}
+
+.el-input.error .el-input__wrapper{
+  border: 1px solid #ff4747;
+}
+.el-input__inner{
+  font-size: 13px !important;
+  font-family: Notosans !important;
+  margin-bottom: 2px;
+  color: #111 !important;
+}

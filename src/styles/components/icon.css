@@ -1,0 +1,133 @@
+.misa-icon {
+    background: url(../../assets/images/Icon.de5bb0db.svg);
+    cursor: pointer;
+}
+
+.misa-icon-navbar {
+    background: url(../../assets/images/Icon_process.2df8445b.svg);
+    cursor: pointer;
+}
+.icon-pttam{
+    background: url(../../assets/images/Sprites.64af8f61.svg);
+    cursor: pointer;
+
+}
+.misa-icon-24 {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+}
+
+.misa-icon-16 {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+.misa-icon-8 {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    min-height: 8px;
+}
+
+.misa-icon-notice {
+    background-position: -454px -173px;
+    transform: scale(2);
+}
+
+.misa-icon-search {
+    background-position: -192px 0;
+}
+
+.misa-icon-plus-white {
+    background-position: -240px 0;
+
+}
+
+.misa-select-box {
+    background-position: -144px -24px;
+}
+
+
+.misa-icon-user {
+    background-position: -336px -48px;
+}
+
+.misa-icon-protect {
+    background-position: -48px -72px;
+}
+
+.misa-icon-multiple-user {
+    background-position: -72px -24px;
+}
+
+.misa-icon-share-link {
+    background-position: -96px -72px;
+}
+
+.misa-icon-run-process {
+    background-position: -141px -99px;
+}
+
+.misa-icon-pencil {
+    background-position: -216px 0;
+}
+
+.misa-icon-delete-custom {
+    background-position: -264px -3px;
+    filter: invert(51%) sepia(217%) saturate(154%) hue-rotate(1397deg) brightness(85%) contrast(525%);
+
+}
+
+.misa-icon-dropdown {
+    background-position: -144px -24px;
+    height: 20px !important;
+}
+
+.misa-chevron-left {
+    background-position: -72px -24px;
+
+}
+
+.misa-icon-check {
+    background-position: -48px -99px;
+
+    filter: invert(52%) sepia(89%) saturate(505%) hue-rotate(1244deg) brightness(84%) contrast(86%) !important;
+
+}
+
+.misa-icon-close {
+    background-position: -216px -24px;
+}
+
+.misa-icon-setting {
+    background-position: -264px -144px;
+    
+}
+
+.misa-icon-close-2 {
+    background-position: -153px -251px;
+}
+
+.misa-icon-plus {
+    background-position: -168px 0;
+    filter: invert(52%) sepia(89%) saturate(505%) hue-rotate(1244deg) brightness(84%) contrast(86%);
+    transform: scale(0.75);
+}
+
+.misa-icon-change-data {
+    background-position: -2px -27px;
+    filter: invert(52%) sepia(89%) saturate(505%) hue-rotate(1244deg) brightness(84%) contrast(86%);
+    transform: scale(1.5);
+}
+.icon-approve{
+    background-position:-1602px -258px;;
+   
+}
+.icon-reject{
+    background-position: -1189px -515px;
+    filter: invert(30%) sepia(217%) saturate(154%) hue-rotate(1397deg) brightness(85%) contrast(525%);
+}

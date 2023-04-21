@@ -1,0 +1,47 @@
+.misa-icon-style {
+    height: 32px;
+    width: 32px;
+    margin-left: 8px;
+    border-radius: 50%;
+    padding-top: 4.5px;
+    padding-left: 4px;
+    box-sizing: border-box;
+}
+
+.misa-icon-style:hover {
+    background-color: #dadce3;
+}
+
+.misa-cell-avatar-color {
+    text-transform: uppercase;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    padding-top: 6px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: bolder;
+    margin-right: 8px;
+    text-align: center;
+    min-width: 32px;
+    min-height: 32px;
+
+}
+
+.misa-full-name-avatar-table.flex {
+    align-items: center;
+}
+
+.misa-cell-active-color {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    margin-top: 5px;
+}
+
+.wrap-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

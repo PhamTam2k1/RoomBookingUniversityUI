@@ -1,0 +1,12 @@
+.el-message {
+
+    --el-message-width: 200px !important;
+    --el-message-padding: none !important;
+    font-weight: normal !important;
+    margin-top: -45.5%;
+    margin-left: 50%;
+display: flex;
+    z-index: 100000 !important
+
+}
+/*  */

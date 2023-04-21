@@ -1,0 +1,64 @@
+.misa-input-wrap {
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 3.5px;
+  background: #fff;
+  min-height: 36px;
+  align-items: center;
+  overflow: hidden;
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.misa-input-wrap .misa-input {
+  height: 100%;
+  border-radius: 4px;
+  border: none;
+  color: #000000;
+  padding: 0 12px 0px 44px;
+  outline: unset;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.misa-input {
+  height: 36px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  color: #000000;
+  padding: 0 12px;
+  outline: unset;
+  box-sizing: border-box;
+}
+
+.misa-input::placeholder {
+  color: var(--text-placeholder-color);
+}
+
+.misa-input-wrap:hover,
+.misa-input-secondary .misa-input:hover {
+  border: 1px solid var(--input-hover-border-color);
+}
+.misa-input-required .misa-input:hover {
+  border: 1px solid #ff4747;
+}
+.misa-input-wrap:focus-within,
+.misa-input-secondary .misa-input:focus-within {
+  border: 1px solid var(--input-active-border-color);
+}
+
+.misa-input-wrap .misa-icon {
+  position: absolute;
+  left: 0px;
+  margin-left: 8px;
+  border: none;
+  background-color: unset;
+  filter: invert(52%) sepia(5%) saturate(480%) hue-rotate(1217deg)
+    brightness(131%) contrast(99%);
+}
+.misa-input-required .misa-input {
+  border: 1px solid #f7453b;
+}
