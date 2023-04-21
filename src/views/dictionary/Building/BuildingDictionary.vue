@@ -339,7 +339,7 @@ export default {
   },
   computed: {
     ...mapState({
-      roleOption: (state) => state.auth.roleOption,
+      // roleOption: (state) => state.auth.roleOption,
     }),
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
