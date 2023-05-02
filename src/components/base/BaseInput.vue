@@ -8,13 +8,13 @@
     <div class="lable-input t-title-lable flex" v-if="lable">
       {{ lable }}
       <div v-if="required" :class="{ requiredField: required }">
-        <span class="t-required"> &nbsp;(*)</span>
+        <span class="t-required"> &nbsp;*</span>
       </div>
     </div>
     <slot></slot>
     <input
       ref="input"
-      type="text"
+      :type="type"
       :class="classInput"
       :placeholder="placeholder"
       :value="modelValue"
@@ -75,6 +75,11 @@ export default {
     isCapitaLable: {
       type: Boolean,
       default: false,
+    },
+    type: {
+      type: [String, Number],
+      default: 'text',
+      validator: (value) => ['text', 'number'].includes(value),
     },
   },
   data() {
@@ -157,9 +162,9 @@ export default {
   color: #ff4747;
 }
 
-.misa-input {
+/* .misa-input {
   width: 70%;
-}
+} */
 .lable-input {
   width: 30%;
   padding-top: 5px;

@@ -209,9 +209,6 @@ export default {
   color: #ff4747;
 }
 
-.drop-down-utc {
-  width: 70%;
-}
 .lable-input {
   font-size: 14px;
   width: 30%;

@@ -11,14 +11,16 @@
         <CIcon icon="cil-user" /> Thông tin tài khoản
       </CDropdownItem>
       <CDropdownItem> <CIcon icon="cil-settings" /> Thiết lập </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-pencil" /> Đổi mật khẩu </CDropdownItem>
+      <CDropdownItem @click="handleChangePass">
+        <CIcon icon="cil-pencil" /> Đổi mật khẩu
+      </CDropdownItem>
       <!-- <CDropdownItem>
         <CIcon icon="cil-dollar" /> Payments
         <CBadge color="secondary" class="ms-auto">{{ itemsCount }}</CBadge>
       </CDropdownItem> -->
 
       <CDropdownDivider />
-      <CDropdownItem>
+      <CDropdownItem @click="handleLogout">
         <CIcon icon="cil-lock-locked" /> Đăng xuất
       </CDropdownItem>
     </CDropdownMenu>
@@ -34,6 +36,12 @@ export default {
       avatar: avatar,
       itemsCount: 42,
     }
+  },
+  methods: {
+    handleChangePass() {
+      alert('changePass')
+    },
+    handleLogout() {},
   },
 }
 </script>
