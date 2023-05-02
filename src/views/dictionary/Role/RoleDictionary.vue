@@ -66,12 +66,12 @@
     <!-- End popup detail -->
     <!-- Begin popup delete -->
     <DeleteRolePopup
-      @onClickClosePopup="onClickClosePopup"
-      @onLoadData="getData()"
-      @onShowLoading="showLoading(true)"
-      @onHideLoading="showLoading(false)"
-      :popupMode="dataComponent.popupMode"
-      v-if="dataComponent.popupMode == Enum.PopupMode.DeleteMode"
+    @onClickClosePopup="onClickClosePopup"
+    @onLoadData="getData()"
+    @onShowLoading="showLoading(true)"
+    @onHideLoading="showLoading(false)"
+    :popupMode="dataComponent.popupMode"
+    v-if="dataComponent.popupMode == Enum.PopupMode.DeleteMode"
       :roleData="JSON.parse(JSON.stringify(dataComponent.roleData))"
     />
     <!-- End popup delete -->
@@ -80,18 +80,18 @@
   <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>
 </template>
 <script>
-import BasePaging from '@/components/base/BasePaging.vue'
-import BaseCellTemplace from '@/components/base/BaseCellTemplace.vue'
-import BaseTable from '@/components/base/BaseTable.vue'
-import Enum from '@/commons/Enum'
-import { DxButton } from 'devextreme-vue/button'
-import { reactive } from 'vue'
-import { mapState } from 'vuex'
-import BuidingDictionaryDetail from '../Role/RoleDictionaryDetailPopup.vue'
-import RoleApi from '@/apis/RoleApi'
-import DeleteRolePopup from '../Role/DeleteRolePopup.vue'
-import DxTextBox from 'devextreme-vue/text-box'
-import BaseLoading from '@/components/base/BaseLoading.vue'
+import BasePaging from "@/components/base/BasePaging.vue";
+import BaseCellTemplace from "@/components/base/BaseCellTemplace.vue";
+import BaseTable from "@/components/base/BaseTable.vue";
+import Enum from "@/commons/Enum";
+import { DxButton } from "devextreme-vue/button";
+import { reactive } from "vue";
+import { mapState } from "vuex";
+import BuidingDictionaryDetail from "../Role/RoleDictionaryDetailPopup.vue";
+import RoleApi from "@/apis/RoleApi";
+import DeleteRolePopup from "../Role/DeleteRolePopup.vue";
+import DxTextBox from "devextreme-vue/text-box";
+import BaseLoading from "@/components/base/BaseLoading.vue";
 export default {
   components: {
     DxButton,
@@ -130,12 +130,12 @@ export default {
       /**Ẩn hiện popup thêm mới | popup sửa*/
       popupVisible: false,
 
-      message: '',
+      message: "",
 
       dataSelect: {},
 
       /**Title popup  */
-      title: '',
+      title: "",
 
       /**Ẩn hiện popup thêm mới | popup sửa*/
       deleteVisible: false,
@@ -148,17 +148,17 @@ export default {
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
       /**Biến show popup */
-      isShowForm: false,
+      isShowForm:false,
       /**Biến trạng thái popup */
-      popupMode: 0,
-    })
+      popupMode:0
+    });
     /**
-     * Hiển thị popup
+     * Hiển thị popup 
      * PTTAM
-     * @param {Boolean} isShow
+     * @param {Boolean} isShow 
      */
-    function showFormDetail(isShow) {
-      dataComponent.isShowForm = isShow
+   function showFormDetail(isShow) {
+    dataComponent.isShowForm = isShow;
     }
     /**
      * Header của table
@@ -166,29 +166,29 @@ export default {
      */
     var headerTableRole = [
       {
-        dataField: 'RoleID',
+        dataField: "RoleID",
         visible: false,
         width: 0,
       },
       {
-        dataField: 'RoleCode',
-        caption: 'Mã vai trò',
+        dataField: "RoleCode",
+        caption: "Mã vai trò",
         visible: true,
         width: 200,
       },
       {
-        dataField: 'RoleName',
-        caption: 'Tên vai trò',
+        dataField: "RoleName",
+        caption: "Tên vai trò",
         visible: true,
         width: 200,
       },
 
       {
-        dataField: '',
-        caption: '',
+        dataField: "",
+        caption: "",
         width: 50,
       },
-    ]
+    ];
 
     /** Mô tả: Hàm hiển thị popup xóa người dùng
      * @param {string} userId Mã người dùng
@@ -198,16 +198,16 @@ export default {
      */
     function onClickShowPopupDelete(id, name) {
       dataComponent.roleData = dataComponent.dataSource.find(
-        (x) => x.RoleID == id,
-      )
-      dataComponent.popupMode = Enum.PopupMode.DeleteMode // Gán lại trạng thái của popup
+        (x) => x.RoleID == id
+      );
+      dataComponent.popupMode = Enum.PopupMode.DeleteMode; // Gán lại trạng thái của popup
     }
-    /** Mô tả: ẩn popup
+      /** Mô tả: ẩn popup
      * CreatedBy: PTTAM
      * Created Date: 11-09-2022 08:22:11
      */
     function onClickClosePopup() {
-      dataComponent.popupMode = -1
+      dataComponent.popupMode = -1;
     }
 
     /**
@@ -216,7 +216,7 @@ export default {
      * @Createdby: PTTAM
      */
     function showLoading(isShow) {
-      dataComponent.isShowLoading = isShow
+      dataComponent.isShowLoading = isShow;
     }
 
     /** Mô tả: Hàm hiển thị popup sửa vai trò của người dùng
@@ -226,10 +226,10 @@ export default {
      */
     function onClickShowPopupEdit(id) {
       dataComponent.roleData = dataComponent.dataSource.find(
-        (x) => x.RoleID == id,
-      )
-      dataComponent.popupMode = Enum.PopupMode.EditMode // Gán lại trạng thái của popup
-      showFormDetail(true)
+        (x) => x.RoleID == id
+      );
+      dataComponent.popupMode = Enum.PopupMode.EditMode; // Gán lại trạng thái của popup
+      showFormDetail(true);
     }
 
     /**
@@ -238,29 +238,29 @@ export default {
      * } val
      */
     const closePopup = (val) => {
-      dataComponent.popupVisible = false
-    }
+      dataComponent.popupVisible = false;
+    };
 
     /**
      * Đóng popup delete
      */
     const closeDeletePopup = () => {
-      dataComponent.deleteVisible = false
-    }
+      dataComponent.deleteVisible = false;
+    };
 
     /**
      * sửa vai trò
      * @param {*} event
      */
     const editRole = (event) => {
-      let id = event.element.accessKey
+      let id = event.element.accessKey;
       dataComponent.roleData = dataComponent.dataSource.find(
-        (x) => x.RoleID == id,
-      )
-      dataComponent.title = 'Sửa vai trò'
-      dataComponent.isEdit = true
-      dataComponent.popupVisible = true
-    }
+        (x) => x.RoleID == id
+      );
+      dataComponent.title = "Sửa vai trò";
+      dataComponent.isEdit = true;
+      dataComponent.popupVisible = true;
+    };
 
     /**
      * lấy dữ liệu
@@ -271,53 +271,53 @@ export default {
         RoleApi.getPaging({
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
-          keyword: '',
+          keyword: "",
         }).then((res) => {
-          dataComponent.dataSource = res.data.Data || []
-          dataComponent.pageIndex = res.data.CurrentPage
-          dataComponent.startRecord = res.data.StartRecord
-          dataComponent.endRecord = res.data.EndRecord
-          dataComponent.totalRecord = res.data.TotalRecord
-          showLoading(false)
-        })
+          dataComponent.dataSource = res.data.Data || [];
+          dataComponent.pageIndex = res.data.CurrentPage;
+          dataComponent.startRecord = res.data.StartRecord;
+          dataComponent.endRecord = res.data.EndRecord;
+          dataComponent.totalRecord = res.data.TotalRecord;
+          showLoading(false);
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
 
     const deleteRole = (event) => {
-      let id = event.element.accessKey
+      let id = event.element.accessKey;
       dataComponent.roleData = dataComponent.dataSource.find(
-        (x) => x.RoleID == id,
-      )
-      dataComponent.deleteVisible = true
-    }
+        (x) => x.RoleID == id
+      );
+      dataComponent.deleteVisible = true;
+    };
 
     /**
      * Sự kiện thay đổi số bản ghi/trang
      */
     const pageSizeSelected = (size) => {
-      dataComponent.pageSize = size
-      showLoading(true)
-      getData()
-    }
+      dataComponent.pageSize = size;
+      showLoading(true);
+      getData();
+    };
 
     /**
      * Sự kiện thay đổi số trang
      */
     const currentPage = (val) => {
-      dataComponent.pageIndex = val
-      showLoading(true)
-      getData()
-    }
+      dataComponent.pageIndex = val;
+      showLoading(true);
+      getData();
+    };
 
     const addRole = () => {
-      dataComponent.title = 'Thêm mới'
-      dataComponent.roleData = {}
-      showFormDetail(true)
-      dataComponent.popupMode = Enum.PopupMode.AddMode
-      dataComponent.popupVisible = true
-    }
+      dataComponent.title = "Thêm mới";
+      dataComponent.roleData = {};
+      showFormDetail(true);
+      dataComponent.popupMode = Enum.PopupMode.AddMode;
+      dataComponent.popupVisible = true;
+    };
 
     return {
       dataComponent,
@@ -334,24 +334,24 @@ export default {
       onClickShowPopupEdit,
       showLoading,
       showFormDetail,
-      onClickClosePopup,
-    }
+      onClickClosePopup
+    };
   },
   computed: {
     ...mapState({
       roleOption: (state) => state.auth.roleOption,
     }),
-    // Đăng ký đối tượng Enum trong phạm vi của component
-    Enum() {
-      return Enum
-    },
+      // Đăng ký đối tượng Enum trong phạm vi của component
+      Enum() {
+      return Enum;
+    }
   },
   mounted() {
-    this.showLoading(true)
-    this.getData()
-    this.isAdmin = this.roleOption == Enum.RoleOption.Admin ? true : false
+    this.showLoading(true);
+    this.getData();
+    this.isAdmin = this.roleOption == Enum.RoleOption.Admin ? true : false;
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -383,7 +383,7 @@ export default {
       height: 20px;
       z-index: 1;
       margin-left: -20px;
-      background: url('@/assets/images/Icon.de5bb0db.svg') no-repeat;
+      background: url("@/assets/images/Icon.de5bb0db.svg") no-repeat;
 
       &.icon-search {
         background-position: -194px -2px;
@@ -423,3 +423,4 @@ export default {
   padding-right: 20px !important;
 }
 </style>
+  

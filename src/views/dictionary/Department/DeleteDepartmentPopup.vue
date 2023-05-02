@@ -56,6 +56,7 @@ export default {
     return {
       /**Object chứa resource */
       Resource: Resource,
+      ObjectFunction: ObjectFunction,
     }
   },
   methods: {

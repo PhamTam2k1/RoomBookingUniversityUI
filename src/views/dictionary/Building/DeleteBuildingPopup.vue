@@ -78,13 +78,17 @@ export default {
           () => {
             // toast thông báo xóa thành công
             ObjectFunction.toastMessage(
-              Resource.Messenger.DeleteSucces,
+              'Xóa tòa nhà thành công',
               Resource.Messenger.Success,
             )
             currentThis.onClickClosePopup() // đóng popup
             currentThis.$emit('onLoadData') // load lại dữ liệu
           },
           (err) => {
+            ObjectFunction.toastMessage(
+              'Xóa tòa nhà thất bại',
+              Resource.Messenger.Error,
+            )
             console.log(err)
           },
         )

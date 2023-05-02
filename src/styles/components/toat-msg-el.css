@@ -1,12 +1,115 @@
 .el-message {
-
-    --el-message-width: 200px !important;
-    --el-message-padding: none !important;
-    font-weight: normal !important;
-    margin-top: -45.5%;
-    margin-left: 50%;
-display: flex;
-    z-index: 100000 !important
-
+  --el-message-width: 200px !important;
+  --el-message-padding: none !important;
+  font-weight: normal !important;
+  padding: 10px;
+  width: 221px;
+  height: 40px;
+  padding: 0;
+  position: fixed;
+  top: 50px !important;
+  left: 0;
+  right: 0px;
+  margin: 0 auto;
+  display: flex;
 }
-/*  */
+
+.el-message--success {
+  background-color: #fff;
+  border: 1px solid #64c095 !important ;
+  border-radius: 4px;
+}
+
+.el-message .el-message-icon--success {
+  color: #2ca01c;
+  width: 34px;
+  height: 40px !important;
+  width: fit-content;
+}
+
+.el-message__content {
+  padding: 0 0px 0 9px;
+  font-size: 14px;
+  line-height: 40px;
+}
+.el-message-fade-enter-active {
+  animation: fade-in 0.3s;
+}
+
+.el-message-fade-leave-active {
+  animation: fade-out 0.3s;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+.el-message--warning {
+  --el-message-bg-color: #fff;
+  --el-message-border-color: rgb(230, 177, 61);
+  --el-message-text-color: rgb(230, 177, 61);
+  width: 380px !important;
+  min-width: 380px !important;
+}
+
+.el-message--success .el-message__content {
+  white-space: nowrap !important;
+  padding-right: 9px !important;
+}
+
+.el-message .el-message-icon--warning {
+  color: rgb(230, 177, 61);
+
+  font-size: 25px;
+}
+
+.el-message .el-icon svg {
+  height: 2em;
+}
+
+.el-message .el-message-icon--success {
+  color: var(--el-message-text-color);
+  background-color: #00c853;
+}
+
+i.el-icon.el-message__icon.el-message-icon--success svg path {
+  display: none;
+}
+
+i.el-icon.el-message__icon.el-message-icon--success svg {
+  background: url(../../assets/images/Icon.de5bb0db.svg) !important;
+  background-position: -72px -96px !important;
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
+.el-message .el-message-icon--success {
+  color: var(--el-message-text-color);
+
+  /* filter: brightness(0) invert(1); */
+}
+
+#message_1 i {
+  background-color: #00c853;
+  width: 34px;
+  height: 40px !important;
+}

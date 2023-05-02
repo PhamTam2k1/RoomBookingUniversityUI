@@ -1,8 +1,8 @@
 <template>
   <router-link :to="itemLink" class="button">
-				<span :class="itemIcon">{{ itemNameIcon }}</span>
-				<span class="text">{{itemName}}</span>
-	</router-link>
+    <span :class="itemIcon">{{ itemNameIcon }}</span>
+    <span class="text">{{ itemName }}</span>
+  </router-link>
 </template>
 
 <script>
@@ -11,23 +11,23 @@ export default {
     /**Tên của item */
     itemName: {
       type: String,
-      default: "",
+      default: '',
     },
 
     /**Icon của item */
     itemIcon: {
       type: String,
-      default: "",
+      default: '',
     },
     itemNameIcon: {
       type: String,
-      default: "",
+      default: '',
     },
     /**Link của item */
     itemLink: {
       type: String,
-      default: "",
+      default: '',
     },
   },
-};
+}
 </script>

@@ -1,31 +1,29 @@
-
 <template>
   <div class="showtime-preview">
-    <div> {{ movieData.text }}</div>
-    <div>
-      Ticket Price: <strong>{{ '$' + templateModel.targetedAppointmentData.price }}</strong>
-    </div>
-    <div>
-      <!-- {{ getFormatDate(templateModel.targetedAppointmentData.displayStartDate) }} -
-      {{ getFormatDate(templateModel.targetedAppointmentData.displayEndDate) }} -->
+    <div class="schedule-cell">
+      <div class="schedule-cell-inner" :style="{ backgroundColor: '#b2ccff' }">
+        <div class="misa-active-status-table flex">
+          <div
+            class="misa-cell-active-color"
+            :style="{
+              backgroundColor: 'blue',
+            }"
+          ></div>
+
+          <div class="misa-cell-active-text" :style="{ color: black }">
+            {{ templateModel.targetedAppointmentData.TimeSlotName }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
 // import localization from 'devextreme/localization';
-import DxButton from 'devextreme-vue/button';
-import Query from 'devextreme/data/query';
+import DxButton from 'devextreme-vue/button'
 
-import { moviesData } from '../../data/data.js';
-
-const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-const getMovieById = function(resourceId) {
-  return Query(moviesData)
-    .filter('id', resourceId)
-    .toArray()[0];
-};
+const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export default {
   components: {
@@ -34,70 +32,50 @@ export default {
   props: {
     scheduler: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
     templateModel: {
       type: Object,
-      default: () => { },
+      default: () => {},
     },
   },
   data() {
     return {
       dayOfWeekNames,
-      movieData: getMovieById(this.templateModel.targetedAppointmentData.movieId),
-    };
+    }
   },
   methods: {
     // getFormatDate(value) {
     //   return localization.formatDate(value, 'shortTime');
     // },
   },
-};
+  mounted() {
+    console.log(this.templateModel)
+  },
+}
 </script>
 <style scoped>
-  .dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
-    padding: 14px;
-  }
+.misa-full-name-avatar-table.flex {
+  align-items: center;
+}
+.misa-active-status-table {
+  height: 100%;
+}
+.misa-cell-active-color {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: 5px;
+}
+.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+  padding: 0px !important;
+}
 
-  .showtime-preview > div:first-child {
-    font-size: 12px;
-    white-space: normal;
-  }
-
-  .showtime-preview > div:not(:first-child) {
-    font-size: 11px;
-    white-space: normal;
-  }
-
-  .movie-tooltip .movie-info {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: top;
-    text-align: left;
-  }
-
-  .movie-tooltip img {
-    height: 80px;
-    margin-bottom: 10px;
-  }
-
-  .movie-tooltip .movie-title {
-    font-size: 1.5em;
-    line-height: 40px;
-  }
-
-  .long-title h3 {
-    font-family:
-      'Segoe UI Light',
-      'Helvetica Neue Light',
-      'Segoe UI',
-      'Helvetica Neue',
-      'Trebuchet MS',
-      Verdana;
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
+.schedule-cell {
+  height: 100%;
+}
+.schedule-cell-inner {
+  height: 100%;
+}
 </style>

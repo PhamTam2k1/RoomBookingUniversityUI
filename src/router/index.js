@@ -6,7 +6,7 @@ import DefaultLayout from '@/layouts/DefaultLayout'
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Trang chủ',
     component: DefaultLayout,
     redirect: '/dashboard',
     children: [
@@ -20,126 +20,92 @@ const routes = [
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
       },
       {
-        path: '/theme',
-        name: 'Theme',
-        redirect: '/theme/typography',
+        path: '/booking',
+        name: 'Booking',
+        redirect: '/booking-room',
       },
       {
-        path: '/theme/colors',
-        name: 'Colors',
-        component: () => import('@/views/theme/Colors.vue'),
+        path: '/booking/booking-room',
+        name: 'Đặt phòng',
+        component: () => import('@/views/booking/RoomBooking.vue'),
       },
       {
-        path: '/theme/typography',
-        name: 'Typography',
+        path: '/booking/booking-await',
+        name: 'Chờ duyệt',
         component: () =>
           import('@/views/dictionary/Building/BuildingDictionary.vue'),
       },
       {
-        path: '/base',
-        name: 'Base',
+        path: '/booking/booking-history',
+        name: 'Lịch sử đặt phòng',
+        component: () =>
+          import('@/views/dictionary/Building/BuildingDictionary.vue'),
+      },
+      {
+        path: '/dictionary',
+        name: 'Danh mục',
         component: {
           render() {
             return h(resolveComponent('router-view'))
           },
         },
-        redirect: '/base/breadcrumbs',
+        redirect: '/dictionary/room',
         children: [
           {
-            path: '/base/accordion',
-            name: 'Accordion',
+            path: '/dictionary/room',
+            name: 'Phòng học',
             component: () => import('@/views/base/Accordion.vue'),
           },
           {
-            path: '/base/breadcrumbs',
-            name: 'Breadcrumbs',
+            path: '/dictionary/room-type',
+            name: 'Loại phòng học',
+            component: () => import('@/views/base/Accordion.vue'),
+          },
+          {
+            path: '/dictionary/building',
+            name: 'Tòa nhà',
             component: () => import('@/views/base/Breadcrumbs.vue'),
           },
           {
-            path: '/base/cards',
-            name: 'Cards',
+            path: '/dictionary/timeslot',
+            name: 'Ca học',
             component: () => import('@/views/base/Cards.vue'),
           },
           {
-            path: '/base/carousels',
-            name: 'Carousels',
+            path: '/dictionary/equipment',
+            name: 'Thiết bị',
             component: () => import('@/views/base/Carousels.vue'),
           },
           {
-            path: '/base/collapses',
-            name: 'Collapses',
+            path: '/dictionary/equipment-type',
+            name: 'Loại thiết bị',
             component: () => import('@/views/base/Collapses.vue'),
-          },
-          {
-            path: '/base/list-groups',
-            name: 'List Groups',
-            component: () => import('@/views/base/ListGroups.vue'),
-          },
-          {
-            path: '/base/navs',
-            name: 'Navs',
-            component: () => import('@/views/base/Navs.vue'),
-          },
-          {
-            path: '/base/paginations',
-            name: 'Paginations',
-            component: () => import('@/views/base/Paginations.vue'),
-          },
-          {
-            path: '/base/placeholders',
-            name: 'Placeholders',
-            component: () => import('@/views/base/Placeholders.vue'),
-          },
-          {
-            path: '/base/popovers',
-            name: 'Popovers',
-            component: () => import('@/views/base/Popovers.vue'),
-          },
-          {
-            path: '/base/progress',
-            name: 'Progress',
-            component: () => import('@/views/base/Progress.vue'),
-          },
-          {
-            path: '/base/spinners',
-            name: 'Spinners',
-            component: () => import('@/views/base/Spinners.vue'),
-          },
-          {
-            path: '/base/tables',
-            name: 'Tables',
-            component: () => import('@/views/base/Tables.vue'),
-          },
-          {
-            path: '/base/tooltips',
-            name: 'Tooltips',
-            component: () => import('@/views/base/Tooltips.vue'),
           },
         ],
       },
       {
-        path: '/buttons',
-        name: 'Buttons',
+        path: '/dictionary',
+        name: 'Người dùng',
         component: {
           render() {
             return h(resolveComponent('router-view'))
           },
         },
-        redirect: '/buttons/standard-buttons',
+        redirect: '/dictionary/user',
         children: [
           {
-            path: '/buttons/standard-buttons',
-            name: 'Buttons',
+            path: '/dictionary/user',
+            name: 'Người dùng',
             component: () => import('@/views/buttons/Buttons.vue'),
           },
           {
-            path: '/buttons/dropdowns',
-            name: 'Dropdowns',
+            path: '/dictionary/role',
+            name: 'Vai trò',
             component: () => import('@/views/buttons/Dropdowns.vue'),
           },
           {
-            path: '/buttons/button-groups',
-            name: 'Button Groups',
+            path: '/dictionary/department',
+            name: 'Khoa',
             component: () => import('@/views/buttons/ButtonGroups.vue'),
           },
         ],

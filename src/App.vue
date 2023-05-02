@@ -3,10 +3,20 @@
 </template>
 
 <style lang="scss">
+@import url(./styles/components/toat-msg-el.css);
 // Import Main styles for this application
 @import 'styles/style';
 .mgl-16 {
   margin-left: 16px !important;
+}
+.mgt-16 {
+  margin-top: 16px !important;
+}
+.mgb-16 {
+  margin-bottom: 16px !important;
+}
+.mgt-8 {
+  margin-top: 8px;
 }
 .mgb-8 {
   margin-bottom: 8px;
@@ -25,7 +35,9 @@ button {
   width: 86px;
   min-width: 86px;
 }
-
+.required {
+  color: #e54848;
+}
 .w-80 {
   width: 80px;
   min-width: 80px;

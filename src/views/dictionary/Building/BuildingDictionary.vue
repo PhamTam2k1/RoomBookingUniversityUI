@@ -1,7 +1,7 @@
 <template>
   <div id="body-building-dictionary">
     <!-- Begin body -->
-    <div id="bd-building">
+    <div id="bd-building" class="Body">
       <div class="filter-options">
         <DxTextBox
           placeholder="Tìm kiếm"
@@ -92,6 +92,7 @@ import BuildingApi from '@/apis/BuildingApi'
 import DeleteBuildingPopup from '../Building/DeleteBuildingPopup.vue'
 import DxTextBox from 'devextreme-vue/text-box'
 import BaseLoading from '@/components/base/BaseLoading.vue'
+
 export default {
   components: {
     DxButton,
@@ -160,6 +161,7 @@ export default {
     function showFormDetail(isShow) {
       dataComponent.isShowForm = isShow
     }
+
     /**
      * Header của table
      * PTTAM
@@ -233,36 +235,6 @@ export default {
     }
 
     /**
-     * đóng popup phê duyệt
-     * @param {
-     * } val
-     */
-    const closePopup = () => {
-      dataComponent.popupVisible = false
-    }
-
-    /**
-     * Đóng popup delete
-     */
-    const closeDeletePopup = () => {
-      dataComponent.deleteVisible = false
-    }
-
-    /**
-     * sửa tòa nhà
-     * @param {*} event
-     */
-    const editBuilding = (event) => {
-      let id = event.element.accessKey
-      dataComponent.buildingData = dataComponent.dataSource.find(
-        (x) => x.BuildingID == id,
-      )
-      dataComponent.title = 'Sửa tòa nhà'
-      dataComponent.isEdit = true
-      dataComponent.popupVisible = true
-    }
-
-    /**
      * lấy dữ liệu
      *
      */
@@ -312,7 +284,6 @@ export default {
     }
 
     const addBuilding = () => {
-      dataComponent.title = 'Thêm mới'
       dataComponent.buildingData = {}
       showFormDetail(true)
       dataComponent.popupMode = Enum.PopupMode.AddMode
@@ -324,10 +295,7 @@ export default {
       getData,
       pageSizeSelected,
       currentPage,
-      closePopup,
       addBuilding,
-      closeDeletePopup,
-      editBuilding,
       deleteBuilding,
       headerTableBuilding,
       onClickShowPopupDelete,
@@ -339,7 +307,7 @@ export default {
   },
   computed: {
     ...mapState({
-      // roleOption: (state) => state.auth.roleOption,
+      roleOption: (state) => state.auth.roleOption,
     }),
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
@@ -356,8 +324,9 @@ export default {
 
 <style lang="scss" scoped>
 #body-building-dictionary {
-  padding: 10px 20px;
+  padding: 20px 20px;
   background-color: #efefef;
+  height: calc(100%);
   flex: 1;
 }
 .filter-options {
@@ -391,6 +360,7 @@ export default {
   }
 }
 #bd-building {
+  height: calc(100%);
   background: white;
   padding: 20px;
 }

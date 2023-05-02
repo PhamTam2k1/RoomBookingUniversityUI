@@ -94,6 +94,8 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
+import { v4 as uuidv4 } from 'uuid'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
   name: ' ',
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
@@ -135,6 +137,7 @@ export default {
       /**Icon của popup */
       classIconPopup: '',
       building: {
+        BuildingID: this.buildingData.BuildingID || uuidv4(),
         BuildingCode: this.buildingData.BuildingCode || '',
         BuildingName: this.buildingData.BuildingName || '',
       },
@@ -201,7 +204,6 @@ export default {
      * @param {String} fieldName
      */
     removeError(fieldName) {
-      debugger
       if (this.building[fieldName]) {
         this.Error[fieldName] = ''
       }
@@ -261,14 +263,18 @@ export default {
           BuildingApi.updated(this.buildingData.BuildingID, this.building).then(
             (res) => {
               if (res && res.data) {
-                this.toastVisible = true
-                this.message = 'Cập nhật thành công'
+                ObjectFunction.toastMessage(
+                  'Sửa tòa nhà thành công',
+                  Resource.Messenger.Success,
+                )
                 this.$emit('onShowLoading')
                 this.$emit('onCloseForm')
                 this.$emit('onLoadData')
               } else {
-                this.toastVisible = true
-                this.message = 'Cập nhật thất bại'
+                ObjectFunction.toastMessage(
+                  'Sửa tòa nhà thất bại',
+                  Resource.Messenger.Error,
+                )
                 this.$emit('onCloseForm')
               }
             },
@@ -280,13 +286,17 @@ export default {
         try {
           BuildingApi.insert(this.building).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true
-              this.message = 'Lưu thành công'
+              ObjectFunction.toastMessage(
+                'Thêm thành công',
+                Resource.Messenger.Success,
+              )
               this.$emit('onCloseForm')
               this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Lưu thất bại'
+              ObjectFunction.toastMessage(
+                'Thêm thất bại',
+                Resource.Messenger.Error,
+              )
               this.$emit('onCloseForm')
             }
           })

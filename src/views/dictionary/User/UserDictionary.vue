@@ -1,6 +1,6 @@
 <template>
-  <div id="body-room-dictionary" >
-    <div id="bd-room" class ="Body">
+  <div id="body-user-dictionary" >
+    <div id="bd-user" class ="Body">
       <div class="filter-options">
         <DxTextBox
           placeholder="Tìm kiếm"
@@ -23,15 +23,15 @@
       <!-- Begin table -->
       <div class="misa-tabble">
         <BaseTable
-          :optionItems="headerTableRoom"
+          :optionItems="headerTableUser"
           :dataSource="dataComponent.dataSource"
-          id="table-room"
+          id="table-user"
           :tableMode="0"
         >
           <template #baseCell="{ data }">
             <BaseCellTemplace
               :data="data"
-              id="RoomID"
+              id="UserID"
               @onClickShowPopupDelete="onClickShowPopupDelete"
               @onClickShowPopupEdit="onClickShowPopupEdit"
             ></BaseCellTemplace>
@@ -56,14 +56,14 @@
   <!-- Loading -->
   <!-- <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading> -->
 
-  <RoomDictionaryDetail :width="700"
+  <UserDictionaryDetail :width="700"
        v-if="dataComponent.isShowForm"
       
       @onCloseForm="showFormDetail(false)"
       :popupMode="dataComponent.popupMode"
       @onLoadData="getData()"
       @onShowLoading="showLoading(true)"
-      :roomData="JSON.parse(JSON.stringify(dataComponent.roomData))"
+      :userID="JSON.parse(JSON.stringify(dataComponent.userID))"
         
         
         />
@@ -77,9 +77,9 @@ import { DxButton } from "devextreme-vue/button";
 import { reactive } from "vue";
 import { mapState } from "vuex";
 import DxTextBox from "devextreme-vue/text-box";
-import RoomApi from "@/apis/RoomApi";
+import UserApi from "@/apis/UserApi";
 import BaseLoading from "@/components/base/BaseLoading.vue";
-import RoomDictionaryDetail from "./RoomDictionaryDetail.vue";
+import UserDictionaryDetail from "./UserDictionaryDetail.vue";
 export default {
   components: {
     DxTextBox,
@@ -87,7 +87,7 @@ export default {
     BaseTable,
     BasePaging,
     BaseCellTemplace,
-    RoomDictionaryDetail
+    UserDictionaryDetail
 },
   props: {
     weekID: {
@@ -109,7 +109,7 @@ export default {
       dataSelect: {},
       title: "",
       deleteVisible: false,
-      roomData: {},
+      userID: "",
       isEdit: false,
       popupMode:0
     });
@@ -118,37 +118,38 @@ export default {
      * Header table
      * PTTAM
      */
-    var headerTableRoom = [
+    var headerTableUser = [
       {
-        dataField: "RoomID",
-        caption: "Mã phòng",
+        dataField: "UserID",
+        caption: "ID User",
         visible: false,
         width: 0,
       },
       {
-        dataField: "RoomCode",
-        caption: "Mã phòng",
+        dataField: "UserCode",
+        caption: "Mã người dùng",
       },
       {
-        dataField: "RoomName",
-        caption: "Tên phòng",
+        dataField: "FullName",
+        caption: "Tên người dùng",
       },
       {
-        dataField: "BuildingName",
-        caption: "Địa điểm",
+        dataField: "DepartmentName",
+        caption: "Phòng ban",
       },
       {
-        dataField: "Capacity",
-        caption: "Sức chứa",
+        dataField: "PhoneNumber",
+        caption: "Số điện thoại",
       },
       {
-        dataField: "UserName",
-        caption: "Người phụ trách",
+        dataField: "RoleName",
+        caption: "Vai trò",
       },
       {
-        dataField: "RoomStatus",
-        caption: "Trạng thái phòng",
+        dataField: "Email",
+        caption: "Email",
       },
+
       {
         dataField: "",
         caption: "",
@@ -161,7 +162,7 @@ export default {
         visible: false,
       },
       {
-        dataField: "RoomStatusColor",
+        dataField: "UserStatusColor",
         caption: "",
         width: 0,
         visible: false,
@@ -190,9 +191,7 @@ export default {
      * Created Date: 02-09-2022 14:12:42
      */
     function onClickShowPopupDelete(id, name) {
-      dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
+      dataComponent.userID=id;
       dataComponent.popupMode = Enum.PopupMode.DeleteMode; //
     }
 
@@ -202,39 +201,12 @@ export default {
      * Created Date: 03-09-2022 07:02:41
      */
     function onClickShowPopupEdit(id) {
-      dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
+      dataComponent.userID=id;
       dataComponent.popupMode = Enum.PopupMode.EditMode; // Gán lại trạng thái của popup
       showFormDetail(true);
     }
 
-    /**
-     * đóng popup phê duyệt
-     * @param {
-     * } val
-     */
-    const closePopup = (val) => {
-      dataComponent.popupVisible = false;
-    };
 
-    const closeDeletePopup = () => {
-      dataComponent.deleteVisible = false;
-    };
-
-    /**
-     * sửa tòa nhà
-     * @param {*} event
-     */
-    const editBuilding = (event) => {
-      let id = event.element.accessKey;
-      dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
-      dataComponent.title = "Sửa tòa nhà";
-      dataComponent.isEdit = true;
-      dataComponent.popupVisible = true;
-    };
 
     /**
      * lấy dữ liệu
@@ -242,7 +214,7 @@ export default {
      */
     const getData = () => {
       try {
-        RoomApi.getPaging({
+        UserApi.getPaging({
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
           keyword: "",
@@ -261,8 +233,8 @@ export default {
 
     const deleteBuilding = (event) => {
       let id = event.element.accessKey;
-      dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
+      dataComponent.userData = dataComponent.dataSource.find(
+        (x) => x.UserID == id
       );
       dataComponent.deleteVisible = true;
     };
@@ -288,7 +260,7 @@ export default {
 
     const addBuilding = () => {
       dataComponent.title = "Thêm mới";
-      dataComponent.roomData = {};
+      dataComponent.userData = {};
       showFormDetail(true);
       dataComponent.popupMode = Enum.PopupMode.AddMode;
     };
@@ -298,12 +270,9 @@ export default {
       getData,
       pageSizeSelected,
       currentPage,
-      closePopup,
       addBuilding,
-      closeDeletePopup,
-      editBuilding,
       deleteBuilding,
-      headerTableRoom,
+      headerTableUser,
       onClickShowPopupDelete,
       onClickShowPopupEdit,
       showLoading,
@@ -324,13 +293,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#body-room-dictionary {
+#body-user-dictionary {
   flex: 1;
   padding: 10px 20px;
   background-color: #efefef;
   height: calc(100% - 75px);
 }
-#bd-room {
+#bd-user {
   height: calc(100%);
   background: white;
   padding: 20px;

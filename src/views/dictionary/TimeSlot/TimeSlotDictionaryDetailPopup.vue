@@ -33,7 +33,7 @@
         <!-- User Code Field -->
         <base-input
           lable="Thời gian bắt đầu"
-          classInput="misa-input w-135"
+          classInput="misa-input w-135 mgb-8"
           :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
@@ -108,6 +108,8 @@ import Enum from "@/commons/Enum";
 import Resource from "@/commons/Resource";
 import PopupNotice from "@/components/popup/PopupNotice.vue";
 import moment from 'moment';
+import { v4 as uuidv4 } from "uuid";
+import ObjectFunction from "@/commons/CommonFuction";
 export default {
   name: " ",
   emits: ["onCloseForm", "onLoadData", "onShowLoading"],
@@ -152,6 +154,7 @@ export default {
         EndTime: this.timeSlotData.EndTime || "",
         StartTime: this.timeSlotData.StartTime || "",
         TimeSlotName: this.timeSlotData.TimeSlotName|| "",
+        TimeSlotID: this.timeSlotData.TimeSlotID|| uuidv4(),
       },
       validateErrorList: [],
       toastVisible: false,
@@ -285,14 +288,18 @@ export default {
           TimeSlotApi.updated(this.timeSlotData.TimeSlotID, dataTime).then(
             (res) => {
               if (res && res.data) {
-                this.toastVisible = true;
-                this.message = "Cập nhật thành công";
+                ObjectFunction.toastMessage(
+                Resource.Messenger.UpdateSucces,
+                Resource.Messenger.Success
+              );
                 this.$emit("onShowLoading");
                 this.$emit("onCloseForm");
                 this.$emit("onLoadData");
               } else {
-                this.toastVisible = true;
-                this.message = "Cập nhật thất bại";
+                ObjectFunction.toastMessage(
+                "Cập nhật thất bại",
+                Resource.Messenger.Error
+              );
                 this.$emit("onCloseForm");
               }
             }
@@ -304,13 +311,17 @@ export default {
         try {
           TimeSlotApi.insert(dataTime).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true;
-              this.message = "Lưu thành công";
+              ObjectFunction.toastMessage(
+                Resource.Messenger.InsertSucces,
+                Resource.Messenger.Success
+              );
               this.$emit("onCloseForm");
               this.$emit("onLoadData");
             } else {
-              this.toastVisible = true;
-              this.message = "Lưu thất bại";
+              ObjectFunction.toastMessage(
+                "Thêm thất bại",
+                Resource.Messenger.Error
+              );
               this.$emit("onCloseForm");
             }
           });
