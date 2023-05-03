@@ -13,7 +13,7 @@
           </div>
         </div>
         <BaseDate
-          class="mt-16 w-120"
+          class="mt-16"
           :labelMode="'hidden'"
           :stylingMode="'outlined'"
           :value="currentDate"
@@ -48,7 +48,7 @@
         <div class="t-row">
           <BaseDropdownbox
             classDropdownbox="drop-down-utc mgl-16"
-            :dataSource="lstRoom"
+            :dataSource="dataRoom"
             optionName="RoomName"
             optionValue="RoomID"
             :isSearch="true"
@@ -120,7 +120,7 @@
     </div>
 
     <DxScheduler
-      v-if="!showView"
+      v-if="showView || isTypeDay"
       :dataSource="dataSource"
       :current-view="currentView"
       :current-date="currentDate"
@@ -152,7 +152,6 @@
           scrollByThumb: true,
           bounceEnabled: false,
         }"
-        c
       />
       <DxView type="week" height="75vh" />
 
@@ -175,7 +174,7 @@
     </DxScheduler>
 
     <ColumnBookingForWeekTemplate
-      v-if="showView"
+      v-if="!showView && !isTypeDay"
       :data="dataSource"
       :view="currentView"
     ></ColumnBookingForWeekTemplate>
@@ -229,6 +228,7 @@ export default {
       scrollingMode: 'virtual',
       lstRoom: [],
       rooms: [],
+      isTypeDay: true,
     }
   },
   computed: {
@@ -289,6 +289,8 @@ export default {
     },
     // set view khi click chuyển đổi
     setView(option, name) {
+      this.isTypeDay = name == 'day' ? true : false
+      this.showView = this.lstRoom.length > 1 ? false : true
       if (option && name) {
         this.currentView = name
       }
@@ -313,6 +315,7 @@ export default {
      * 24.04.2023 PTTAM
      */
     onAppointmentClick(e) {
+      debugger
       e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
       this.isShowForm = true
     },
@@ -323,9 +326,8 @@ export default {
      */
     async loadDataBooking(callback) {
       try {
-        debugger
         await BookingRoomApi.getPaging({
-          roomID: '9bb1c410-ccb9-11ed-8def-f8b46ac25bb6',
+          roomID: null,
           userID: null,
           buildingID: null,
           equipmentIDs: null,
@@ -334,10 +336,10 @@ export default {
         }).then((res) => {
           this.dataSource = res.data.dataBooking || []
           this.lstRoom = res.data.dataRoom || []
-          if (res.data.option == 1) {
-            this.showView = false
-          } else {
+          if (res.data.option == 1 || this.isTypeDay) {
             this.showView = true
+          } else {
+            this.showView = false
           }
           callback() // gọi callback để xử lý dataSource
         })
@@ -408,7 +410,6 @@ export default {
   height: 56px;
   background-color: #f5f5f5;
   align-items: center;
-  position: relative;
 }
 
 .dx-buttongroup_custom {
@@ -422,9 +423,9 @@ export default {
 
 .dx-scheduler-group-header {
   height: 50px !important;
-  width: 100px;
+  width: 200px;
 }
 .dx-scheduler-cell-sizes-horizontal {
-  width: 100px;
+  width: 200px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="table_multi">
+  <div class="table_multi" ref="table_multi">
     <table class="schedule-table">
       <thead>
         <tr>
@@ -24,6 +24,7 @@
               isActive: dateNow == timeSlot.dateTime,
               isDisable: setDisable(timeSlot.dateTime1),
             }"
+            ref="hoverElement"
           >
             <div class="schedule-cell">
               <!-- <div
@@ -31,9 +32,15 @@
                 v-if="getBookingColor(timeSlot.dateTime, room.RoomID) "
               
               > -->
-              <div class="misa-active-status-table flex">
+              <div
+                class="misa-active-status-table flex"
+                v-click-out-side="showToolTip"
+              >
                 <div
-                  @click="onClickCell(booking.dateTime, booking.RoomID)"
+                  @click="
+                    onClickCell(booking.dateTime, booking.RoomID),
+                      (indexTooltip = 1)
+                  "
                   v-for="(booking, index) in getSubject(
                     timeSlot.dateTime,
                     room.RoomID,
@@ -51,7 +58,12 @@
                       ),
                     }"
                   ></div>
-                  <p v-if="index <= 2" class="titleSubject">
+                  <p
+                    v-if="index <= 2"
+                    class="titleSubject"
+                    v-hover
+                    @mousemove="handleMouseMove($event, booking)"
+                  >
                     {{ booking.Subject }}
                   </p>
                   <p
@@ -70,6 +82,19 @@
         </tr>
       </tbody>
     </table>
+    <div
+      class="tooltipTable"
+      :style="{ left: left + 'px', top: top + 'px' }"
+      v-if="isShowTooltip"
+      @click="isShowForm = true"
+    >
+      <AppointmentTooltipTemplate
+        :scheduler="scheduler"
+        :templateTooltipModel="bookingHover"
+        :classArrow="classArrow"
+      ></AppointmentTooltipTemplate>
+    </div>
+    <RoomBookingPopup v-if="isShowForm" @onCloseForm="isShowForm = false" />
     <BasePopup
       v-if="popupNoticeMode"
       class="misa-dialog"
@@ -132,9 +157,18 @@
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import BasePopup from '@/components/base/BasePopup.vue'
+import clickOutSide from '@mahdikhashan/vue3-click-outside'
+import RoomBookingPopup from '@/views/booking/RoomBookingPopup.vue'
+import AppointmentTooltipTemplate from '@/views/booking/template/AppointmentTooltipTemplate.vue'
 export default {
   components: {
     BasePopup,
+    AppointmentTooltipTemplate,
+    RoomBookingPopup,
+  },
+  // do not forget this section
+  directives: {
+    clickOutSide,
   },
   props: {
     data: {
@@ -146,12 +180,22 @@ export default {
       required: true,
       default: 'week',
     },
+    dataDate: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
       bookingExists: false,
+      classArrow: false,
       dataSource: [],
+      bookingHover: {},
+      isShowTooltip: false,
+      left: '0px',
+      top: '0px',
       popupNoticeMode: false,
+      isShowForm: false,
       generate: [],
       dateNow: new Date().toLocaleDateString('vi-VN'),
       bookingRooms: [],
@@ -160,6 +204,9 @@ export default {
     }
   },
   methods: {
+    showToolTip() {
+      this.isShowTooltip = false
+    },
     getSubject(dateTime, RoomID) {
       const booking = this.bookingRooms.filter(
         (item) => item.dateTime === dateTime && item.RoomID === RoomID,
@@ -169,7 +216,31 @@ export default {
         : (this.bookingExists = false)
       return booking.slice(0, 4)
     },
-
+    // lấy vị trí x y khi hover
+    handleMouseMove(event, booking) {
+      this.isShowTooltip = true
+      this.bookingHover = booking
+      var chird = event.currentTarget
+      var widthDisplay = this.$refs.table_multi.clientWidth * 0.8
+      var parent = chird.closest('.rowColor')
+      const elementWidth = parent.clientWidth
+      const elementHeight = chird.clientHeight
+      const parentHeight = parent.clientHeight
+      const elementLeft = parent.offsetLeft
+      const elementTop = chird.offsetTop
+      const parentTop = parent.offsetTop
+      const centerX = elementLeft + elementWidth / 2
+      const centerY = elementTop + elementHeight / 2
+      const parentCenterY = parentTop + parentHeight / 2
+      if (centerX + event.currentTarget.clientWidth < widthDisplay) {
+        this.left = centerX + event.currentTarget.clientWidth + 280
+        this.classArrow = false
+      } else {
+        this.left = centerX - event.currentTarget.clientWidth - 80
+        this.classArrow = true
+      }
+      this.top = centerY + parentCenterY - 40
+    },
     getBookingColor(value, RoomID) {
       const booking = this.bookingRooms.find(
         (item) => item.dateTime === value && item.RoomID === RoomID,
@@ -178,7 +249,6 @@ export default {
       return color
     },
     getBookingStatusColor(value, RoomID) {
-      debugger
       const booking = this.bookingRooms.find(
         (item) => item.dateTime === value && item.RoomID === RoomID,
       )
@@ -201,7 +271,6 @@ export default {
       // kiểm tra  gán lại giá trị
       this.bookingRooms = this.dataSource
       this.bookingRooms.forEach((element) => {
-        debugger
         var date1 = new Date(element.StartDate)
         element.dateTime = date1.toLocaleDateString('vi-VN')
         element.color = '#008000'
@@ -263,8 +332,7 @@ export default {
     },
     // tạo ra template ngày tháng
     dateCellTemplate() {
-      debugger
-      const today = new Date()
+      const today = new Date(this.dataDate)
       let daysOfWeek = []
       if (this.view && this.view == 'week') {
         daysOfWeek = [
@@ -343,7 +411,6 @@ export default {
   },
 
   created() {
-    debugger
     this.dataSource = this.data
     this.loadDataBooking()
     this.dateCellTemplate()
@@ -352,11 +419,14 @@ export default {
     view: function () {
       this.dateCellTemplate()
     },
+    dataDate: function () {
+      this.dateCellTemplate()
+    },
   },
 }
 </script>
 
-<style scoped>
+<style>
 .misa-cell-avatar-color {
   text-transform: uppercase;
   height: 32px;
@@ -496,7 +566,7 @@ export default {
 }
 
 .table_multi {
-  height: 100%;
+  height: 75vh;
   overflow: auto;
   background-color: #fff;
 }
@@ -517,7 +587,6 @@ export default {
 .misa-cell-active-group {
   margin-top: 10px;
   display: flex;
-  z-index: 99999;
   color: black;
 }
 
@@ -559,5 +628,15 @@ thead {
 
 .misa-active-status-table:hover {
   background-color: #6691e2;
+}
+.tooltipTable {
+  position: absolute;
+  width: 400px;
+  z-index: 999999999;
+  top: 130px;
+  left: 0px;
+  background-color: #fff;
+  border-radius: 4px;
+  padding: 20px;
 }
 </style>
