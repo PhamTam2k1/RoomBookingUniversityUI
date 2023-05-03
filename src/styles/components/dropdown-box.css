@@ -256,3 +256,11 @@
 .t-row-block .drop-down-utc {
   width: 100%;
 }
+.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
+  height: 80px;
+  max-height: 80px;
+  min-height: 80px;
+  vertical-align: top;
+  text-align: right;
+  color: #959595;
+}

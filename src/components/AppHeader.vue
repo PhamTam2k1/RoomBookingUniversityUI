@@ -10,17 +10,17 @@
       <CHeaderNav class="d-none d-md-flex me-auto"> </CHeaderNav>
       <CHeaderNav>
         <CNavItem>
-          <CNavLink href="#">
+          <CNavLink>
             <CIcon class="mx-2" icon="cil-bell" size="lg" />
           </CNavLink>
         </CNavItem>
         <CNavItem>
-          <CNavLink href="#">
+          <CNavLink>
             <CIcon class="mx-2" icon="cil-list" size="lg" />
           </CNavLink>
         </CNavItem>
         <CNavItem>
-          <CNavLink href="#">
+          <CNavLink>
             <CIcon class="mx-2" icon="cil-envelope-open" size="lg" />
           </CNavLink>
         </CNavItem>

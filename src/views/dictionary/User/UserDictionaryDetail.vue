@@ -191,19 +191,19 @@
 </template>
 
 <script>
-import UserApi from "@/apis/UserApi";
-import BaseDropdownbox from "@/components/base/BaseDropdownbox.vue";
-import BaseInput from "@/components/base/BaseInput.vue";
-import BaseButton from "@/components/base/BaseButton.vue";
-import BasePopup from "@/components/base/BasePopup.vue";
-import Enum from "@/commons/Enum";
-import Resource from "@/commons/Resource";
-import PopupNotice from "@/components/popup/PopupNotice.vue";
-import { v4 as uuidv4 } from "uuid";
-import { mapActions, mapState } from "vuex";
-import CommonFunction from '@/commons/CommonFuction';
+import UserApi from '@/apis/UserApi'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BasePopup from '@/components/base/BasePopup.vue'
+import Enum from '@/commons/Enum'
+import Resource from '@/commons/Resource'
+import PopupNotice from '@/components/popup/PopupNotice.vue'
+import { v4 as uuidv4 } from 'uuid'
+import { mapActions, mapState } from 'vuex'
+import CommonFunction from '@/commons/CommonFuction'
 export default {
-  name: " ",
+  name: ' ',
   components: {
     BaseDropdownbox,
     BaseInput,
@@ -211,7 +211,7 @@ export default {
     BasePopup,
     PopupNotice,
   },
-  emits: ["onCloseForm", "onLoadData", "onShowLoading"],
+  emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   props: {
     userID: {
       type: Object,
@@ -224,8 +224,8 @@ export default {
 
   data() {
     return {
-      UserCode: "",
-      UserName: "",
+      UserCode: '',
+      UserName: '',
       Capacity: 0,
       Enum: Enum,
       focus: true,
@@ -237,20 +237,20 @@ export default {
       /**Trạng thái của popup */
       popupNoticeMode: -1,
       Error: {},
-    };
+    }
   },
 
   methods: {
     // Gọi hàm load data từ store
     ...mapActions({
-      loadDataDepartments: "dictionary/loadDataDepartments",
-      loadDataRoles: "dictionary/loadDataRoles",
+      loadDataDepartments: 'dictionary/loadDataDepartments',
+      loadDataRoles: 'dictionary/loadDataRoles',
     }),
     /** Mô tả: Gửi sự kiện đóng form
      * CreatedBy: PTTAM
      */
     onCloseForm() {
-      this.$emit("onCloseForm");
+      this.$emit('onCloseForm')
     },
     /**
      * Sự kiện thay đổi khoa
@@ -258,16 +258,16 @@ export default {
      * PTTAM
      */
     onValueChangeDepartment(value) {
-      this.user.DepartmentID = value;
+      this.user.DepartmentID = value
     },
     /**
      * Mô tả : Sự kiện khi focus vào input đầu tiên khi tab index đến item cuối cùng của form
      * @Createdby: PTTAM
      */
     handleKeyup(e) {
-      if (e.key == "Tab") {
-        this.focus = true;
-        this.$refs.popupDictionary.querySelector("input[tabindex]").focus();
+      if (e.key == 'Tab') {
+        this.focus = true
+        this.$refs.popupDictionary.querySelector('input[tabindex]').focus()
       }
     },
     /**
@@ -276,28 +276,28 @@ export default {
      * PTTAM
      */
     onValueChangeRole(value) {
-      this.user.RoleID = value;
+      this.user.RoleID = value
     },
     /** Mô tả: Hiển thị popup
      * @param
      * CreatedBy: PTTAM
      */
     showPopup(iconPopup, contentPopup) {
-      this.classIconPopup = iconPopup;
-      this.contentPopup = contentPopup;
+      this.classIconPopup = iconPopup
+      this.contentPopup = contentPopup
     },
     /** Mô tả: xử lý sự kiện form
      * @param {event}
      * CreatedBy: PTTAM
      */
     eventFormDictionary(e) {
-      if (e.key === "Escape") {
-        this.onCloseForm();
+      if (e.key === 'Escape') {
+        this.onCloseForm()
       }
 
-      if (e.ctrlKey && e.key.toLowerCase() == "s" && !e.shiftKey) {
-        e.preventDefault();
-        this.beforeSaveData();
+      if (e.ctrlKey && e.key.toLowerCase() == 's' && !e.shiftKey) {
+        e.preventDefault()
+        this.beforeSaveData()
       }
     },
     /**
@@ -305,11 +305,11 @@ export default {
      * PTTAM
      */
     onClickClosePopup() {
-      this.popupNoticeMode = -1;
+      this.popupNoticeMode = -1
       if (this.validateErrorList.length > 0) {
         this.$refs.popupDictionary
-          .querySelector(".misa-input-required input[tabindex]")
-          .focus();
+          .querySelector('.misa-input-required input[tabindex]')
+          .focus()
       }
     },
     /**
@@ -318,22 +318,22 @@ export default {
      */
     beforeSaveData() {
       debugger
-      this.validateErrorList = []; // Gán lại array = []
+      this.validateErrorList = [] // Gán lại array = []
       // Lấy danh sách các trường (fields) của object bookingRoomData
-      const fields = Object.keys(this.user);
+      const fields = Object.keys(this.user)
 
       // Lặp qua danh sách các trường để lấy tên của các trường
       fields.forEach((field) => {
-        this.validate(field);
-      });
+        this.validate(field)
+      })
       // Nếu mảng chứa lỗi không chứa lỗi
       if (this.validateErrorList.length <= 0) {
         // Thêm mới user
-        this.saveData();
+        this.saveData()
       } else {
         // Ngược lại
-        this.showPopup("misa-icon-notice", Resource.ErrForm.ErrorInput); // Hiển thị popup
-        this.popupNoticeMode = Enum.PopupMode.NotifyMode;
+        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput) // Hiển thị popup
+        this.popupNoticeMode = Enum.PopupMode.NotifyMode
       }
     },
     /**
@@ -343,23 +343,23 @@ export default {
     validate(fieldName) {
       try {
         if (!this.user[fieldName]) {
-          let field = "";
-          if (fieldName == "FullName") {
-            field = "Tên giảng viên";
-          } else if (fieldName == "PhoneNumber") {
-            field = "Số điện thoại";
-          } else if (fieldName == "Email") {
-            field = "Email";
-          } else if (fieldName == "DepartmentID") {
-            field = "Khoa";
-          } else if (fieldName == "RoleID") {
-            field = "Vai trò";
+          let field = ''
+          if (fieldName == 'FullName') {
+            field = 'Tên giảng viên'
+          } else if (fieldName == 'PhoneNumber') {
+            field = 'Số điện thoại'
+          } else if (fieldName == 'Email') {
+            field = 'Email'
+          } else if (fieldName == 'DepartmentID') {
+            field = 'Khoa'
+          } else if (fieldName == 'RoleID') {
+            field = 'Vai trò'
           }
-          this.Error[fieldName] = field + " " + Resource.ErrForm.IsNotEmpty;
-          this.validateErrorList.push(fieldName);
+          this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
+          this.validateErrorList.push(fieldName)
         }
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
     /**
@@ -368,45 +368,44 @@ export default {
      */
     removeError(fieldName) {
       if (this.user[fieldName]) {
-        this.Error[fieldName] = "";
+        this.Error[fieldName] = ''
       }
     },
     /**
      * Lưu dữ liệu
      */
     saveData() {
-      if (this.popupMode==Enum.PopupMode.EditMode) {
+      if (this.popupMode == Enum.PopupMode.EditMode) {
         try {
-       
           UserApi.updated(this.userID, this.user).then((res) => {
             if (res && res.IsSuccess) {
-              this.toastVisible = true;
-              this.message = "Cập nhật thành công";
-              this.$emit("closePopup", false);
+              this.toastVisible = true
+              this.message = 'Cập nhật thành công'
+              this.$emit('closePopup', false)
             } else {
-              this.toastVisible = true;
-              this.message = "Cập nhật thất bại";
+              this.toastVisible = true
+              this.message = 'Cập nhật thất bại'
             }
-          });
+          })
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       } else {
         try {
-          this.user.AvatarColor=CommonFunction.generateRandomColor();
-          this.user.Password=Resource.PassWordDefault;
+          this.user.AvatarColor = CommonFunction.generateRandomColor()
+          this.user.Password = Resource.PassWordDefault
           UserApi.insert(this.user).then((res) => {
             if (res && res.IsSuccess) {
-              this.toastVisible = true;
-              this.message = "Lưu thành công";
-              this.$emit("closePopup", false);
+              this.toastVisible = true
+              this.message = 'Lưu thành công'
+              this.$emit('closePopup', false)
             } else {
-              this.toastVisible = true;
-              this.message = "Lưu thất bại";
+              this.toastVisible = true
+              this.message = 'Lưu thất bại'
             }
-          });
+          })
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       }
     },
@@ -417,9 +416,9 @@ export default {
     getNewUserCode() {
       UserApi.getNewUserCode().then((res) => {
         if (res) {
-          this.user.UserCode = res.data;
+          this.user.UserCode = res.data
         }
-      });
+      })
     },
 
     /**
@@ -430,19 +429,19 @@ export default {
       debugger
       UserApi.getByID(this.userID).then((res) => {
         if (res) {
-          let data = res.data;
-          this.user={
+          let data = res.data
+          this.user = {
             UserID: data.UserID,
-            UserCode:data.UserCode,
-            FullName:data.FullName,
-            DepartmentID:data.DepartmentID,
-            RoleID:data.RoleID,
-            Email:data.Email,
-            PhoneNumber:data.PhoneNumber,
-            Address:data.Address
+            UserCode: data.UserCode,
+            FullName: data.FullName,
+            DepartmentID: data.DepartmentID,
+            RoleID: data.RoleID,
+            Email: data.Email,
+            PhoneNumber: data.PhoneNumber,
+            Address: data.Address,
           }
         }
-      });
+      })
     },
   },
   computed: {
@@ -458,20 +457,20 @@ export default {
    */
   async created() {
     try {
-      await this.loadDataDepartments();
-      await this.loadDataRoles();
+      await this.loadDataDepartments()
+      await this.loadDataRoles()
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
   },
   mounted() {
     if (this.popupMode == Enum.PopupMode.AddMode) {
-      this.getNewUserCode();
+      this.getNewUserCode()
     } else if (this.popupMode == Enum.PopupMode.EditMode) {
-      this.getUserByID();
+      this.getUserByID()
     }
   },
-};
+}
 </script>
 
 <style scoped>

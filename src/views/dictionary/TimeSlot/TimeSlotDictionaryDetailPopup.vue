@@ -99,20 +99,20 @@
 </template>
 
 <script>
-import BasePopup from "@/components/base/BasePopup.vue";
-import TimeSlotApi from "@/apis/TimeSlotApi";
-import { DxToast } from "devextreme-vue/toast";
-import BaseButton from "@/components/base/BaseButton.vue";
-import BaseInput from "@/components/base/BaseInput.vue";
-import Enum from "@/commons/Enum";
-import Resource from "@/commons/Resource";
-import PopupNotice from "@/components/popup/PopupNotice.vue";
-import moment from 'moment';
-import { v4 as uuidv4 } from "uuid";
-import ObjectFunction from "@/commons/CommonFuction";
+import BasePopup from '@/components/base/BasePopup.vue'
+import TimeSlotApi from '@/apis/TimeSlotApi'
+import { DxToast } from 'devextreme-vue/toast'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import Enum from '@/commons/Enum'
+import Resource from '@/commons/Resource'
+import PopupNotice from '@/components/popup/PopupNotice.vue'
+import moment from 'moment'
+import { v4 as uuidv4 } from 'uuid'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
-  name: " ",
-  emits: ["onCloseForm", "onLoadData", "onShowLoading"],
+  name: ' ',
+  emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   components: {
     DxToast,
     BasePopup,
@@ -133,33 +133,33 @@ export default {
 
   data() {
     return {
-      positionOf: "",
+      positionOf: '',
       /**Trạng thái của popup */
       popupNoticeMode: -1,
       Error: {},
       focus: true,
       closeButtonOptions: {
-        text: "Hủy bỏ",
+        text: 'Hủy bỏ',
         onClick: () => {
-          this.$emit("closePopup", false);
+          this.$emit('closePopup', false)
         },
       },
       Enum: Enum,
       /**Nội dung của popup */
-      contentPopup: "",
+      contentPopup: '',
 
       /**Icon của popup */
-      classIconPopup: "",
+      classIconPopup: '',
       timeSlot: {
-        EndTime: this.timeSlotData.EndTime || "",
-        StartTime: this.timeSlotData.StartTime || "",
-        TimeSlotName: this.timeSlotData.TimeSlotName|| "",
-        TimeSlotID: this.timeSlotData.TimeSlotID|| uuidv4(),
+        EndTime: this.timeSlotData.EndTime || '',
+        StartTime: this.timeSlotData.StartTime || '',
+        TimeSlotName: this.timeSlotData.TimeSlotName || '',
+        TimeSlotID: this.timeSlotData.TimeSlotID || uuidv4(),
       },
       validateErrorList: [],
       toastVisible: false,
-      message: "",
-    };
+      message: '',
+    }
   },
 
   methods: {
@@ -167,21 +167,21 @@ export default {
      * CreatedBy: PTTAM
      */
     onCloseForm() {
-      this.$emit("onCloseForm");
+      this.$emit('onCloseForm')
     },
     /** Mô tả: Thực hiện đóng popup
      * CreatedBy: PTTAM
      */
     onClickClosePopup() {
-      this.popupNoticeMode = -1;
+      this.popupNoticeMode = -1
       if (this.validateErrorList.length > 0) {
         // Focus vào lỗi đầu tiên
         // this.$nextTick(() =>
         //   this.$refs[this.validateErrorList[0]][0].autoFocus()
         // );
         this.$refs.popupDictionary
-          .querySelector(".misa-input-required input[tabindex]")
-          .focus();
+          .querySelector('.misa-input-required input[tabindex]')
+          .focus()
       }
     },
     /**
@@ -189,9 +189,9 @@ export default {
      * @Createdby: PTTAM
      */
     handleKeyup(e) {
-      if (e.key == "Tab") {
-        this.focus = true;
-        this.$refs.popupDictionary.querySelector("input[tabindex]").focus();
+      if (e.key == 'Tab') {
+        this.focus = true
+        this.$refs.popupDictionary.querySelector('input[tabindex]').focus()
       }
     },
     /**
@@ -201,19 +201,19 @@ export default {
     validate(fieldName) {
       try {
         if (!this.timeSlot[fieldName]) {
-          let field='';
-          if(fieldName=='StartTime'){
-                field="Thời gian bắt đầu";
-            }else if(fieldName=='TimeSlotName'){
-                field="Tên ca học";
-            }else if(fieldName=='EndTime'){
-                field="Thời gian kết thúc";
-            }
-            this.Error[fieldName] = field + " " + Resource.ErrForm.IsNotEmpty;
-          this.validateErrorList.push(fieldName);
+          let field = ''
+          if (fieldName == 'StartTime') {
+            field = 'Thời gian bắt đầu'
+          } else if (fieldName == 'TimeSlotName') {
+            field = 'Tên ca học'
+          } else if (fieldName == 'EndTime') {
+            field = 'Thời gian kết thúc'
+          }
+          this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
+          this.validateErrorList.push(fieldName)
         }
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
     /**
@@ -221,9 +221,9 @@ export default {
      * @param {String} fieldName
      */
     removeError(fieldName) {
-      debugger;
+      debugger
       if (this.timeSlot[fieldName]) {
-        this.Error[fieldName] = "";
+        this.Error[fieldName] = ''
       }
     },
     /** Mô tả: xử lý sự kiện form
@@ -231,13 +231,13 @@ export default {
      * CreatedBy: PTTAM
      */
     eventFormDictionary(e) {
-      if (e.key === "Escape") {
-        this.onCloseForm();
+      if (e.key === 'Escape') {
+        this.onCloseForm()
       }
 
-      if (e.ctrlKey && e.key.toLowerCase() == "s" && !e.shiftKey) {
-        e.preventDefault();
-        this.beforeSaveData();
+      if (e.ctrlKey && e.key.toLowerCase() == 's' && !e.shiftKey) {
+        e.preventDefault()
+        this.beforeSaveData()
       }
     },
     /**
@@ -246,22 +246,22 @@ export default {
      */
     beforeSaveData() {
       debugger
-      this.validateErrorList = []; // Gán lại array = []
+      this.validateErrorList = [] // Gán lại array = []
       // Lấy danh sách các trường (fields) của object timeSlot
-      const fields = Object.keys(this.timeSlot);
+      const fields = Object.keys(this.timeSlot)
 
       // Lặp qua danh sách các trường để lấy tên của các trường
       fields.forEach((field) => {
-        this.validate(field);
-      });
+        this.validate(field)
+      })
       // Nếu mảng chứa lỗi không chứa lỗi
       if (this.validateErrorList.length <= 0) {
         // Thêm mới user
-        this.saveData();
+        this.saveData()
       } else {
         // Ngược lại
-        this.showPopup("misa-icon-notice", Resource.ErrForm.ErrorInput); // Hiển thị popup
-        this.popupNoticeMode = Enum.PopupMode.NotifyMode;
+        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput) // Hiển thị popup
+        this.popupNoticeMode = Enum.PopupMode.NotifyMode
       }
     },
     /** Mô tả: Hiển thị popup
@@ -269,19 +269,20 @@ export default {
      * CreatedBy: PTTAM
      */
     showPopup(iconPopup, contentPopup) {
-      this.classIconPopup = iconPopup;
-      this.contentPopup = contentPopup;
+      this.classIconPopup = iconPopup
+      this.contentPopup = contentPopup
     },
     /**
      * Thực hiện lưu form
      */
     saveData() {
-
-      this.$emit("onShowLoading"); // hiển thị loading
-      let dataTime={
+      this.$emit('onShowLoading') // hiển thị loading
+      let dataTime = {
         TimeSlotName: parseInt(this.timeSlot.TimeSlotName),
-        StartTime:moment(this.timeSlot.StartTime, "HH:mm:ss").format("HH:mm:ss"),
-        EndTime:moment(this.timeSlot.EndTime, "HH:mm:ss").format("HH:mm:ss")
+        StartTime: moment(this.timeSlot.StartTime, 'HH:mm:ss').format(
+          'HH:mm:ss',
+        ),
+        EndTime: moment(this.timeSlot.EndTime, 'HH:mm:ss').format('HH:mm:ss'),
       }
       if (this.popupMode == Enum.PopupMode.EditMode) {
         try {
@@ -289,23 +290,23 @@ export default {
             (res) => {
               if (res && res.data) {
                 ObjectFunction.toastMessage(
-                Resource.Messenger.UpdateSucces,
-                Resource.Messenger.Success
-              );
-                this.$emit("onShowLoading");
-                this.$emit("onCloseForm");
-                this.$emit("onLoadData");
+                  Resource.Messenger.UpdateSucces,
+                  Resource.Messenger.Success,
+                )
+                this.$emit('onShowLoading')
+                this.$emit('onCloseForm')
+                this.$emit('onLoadData')
               } else {
                 ObjectFunction.toastMessage(
-                "Cập nhật thất bại",
-                Resource.Messenger.Error
-              );
-                this.$emit("onCloseForm");
+                  'Cập nhật thất bại',
+                  Resource.Messenger.Error,
+                )
+                this.$emit('onCloseForm')
               }
-            }
-          );
+            },
+          )
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       } else {
         try {
@@ -313,26 +314,25 @@ export default {
             if (res && res.data) {
               ObjectFunction.toastMessage(
                 Resource.Messenger.InsertSucces,
-                Resource.Messenger.Success
-              );
-              this.$emit("onCloseForm");
-              this.$emit("onLoadData");
+                Resource.Messenger.Success,
+              )
+              this.$emit('onCloseForm')
+              this.$emit('onLoadData')
             } else {
               ObjectFunction.toastMessage(
-                "Thêm thất bại",
-                Resource.Messenger.Error
-              );
-              this.$emit("onCloseForm");
+                'Thêm thất bại',
+                Resource.Messenger.Error,
+              )
+              this.$emit('onCloseForm')
             }
-          });
+          })
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       }
     },
   },
-};
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

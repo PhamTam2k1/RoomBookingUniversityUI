@@ -32,14 +32,12 @@ const routes = [
       {
         path: '/booking/booking-await',
         name: 'Chờ duyệt',
-        component: () =>
-          import('@/views/dictionary/Building/BuildingDictionary.vue'),
+        component: () => import('@/views/RoomBrowsing/RoomBrowsing.vue'),
       },
       {
         path: '/booking/booking-history',
         name: 'Lịch sử đặt phòng',
-        component: () =>
-          import('@/views/dictionary/Building/BuildingDictionary.vue'),
+        component: () => import('@/views/RoomBrowsing/RoomBrowsing.vue'),
       },
       {
         path: '/dictionary',
@@ -54,32 +52,38 @@ const routes = [
           {
             path: '/dictionary/room',
             name: 'Phòng học',
-            component: () => import('@/views/base/Accordion.vue'),
+            component: () =>
+              import('@/views/dictionary/Room/RoomDictionary.vue'),
           },
           {
             path: '/dictionary/room-type',
             name: 'Loại phòng học',
-            component: () => import('@/views/base/Accordion.vue'),
+            component: () =>
+              import('@/views/dictionary/Building/BuildingDictionary.vue'),
           },
           {
             path: '/dictionary/building',
             name: 'Tòa nhà',
-            component: () => import('@/views/base/Breadcrumbs.vue'),
+            component: () =>
+              import('@/views/dictionary/Building/BuildingDictionary.vue'),
           },
           {
             path: '/dictionary/timeslot',
             name: 'Ca học',
-            component: () => import('@/views/base/Cards.vue'),
+            component: () =>
+              import('@/views/dictionary/TimeSlot/TimeSlotDictionary.vue'),
           },
           {
             path: '/dictionary/equipment',
             name: 'Thiết bị',
-            component: () => import('@/views/base/Carousels.vue'),
+            component: () =>
+              import('@/views/dictionary/Equipment/EquipmentDictionary.vue'),
           },
           {
             path: '/dictionary/equipment-type',
             name: 'Loại thiết bị',
-            component: () => import('@/views/base/Collapses.vue'),
+            component: () =>
+              import('@/views/dictionary/Equipment/EquipmentDictionary.vue'),
           },
         ],
       },
@@ -96,135 +100,22 @@ const routes = [
           {
             path: '/dictionary/user',
             name: 'Người dùng',
-            component: () => import('@/views/buttons/Buttons.vue'),
+            component: () =>
+              import('@/views/dictionary/User/UserDictionary.vue'),
           },
           {
             path: '/dictionary/role',
             name: 'Vai trò',
-            component: () => import('@/views/buttons/Dropdowns.vue'),
+            component: () =>
+              import('@/views/dictionary/Role/RoleDictionary.vue'),
           },
           {
             path: '/dictionary/department',
             name: 'Khoa',
-            component: () => import('@/views/buttons/ButtonGroups.vue'),
+            component: () =>
+              import('@/views/dictionary/Department/DepartmentDictionary.vue'),
           },
         ],
-      },
-      {
-        path: '/forms',
-        name: 'Forms',
-        component: {
-          render() {
-            return h(resolveComponent('router-view'))
-          },
-        },
-        redirect: '/forms/form-control',
-        children: [
-          {
-            path: '/forms/form-control',
-            name: 'Form Control',
-            component: () => import('@/views/forms/FormControl.vue'),
-          },
-          {
-            path: '/forms/select',
-            name: 'Select',
-            component: () => import('@/views/forms/Select.vue'),
-          },
-          {
-            path: '/forms/checks-radios',
-            name: 'Checks & Radios',
-            component: () => import('@/views/forms/ChecksRadios.vue'),
-          },
-          {
-            path: '/forms/range',
-            name: 'Range',
-            component: () => import('@/views/forms/Range.vue'),
-          },
-          {
-            path: '/forms/input-group',
-            name: 'Input Group',
-            component: () => import('@/views/forms/InputGroup.vue'),
-          },
-          {
-            path: '/forms/floating-labels',
-            name: 'Floating Labels',
-            component: () => import('@/views/forms/FloatingLabels.vue'),
-          },
-          {
-            path: '/forms/layout',
-            name: 'Layout',
-            component: () => import('@/views/forms/Layout.vue'),
-          },
-          {
-            path: '/forms/validation',
-            name: 'Validation',
-            component: () => import('@/views/forms/Validation.vue'),
-          },
-        ],
-      },
-      {
-        path: '/charts',
-        name: 'Charts',
-        component: () => import('@/views/charts/Charts.vue'),
-      },
-      {
-        path: '/icons',
-        name: 'Icons',
-        component: {
-          render() {
-            return h(resolveComponent('router-view'))
-          },
-        },
-        redirect: '/icons/coreui-icons',
-        children: [
-          {
-            path: '/icons/coreui-icons',
-            name: 'CoreUI Icons',
-            component: () => import('@/views/icons/CoreUIIcons.vue'),
-          },
-          {
-            path: '/icons/brands',
-            name: 'Brands',
-            component: () => import('@/views/icons/Brands.vue'),
-          },
-          {
-            path: '/icons/flags',
-            name: 'Flags',
-            component: () => import('@/views/icons/Flags.vue'),
-          },
-        ],
-      },
-      {
-        path: '/notifications',
-        name: 'Notifications',
-        component: {
-          render() {
-            return h(resolveComponent('router-view'))
-          },
-        },
-        redirect: '/notifications/alerts',
-        children: [
-          {
-            path: '/notifications/alerts',
-            name: 'Alerts',
-            component: () => import('@/views/notifications/Alerts.vue'),
-          },
-          {
-            path: '/notifications/badges',
-            name: 'Badges',
-            component: () => import('@/views/notifications/Badges.vue'),
-          },
-          {
-            path: '/notifications/modals',
-            name: 'Modals',
-            component: () => import('@/views/notifications/Modals.vue'),
-          },
-        ],
-      },
-      {
-        path: '/widgets',
-        name: 'Widgets',
-        component: () => import('@/views/widgets/Widgets.vue'),
       },
     ],
   },

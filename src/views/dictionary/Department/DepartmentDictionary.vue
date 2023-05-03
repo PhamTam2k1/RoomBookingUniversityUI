@@ -196,7 +196,7 @@ export default {
      * CreatedBy: PTTAM
      * Created Date: 02-09-2022 14:12:42
      */
-    function onClickShowPopupDelete(id, name) {
+    function onClickShowPopupDelete(id) {
       dataComponent.departmentData = dataComponent.dataSource.find(
         (x) => x.DepartmentID == id,
       )
@@ -237,7 +237,7 @@ export default {
      * @param {
      * } val
      */
-    const closePopup = (val) => {
+    const closePopup = () => {
       dataComponent.popupVisible = false
     }
 

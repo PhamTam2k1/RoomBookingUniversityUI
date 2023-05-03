@@ -1,6 +1,6 @@
 <template>
   <div id="body-browsing">
-    <div id="bd-room-browsing">
+    <div id="bd-room-browsing" class="Body">
       <div class="filter-options">
         <DxTextBox
           placeholder="Tìm kiếm lịch họp"
@@ -61,27 +61,23 @@
     v-if="dataComponent.popupMode == Enum.PopupMode.RefuseMode"
   />
 
-  <DxToast
-    :visible="dataComponent.toastVisible"
-    :message="dataComponent.message"
-    :type="dataComponent.type"
-  />
   <!-- Loading -->
   <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>
 </template>
-  <script>
-import { DxToast } from "devextreme-vue/toast";
-import BookingRoomApi from "@/apis/BookingRoomApi";
-import BasePaging from "@/components/base/BasePaging.vue";
-import BaseCellTemplace from "@/components/base/BaseCellTemplace.vue";
-import BaseTable from "@/components/base/BaseTable.vue";
-import DxTextBox from "devextreme-vue/text-box";
-import Enum from "@/commons/Enum";
-import { reactive } from "vue";
-import ConfirmApproveProcessVue from "./ConfirmApproveProcess.vue";
-import ConfirmRefuseProcessVue from "./ConfirmRefuseProcess.vue";
-import { mapState } from "vuex";
-import BaseLoading from "@/components/base/BaseLoading.vue";
+<script>
+import BookingRoomApi from '@/apis/BookingRoomApi'
+import BasePaging from '@/components/base/BasePaging.vue'
+import BaseCellTemplace from '@/components/base/BaseCellTemplace.vue'
+import BaseTable from '@/components/base/BaseTable.vue'
+import DxTextBox from 'devextreme-vue/text-box'
+import Enum from '@/commons/Enum'
+import { reactive } from 'vue'
+import ConfirmApproveProcessVue from './ConfirmApproveProcess.vue'
+import ConfirmRefuseProcessVue from './ConfirmRefuseProcess.vue'
+import { mapState } from 'vuex'
+import BaseLoading from '@/components/base/BaseLoading.vue'
+import ObjectFunction from '@/commons/CommonFuction'
+import Resource from '@/commons/Resource'
 export default {
   components: {
     BaseTable,
@@ -91,7 +87,6 @@ export default {
     ConfirmApproveProcessVue,
     ConfirmRefuseProcessVue,
     BaseLoading,
-    DxToast,
   },
   props: {
     weekID: {
@@ -107,130 +102,127 @@ export default {
       pageSize: 15,
       popupVisible: false,
       refuseVisible: false,
-      toastVisible: false,
-      message: "",
-      type: "",
       dataSelect: {},
       startRecord: 1,
       endRecord: 1,
       totalRecord: 1,
       /**Timout của tìm kiếm */
       timeout: 1000,
-      keyword: "",
+      keyword: '',
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
-    });
+    })
     var headerTableBookingRoom = [
       {
-        dataField: "BookingRoomID",
+        dataField: 'BookingRoomID',
         visible: false,
         width: 0,
       },
       {
-        dataField: "FullName",
-        caption: "Người đặt lịch",
+        dataField: 'FullName',
+        caption: 'Người đặt lịch',
         visible: true,
         width: 200,
       },
       {
-        dataField: "RoomName",
-        caption: "Tên phòng",
+        dataField: 'RoomName',
+        caption: 'Tên phòng',
         visible: true,
         width: 150,
       },
       {
-        dataField: "BuildingName",
-        caption: "Tên tòa nhà",
+        dataField: 'BuildingName',
+        caption: 'Tên tòa nhà',
         visible: true,
         width: 120,
       },
       {
-        dataField: "TimeSlotName",
-        caption: "Ca đặt",
+        dataField: 'TimeSlotName',
+        caption: 'Ca đặt',
         visible: true,
         width: 70,
       },
       {
-        dataField: "DateRequest",
-        caption: "Ngày yêu cầu",
+        dataField: 'DateRequest',
+        caption: 'Ngày yêu cầu',
         visible: true,
         width: 120,
-        dataType: "date",
-        format: "dd/MM/yyyy",
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
-          const date = new Date(data.DateRequest);
-          const day = date.getDate().toString().padStart(2, "0");
-          const month = (date.getMonth() + 1).toString().padStart(2, "0");
-          const year = date.getFullYear();
-          return `${day}/${month}/${year}`;
+          const date = new Date(data.DateRequest)
+          const day = date.getDate().toString().padStart(2, '0')
+          const month = (date.getMonth() + 1).toString().padStart(2, '0')
+          const year = date.getFullYear()
+          return `${day}/${month}/${year}`
         },
       },
       {
-        dataField: "DateBooking",
-        caption: "Ngày đặt",
+        dataField: 'StartDate',
+        caption: 'Ngày đặt',
         visible: true,
         width: 120,
-        dataType: "date",
-        format: "dd/MM/yyyy",
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
-          const date = new Date(data.DateBooking);
-          const day = date.getDate().toString().padStart(2, "0");
-          const month = (date.getMonth() + 1).toString().padStart(2, "0");
-          const year = date.getFullYear();
-          return `${day}/${month}/${year}`;
+          const date = new Date(data.StartDate)
+          const day = date.getDate().toString().padStart(2, '0')
+          const month = (date.getMonth() + 1).toString().padStart(2, '0')
+          const year = date.getFullYear()
+          return `${day}/${month}/${year}`
         },
       },
       {
-        dataField: "Description",
-        caption: "Tiêu đề",
+        dataField: 'Description',
+        caption: 'Tiêu đề',
         visible: true,
         width: 250,
       },
       {
-        dataField: "Approve",
-        caption: "",
+        dataField: 'Approve',
+        caption: '',
       },
-    ];
+    ]
     /**
      * Mô tả : Hàm show/hide loading
      * @param {Boolean} isShow true: hiển thị loading, false: ẩn loading
      * @Createdby: PTTAM
      */
     function showLoading(isShow) {
-      dataComponent.isShowLoading = isShow;
+      dataComponent.isShowLoading = isShow
     }
     /**
      * đóng popup phê duyệt
      * @param {
      * } val
      */
-    const closePopup = (val) => {
-      dataComponent.popupVisible = false;
-    };
+    const closePopup = () => {
+      dataComponent.popupVisible = false
+    }
     /** Mô tả: ẩn popup
      * CreatedBy: PTTAM
      * Created Date: 11-09-2022 08:22:11
      */
     function onClickClosePopup() {
-      dataComponent.popupMode = -1;
+      dataComponent.popupMode = -1
     }
     /** Mô tả: Sự kiện keyup để tìm kiếm lịch
      * CreatedBy: PTTAM
      */
     function filterBooking() {
-      clearTimeout(dataComponent.timeout);
+      clearTimeout(dataComponent.timeout)
       dataComponent.timeout = setTimeout(() => {
-        getData();
-      }, 500);
+        getData()
+      }, 500)
     }
     /**
      * đóng popup từ chối
      * @param {
      * } val
      */
-    const closeRefusePopup = (val) => {
-      dataComponent.refuseVisible = false;
-    };
+    const closeRefusePopup = () => {
+      dataComponent.refuseVisible = false
+    }
 
     /**
      * lấy dữ liệu
@@ -243,55 +235,55 @@ export default {
           pageSize: dataComponent.pageSize,
           keyword: dataComponent.keyword,
         }).then((res) => {
-          dataComponent.dataSource = res.data.Data || [];
-          dataComponent.pageIndex = res.data.CurrentPage;
-          dataComponent.startRecord = res.data.StartRecord;
-          dataComponent.endRecord = res.data.EndRecord;
-          dataComponent.totalRecord = res.data.TotalRecord;
-          showLoading(false);
-        });
+          dataComponent.dataSource = res.data.Data || []
+          dataComponent.pageIndex = res.data.CurrentPage
+          dataComponent.startRecord = res.data.StartRecord
+          dataComponent.endRecord = res.data.EndRecord
+          dataComponent.totalRecord = res.data.TotalRecord
+          showLoading(false)
+        })
       } catch (error) {
-        showLoading(false);
-        console.log(error);
+        showLoading(false)
+        console.log(error)
       }
-    };
+    }
     /**
      * load lại dữ liệu khi thay đổi số bản ghi/ trang
      * @param {*} size - số bản ghi/ trang
      */
     const pageSizeSelected = (size) => {
-      dataComponent.pageSize = size;
-      showLoading(true);
-      getData();
-    };
+      dataComponent.pageSize = size
+      showLoading(true)
+      getData()
+    }
 
     /**
      * load lại dữ liệu khi thay đổi trang
      * @param {*} val - trang hiện tại
      */
     const currentPage = (val) => {
-      dataComponent.pageIndex = val;
-      showLoading(true);
-      getData();
-    };
+      dataComponent.pageIndex = val
+      showLoading(true)
+      getData()
+    }
 
     /**
      * confirm phê duyệt
      *
      */
     const confirmApproveClick = (e) => {
-      dataComponent.popupMode = Enum.PopupMode.ApproveMode;
-      dataComponent.dataSelect = e;
-    };
+      dataComponent.popupMode = Enum.PopupMode.ApproveMode
+      dataComponent.dataSelect = e
+    }
 
     /**
      * confirm từ chối
      *
      */
     const confirmRefuseClick = (e) => {
-      dataComponent.popupMode = Enum.PopupMode.RefuseMode;
-      dataComponent.dataSelect = e;
-    };
+      dataComponent.popupMode = Enum.PopupMode.RefuseMode
+      dataComponent.dataSelect = e
+    }
 
     /**
      * phê duyệt
@@ -302,27 +294,29 @@ export default {
         const res = await BookingRoomApi.approveRequest({
           bookingRoomID: dataComponent.dataSelect,
           option: Enum.OptionRequest.Approve,
-        });
+        })
 
         if (res && res.data) {
-          closePopup();
-          showLoading(true);
-          getData();
-          onClickClosePopup();
-          // toast thông báo xóa thành công
-          dataComponent.type = "success";
-          dataComponent.toastVisible = true;
-          dataComponent.message = "Phê duyệt thành công";
+          closePopup()
+          showLoading(true)
+          getData()
+          onClickClosePopup()
+
+          ObjectFunction.toastMessage(
+            'Phê duyệt thành công',
+            Resource.Messenger.Success,
+          )
         } else {
-          dataComponent.type = "error";
-          onClickClosePopup();
-          dataComponent.toastVisible = true;
-          dataComponent.message = "Phê duyệt thất bại";
+          onClickClosePopup()
+          ObjectFunction.toastMessage(
+            'Phê duyệt thất bại',
+            Resource.Messenger.Error,
+          )
         }
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-    };
+    }
 
     /**
      * Từ chối
@@ -336,24 +330,26 @@ export default {
           option: Enum.OptionRequest.Reject,
         }).then((res) => {
           if (res && res.data) {
-            onClickClosePopup();
-            // toast thông báo xóa thành công
-            dataComponent.type = "success";
-            dataComponent.toastVisible = true;
-            dataComponent.message = "Từ chối thành công";
-            showLoading(true);
-            getData();
+            closePopup()
+            showLoading(true)
+            getData()
+            onClickClosePopup()
+            ObjectFunction.toastMessage(
+              'Từ chối thành công',
+              Resource.Messenger.Success,
+            )
           } else {
-            onClickClosePopup();
-            dataComponent.type = "error";
-            dataComponent.toastVisible = true;
-            dataComponent.message = "Từ chối thất bại";
+            onClickClosePopup()
+            ObjectFunction.toastMessage(
+              'Từ chối thất bạ',
+              Resource.Messenger.Success,
+            )
           }
-        });
+        })
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-    };
+    }
 
     return {
       dataComponent,
@@ -370,7 +366,7 @@ export default {
       filterBooking,
       showLoading,
       onClickClosePopup,
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -378,29 +374,29 @@ export default {
     }),
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
-      return Enum;
+      return Enum
     },
   },
   mounted() {
-    this.getData();
+    this.getData()
     this.dataComponent.isAdmin =
-      localStorage.getItem("roleOption") - 0 == Enum.RoleOption.Admin
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true
-        : false;
+        : false
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
 #body-browsing {
   flex: 1;
-  padding: 10px 20px;
+  padding: 20px 20px;
   background-color: #efefef;
-  height: calc(100% - 75px);
+  height: calc(100%);
 }
 
 #bd-room-browsing {
-  height: calc(100vh - 140px);
+  height: 100%;
   background: white;
   padding: 20px;
 }
@@ -426,7 +422,7 @@ export default {
       height: 20px;
       z-index: 1;
       margin-left: -20px;
-      background: url("@/assets/images/Icon.de5bb0db.svg") no-repeat;
+      background: url('@/assets/images/Icon.de5bb0db.svg') no-repeat;
 
       &.icon-search {
         background-position: -194px -2px;
@@ -456,4 +452,3 @@ export default {
   height: 600px;
 }
 </style>
-  

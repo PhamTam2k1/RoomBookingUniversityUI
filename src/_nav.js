@@ -17,7 +17,7 @@ export default [
     component: 'CNavItem',
     name: 'Đặt phòng',
     to: '/booking/booking-room',
-    icon: 'cil-drop',
+    icon: 'cil-calendar',
   },
   {
     component: 'CNavItem',

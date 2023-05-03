@@ -1,6 +1,6 @@
 <template>
-  <div id="body-room-dictionary" >
-    <div id="bd-room" class ="Body">
+  <div id="body-room-dictionary">
+    <div id="bd-room" class="Body">
       <div class="filter-options">
         <DxTextBox
           placeholder="Tìm kiếm"
@@ -56,30 +56,28 @@
   <!-- Loading -->
   <!-- <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading> -->
 
-  <RoomDictionaryDetail :width="700"
-       v-if="dataComponent.isShowForm"
-      
-      @onCloseForm="showFormDetail(false)"
-      :popupMode="dataComponent.popupMode"
-      @onLoadData="getData()"
-      @onShowLoading="showLoading(true)"
-      :roomData="JSON.parse(JSON.stringify(dataComponent.roomData))"
-        
-        
-        />
+  <RoomDictionaryDetail
+    :width="700"
+    v-if="dataComponent.isShowForm"
+    @onCloseForm="showFormDetail(false)"
+    :popupMode="dataComponent.popupMode"
+    @onLoadData="getData()"
+    @onShowLoading="showLoading(true)"
+    :roomData="JSON.parse(JSON.stringify(dataComponent.roomData))"
+  />
 </template>
 <script>
-import BasePaging from "@/components/base/BasePaging.vue";
-import BaseCellTemplace from "@/components/base/BaseCellTemplace.vue";
-import BaseTable from "@/components/base/BaseTable.vue";
-import Enum from "@/commons/Enum";
-import { DxButton } from "devextreme-vue/button";
-import { reactive } from "vue";
-import { mapState } from "vuex";
-import DxTextBox from "devextreme-vue/text-box";
-import RoomApi from "@/apis/RoomApi";
-import BaseLoading from "@/components/base/BaseLoading.vue";
-import RoomDictionaryDetail from "./RoomDictionaryDetail.vue";
+import BasePaging from '@/components/base/BasePaging.vue'
+import BaseCellTemplace from '@/components/base/BaseCellTemplace.vue'
+import BaseTable from '@/components/base/BaseTable.vue'
+import Enum from '@/commons/Enum'
+import { DxButton } from 'devextreme-vue/button'
+import { reactive } from 'vue'
+import { mapState } from 'vuex'
+import DxTextBox from 'devextreme-vue/text-box'
+import RoomApi from '@/apis/RoomApi'
+// import BaseLoading from '@/components/base/BaseLoading.vue'
+import RoomDictionaryDetail from './RoomDictionaryDetail.vue'
 export default {
   components: {
     DxTextBox,
@@ -87,8 +85,8 @@ export default {
     BaseTable,
     BasePaging,
     BaseCellTemplace,
-    RoomDictionaryDetail
-},
+    RoomDictionaryDetail,
+  },
   props: {
     weekID: {
       type: Number,
@@ -105,14 +103,14 @@ export default {
       startRecord: 1,
       endRecord: 15,
       popupVisible: false,
-      message: "",
+      message: '',
       dataSelect: {},
-      title: "",
+      title: '',
       deleteVisible: false,
       roomData: {},
       isEdit: false,
-      popupMode:0
-    });
+      popupMode: 0,
+    })
 
     /**
      * Header table
@@ -120,60 +118,60 @@ export default {
      */
     var headerTableRoom = [
       {
-        dataField: "RoomID",
-        caption: "Mã phòng",
+        dataField: 'RoomID',
+        caption: 'Mã phòng',
         visible: false,
         width: 0,
       },
       {
-        dataField: "RoomCode",
-        caption: "Mã phòng",
+        dataField: 'RoomCode',
+        caption: 'Mã phòng',
       },
       {
-        dataField: "RoomName",
-        caption: "Tên phòng",
+        dataField: 'RoomName',
+        caption: 'Tên phòng',
       },
       {
-        dataField: "BuildingName",
-        caption: "Địa điểm",
+        dataField: 'BuildingName',
+        caption: 'Địa điểm',
       },
       {
-        dataField: "Capacity",
-        caption: "Sức chứa",
+        dataField: 'Capacity',
+        caption: 'Sức chứa',
       },
       {
-        dataField: "UserName",
-        caption: "Người phụ trách",
+        dataField: 'UserName',
+        caption: 'Người phụ trách',
       },
       {
-        dataField: "RoomStatus",
-        caption: "Trạng thái phòng",
+        dataField: 'RoomStatus',
+        caption: 'Trạng thái phòng',
       },
       {
-        dataField: "",
-        caption: "",
+        dataField: '',
+        caption: '',
         width: 50,
       },
       {
-        dataField: "AvartarColor",
-        caption: "",
+        dataField: 'AvartarColor',
+        caption: '',
         width: 0,
         visible: false,
       },
       {
-        dataField: "RoomStatusColor",
-        caption: "",
+        dataField: 'RoomStatusColor',
+        caption: '',
         width: 0,
         visible: false,
       },
-    ];
-/**
-     * Hiển thị popup 
+    ]
+    /**
+     * Hiển thị popup
      * PTTAM
-     * @param {Boolean} isShow 
+     * @param {Boolean} isShow
      */
-     function showFormDetail(isShow) {
-    dataComponent.isShowForm = isShow;
+    function showFormDetail(isShow) {
+      dataComponent.isShowForm = isShow
     }
     /**
      * Mô tả : Hàm show/hide loading
@@ -181,7 +179,7 @@ export default {
      * @Createdby: PTTAM
      */
     function showLoading(isShow) {
-      dataComponent.isShowLoading = isShow;
+      dataComponent.isShowLoading = isShow
     }
     /** Mô tả: Hàm hiển thị popup xóa người dùng
      * @param {string} userId Mã người dùng
@@ -189,11 +187,11 @@ export default {
      * CreatedBy: PTTAM
      * Created Date: 02-09-2022 14:12:42
      */
-    function onClickShowPopupDelete(id, name) {
+    function onClickShowPopupDelete(id) {
       dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
-      dataComponent.popupMode = Enum.PopupMode.DeleteMode; //
+        (x) => x.RoomID == id,
+      )
+      dataComponent.popupMode = Enum.PopupMode.DeleteMode //
     }
 
     /** Mô tả: Hàm hiển thị popup sửa vai trò của người dùng
@@ -203,10 +201,10 @@ export default {
      */
     function onClickShowPopupEdit(id) {
       dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
-      dataComponent.popupMode = Enum.PopupMode.EditMode; // Gán lại trạng thái của popup
-      showFormDetail(true);
+        (x) => x.RoomID == id,
+      )
+      dataComponent.popupMode = Enum.PopupMode.EditMode // Gán lại trạng thái của popup
+      showFormDetail(true)
     }
 
     /**
@@ -214,27 +212,27 @@ export default {
      * @param {
      * } val
      */
-    const closePopup = (val) => {
-      dataComponent.popupVisible = false;
-    };
+    const closePopup = () => {
+      dataComponent.popupVisible = false
+    }
 
     const closeDeletePopup = () => {
-      dataComponent.deleteVisible = false;
-    };
+      dataComponent.deleteVisible = false
+    }
 
     /**
      * sửa tòa nhà
      * @param {*} event
      */
     const editBuilding = (event) => {
-      let id = event.element.accessKey;
+      let id = event.element.accessKey
       dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
-      dataComponent.title = "Sửa tòa nhà";
-      dataComponent.isEdit = true;
-      dataComponent.popupVisible = true;
-    };
+        (x) => x.RoomID == id,
+      )
+      dataComponent.title = 'Sửa tòa nhà'
+      dataComponent.isEdit = true
+      dataComponent.popupVisible = true
+    }
 
     /**
      * lấy dữ liệu
@@ -245,53 +243,53 @@ export default {
         RoomApi.getPaging({
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
-          keyword: "",
+          keyword: '',
         }).then((res) => {
-          dataComponent.dataSource = res.data.Data || [];
-          dataComponent.pageIndex = res.data.CurrentPage;
-          dataComponent.startRecord = res.data.StartRecord;
-          dataComponent.endRecord = res.data.EndRecord;
-          dataComponent.totalRecord = res.data.TotalRecord;
+          dataComponent.dataSource = res.data.Data || []
+          dataComponent.pageIndex = res.data.CurrentPage
+          dataComponent.startRecord = res.data.StartRecord
+          dataComponent.endRecord = res.data.EndRecord
+          dataComponent.totalRecord = res.data.TotalRecord
           showLoading(false)
-        });
+        })
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-    };
+    }
 
     const deleteBuilding = (event) => {
-      let id = event.element.accessKey;
+      let id = event.element.accessKey
       dataComponent.roomData = dataComponent.dataSource.find(
-        (x) => x.RoomID == id
-      );
-      dataComponent.deleteVisible = true;
-    };
+        (x) => x.RoomID == id,
+      )
+      dataComponent.deleteVisible = true
+    }
     /**
      * Sự kiện thay đổi số bản ghi/trang
      * PTTAM 09/04/2023
      */
     const pageSizeSelected = (size) => {
-      dataComponent.pageSize = size;
+      dataComponent.pageSize = size
       showLoading(true)
-      getData();
-    };
+      getData()
+    }
 
     /**
      * Sự kiện thay đổi số trang
      * PTTAM 08/04/2023
      */
     const currentPage = (val) => {
-      dataComponent.pageIndex = val;
+      dataComponent.pageIndex = val
       showLoading(true)
-      getData();
-    };
+      getData()
+    }
 
     const addBuilding = () => {
-      dataComponent.title = "Thêm mới";
-      dataComponent.roomData = {};
-      showFormDetail(true);
-      dataComponent.popupMode = Enum.PopupMode.AddMode;
-    };
+      dataComponent.title = 'Thêm mới'
+      dataComponent.roomData = {}
+      showFormDetail(true)
+      dataComponent.popupMode = Enum.PopupMode.AddMode
+    }
 
     return {
       dataComponent,
@@ -307,8 +305,8 @@ export default {
       onClickShowPopupDelete,
       onClickShowPopupEdit,
       showLoading,
-      showFormDetail
-    };
+      showFormDetail,
+    }
   },
   computed: {
     ...mapState({
@@ -316,11 +314,11 @@ export default {
     }),
   },
   mounted() {
-    this.showLoading(true);
-    this.getData();
-    this.isAdmin = this.roleOption == Enum.RoleOption.Admin ? true : false;
+    this.showLoading(true)
+    this.getData()
+    this.isAdmin = this.roleOption == Enum.RoleOption.Admin ? true : false
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -358,7 +356,7 @@ export default {
       height: 20px;
       z-index: 1;
       margin-left: -20px;
-      background: url("@/assets/images/Icon.de5bb0db.svg") no-repeat;
+      background: url('@/assets/images/Icon.de5bb0db.svg') no-repeat;
 
       &.icon-search {
         background-position: -194px -2px;
@@ -387,4 +385,3 @@ export default {
   padding-right: 20px !important;
 }
 </style>
-  

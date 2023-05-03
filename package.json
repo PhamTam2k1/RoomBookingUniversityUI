@@ -31,9 +31,11 @@
     "devextreme": "^22.2.5",
     "devextreme-vue": "^22.2.5",
     "element-plus": "^2.3.3",
+    "moment": "^2.29.4",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",

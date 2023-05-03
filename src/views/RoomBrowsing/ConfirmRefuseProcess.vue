@@ -25,7 +25,6 @@
           v-model="reson"
         ></base-input>
       </div>
-
     </template>
     <template #buttonPopup>
       <base-button
@@ -38,15 +37,15 @@
 </template>
 
 <script>
-import Resource from "@/commons/Resource";
-import BasePopup from '@/components/base/BasePopup.vue';
-import BaseButton from "@/components/base/BaseButton.vue";
-import BaseInput from "@/components/base/BaseInput.vue";
+import Resource from '@/commons/Resource'
+import BasePopup from '@/components/base/BasePopup.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
 export default {
-  components:{
+  components: {
     BasePopup,
     BaseButton,
-    BaseInput
+    BaseInput,
   },
   props: {
     /**Đối tượng user  */
@@ -63,8 +62,8 @@ export default {
     return {
       /**Object chứa resource */
       Resource: Resource,
-      reson: "",
-    };
+      reson: '',
+    }
   },
   methods: {
     /** Mô tả: Gửi sự kiện đóng popup
@@ -74,15 +73,15 @@ export default {
      * Created Date: 06-09-2022 00:09:14
      */
     onClickClosePopup() {
-      this.$emit("onClickClosePopup");
+      this.$emit('onClickClosePopup')
     },
     /** Mô tả: Sự kiện nhấn vào nút xóa người dùng
      * CreatedBy: PTTAM
      * Created Date: 03-09-2022 07:04:16
      */
     async onClickAcceptRefuse() {
-      this.$emit("refuseClick", this.reson);
+      this.$emit('refuseClick', this.reson)
     },
   },
-};
+}
 </script>
