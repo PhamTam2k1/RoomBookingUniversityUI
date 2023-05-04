@@ -37,7 +37,7 @@
           </div>
         </div>
       </div>
-      <div v-if="dataField == 'Approve'">
+      <div v-if="dataField == 'Approve' && isAdmin">
         <div class="display-none">
           <div class="flex">
             <div class="misa-icon-style" title="Phê duyệt">

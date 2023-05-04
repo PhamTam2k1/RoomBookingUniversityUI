@@ -2,7 +2,10 @@
   <div
     class="base-input"
     ref="title"
-    :class="{ 'misa-input-required': error != '', tooltip: error != '' }"
+    :class="{
+      'misa-input-required': error != '' && !isDisable,
+      tooltip: error != '' && !isDisable,
+    }"
     :data_title="error"
   >
     <div class="lable-input t-title-lable flex" v-if="lable">
@@ -23,6 +26,7 @@
       @blur="handleBlur"
       @keyup="handleKeyup"
       :maxlength="maxlength"
+      :disabled="isDisable"
     />
   </div>
 </template>
@@ -73,6 +77,10 @@ export default {
     lable: String,
     /**Viết hoa  */
     isCapitaLable: {
+      type: Boolean,
+      default: false,
+    } /**Viết hoa  */,
+    isDisable: {
       type: Boolean,
       default: false,
     },
@@ -188,7 +196,10 @@ export default {
   font-family: Notosans;
   font-weight: 100;
 }
-
+.misa-input:disabled {
+  color: #585959;
+  background-color: #f5f5f5;
+}
 .tooltip:hover:after {
   display: block;
 }

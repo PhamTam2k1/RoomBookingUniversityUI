@@ -16,14 +16,14 @@
     <template #contentPopup>
       <div class="content-popup-delete">
         Bạn có chắc chắn muốn từ chối lịch họp này không?
-        <base-input
-          placeholder="Lý do từ chối"
-          classInput="misa-input"
-          class="misa-input-secondary mgb-8"
-          :maxlength="20"
-          :tabindex="1"
+        <textarea
+          id="reson"
+          name="w3review"
           v-model="reson"
-        ></base-input>
+          rows="4"
+          placeholder="Lý do từ chối"
+        >
+        </textarea>
       </div>
     </template>
     <template #buttonPopup>
@@ -40,12 +40,12 @@
 import Resource from '@/commons/Resource'
 import BasePopup from '@/components/base/BasePopup.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
-import BaseInput from '@/components/base/BaseInput.vue'
+// import BaseInput from "@/components/base/BaseInput.vue";
 export default {
   components: {
     BasePopup,
     BaseButton,
-    BaseInput,
+    // BaseInput
   },
   props: {
     /**Đối tượng user  */
@@ -85,3 +85,16 @@ export default {
   },
 }
 </script>
+<style scoped>
+#reson {
+  margin: 10px 6px 10px 6px;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #969696;
+  width: 100%;
+}
+#reson:focus {
+  outline: none; /* loại bỏ đường viền màu xanh nhạt mặc định trên Firefox */
+  border-color: #ccc; /* thiết lập màu xám cho khung viền khi tập trung */
+}
+</style>

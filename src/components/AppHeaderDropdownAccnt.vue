@@ -29,6 +29,7 @@
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'AppHeaderDropdownAccnt',
   setup() {
@@ -37,11 +38,23 @@ export default {
       itemsCount: 42,
     }
   },
+  computed: {
+    ...mapState({
+      isLoggedInn: (state) => state.auth.isLoggedIn,
+      currentUser: (state) => state.auth.user,
+    }),
+  },
   methods: {
+    ...mapActions({
+      logout: 'auth/logout',
+    }),
     handleChangePass() {
       alert('changePass')
     },
-    handleLogout() {},
+    handleLogout() {
+      this.logout()
+      this.$router.push('/login')
+    },
   },
 }
 </script>

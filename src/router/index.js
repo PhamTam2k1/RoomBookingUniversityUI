@@ -18,26 +18,31 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/booking',
         name: 'Booking',
         redirect: '/booking-room',
+        meta: { requiresAuth: true },
       },
       {
         path: '/booking/booking-room',
         name: 'Đặt phòng',
         component: () => import('@/views/booking/RoomBooking.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/booking/booking-await',
         name: 'Chờ duyệt',
         component: () => import('@/views/RoomBrowsing/RoomBrowsing.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/booking/booking-history',
         name: 'Lịch sử đặt phòng',
         component: () => import('@/views/RoomBrowsing/RoomBrowsing.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/dictionary',
@@ -54,36 +59,42 @@ const routes = [
             name: 'Phòng học',
             component: () =>
               import('@/views/dictionary/Room/RoomDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/room-type',
             name: 'Loại phòng học',
             component: () =>
               import('@/views/dictionary/Building/BuildingDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/building',
             name: 'Tòa nhà',
             component: () =>
               import('@/views/dictionary/Building/BuildingDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/timeslot',
             name: 'Ca học',
             component: () =>
               import('@/views/dictionary/TimeSlot/TimeSlotDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/equipment',
             name: 'Thiết bị',
             component: () =>
               import('@/views/dictionary/Equipment/EquipmentDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/equipment-type',
             name: 'Loại thiết bị',
             component: () =>
               import('@/views/dictionary/Equipment/EquipmentDictionary.vue'),
+            meta: { requiresAuth: true },
           },
         ],
       },
@@ -102,22 +113,30 @@ const routes = [
             name: 'Người dùng',
             component: () =>
               import('@/views/dictionary/User/UserDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/role',
             name: 'Vai trò',
             component: () =>
               import('@/views/dictionary/Role/RoleDictionary.vue'),
+            meta: { requiresAuth: true },
           },
           {
             path: '/dictionary/department',
             name: 'Khoa',
             component: () =>
               import('@/views/dictionary/Department/DepartmentDictionary.vue'),
+            meta: { requiresAuth: true },
           },
         ],
       },
     ],
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/Login.vue'),
+    // component: () => import('@/views/pages/Login.vue'),
   },
   {
     path: '/pages',
@@ -161,5 +180,13 @@ const router = createRouter({
     return { top: 0 }
   },
 })
+router.beforeEach((to, from, next) => {
+  const loggedIn = localStorage.getItem('user')
 
+  if (to.matched.some((record) => record.meta.requiresAuth) && !loggedIn) {
+    next('/login')
+  } else {
+    next()
+  }
+})
 export default router

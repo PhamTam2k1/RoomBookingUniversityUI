@@ -1,54 +1,38 @@
 <template>
-  <div class="booking-tooltip">
+  <div class="booking-tooltip" ref="tooltip">
     <div class="header-popover flex">
-      <div class="text-title flex">
-        {{ templateTooltipModel.targetedAppointmentData.Subject }}
-      </div>
+      <div class="text-title flex">{{ templateTooltipModel.Subject }}</div>
       <div class="tool flex"></div>
     </div>
     <div class="info">
       <div class="t-item-line flex">
         <div class="t-lable">Tên phòng</div>
-        <div class="t-content">
-          {{ templateTooltipModel.targetedAppointmentData.RoomName }}
-        </div>
+        <div class="t-content">{{ templateTooltipModel.RoomName }}</div>
       </div>
       <div class="t-item-line flex">
         <div class="t-lable">Thời gian đặt</div>
-        <div class="t-content">
-          {{ templateTooltipModel.targetedAppointmentData.StartDate }}
-        </div>
+        <div class="t-content">{{ templateTooltipModel.dateTime }}</div>
       </div>
       <div class="t-item-line flex">
         <div class="t-lable">Số người tham dự</div>
-        <div class="t-content">
-          {{ templateTooltipModel.targetedAppointmentData.Quantity }}
-        </div>
+        <div class="t-content"></div>
       </div>
       <div class="t-item-line flex">
         <div class="t-lable">Người đặt phòng</div>
         <div class="t-content">
+          {{ templateTooltipModel.FullName }}
           <div class="misa-full-name-avatar-table flex">
-            <div
-              class="misa-cell-avatar-color"
-              :style="{
-                backgroundColor:
-                  templateTooltipModel.targetedAppointmentData.AvartarColor,
-              }"
-            >
-              {{
-                CommonFunction.splitFullName(
-                  templateTooltipModel.targetedAppointmentData.FullName,
-                )
-              }}
+            <div class="misa-cell-avatar-color">
+              {{ templateTooltipModel.AvartarColor }}
             </div>
             <div class="misa-cell-FullName">
-              {{ templateTooltipModel.targetedAppointmentData.FullName }}
+              {{ templateTooltipModel.FullName }}
             </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="arrow" :class="{ arrow_right: classArrow }"></div>
   </div>
 </template>
 <script>
@@ -73,6 +57,12 @@ export default {
       type: Object,
       default: () => {},
     },
+    classArrow: {
+      type: Boolean,
+    },
+  },
+  created() {
+    console.log(this.templateTooltipModel)
   },
   data() {
     return {
@@ -110,7 +100,7 @@ export default {
     .t-lable {
       text-align: left;
       margin-right: 10px;
-      width: 120px;
+      width: 150px;
     }
 
     .t-content {
@@ -137,5 +127,22 @@ export default {
     min-width: 32px;
     min-height: 32px;
   }
+}
+.arrow {
+  width: 0;
+  left: -10px;
+  top: 50%;
+  height: 0;
+  position: absolute;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #fff;
+  transform: translateY(-50%);
+}
+.arrow_right {
+  border-left: 10px solid #fff;
+  right: -10px;
+  left: auto;
+  border-right: none;
 }
 </style>

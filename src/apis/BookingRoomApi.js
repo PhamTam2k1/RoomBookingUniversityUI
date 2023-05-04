@@ -64,5 +64,14 @@ class BookingRoomAPI {
       param,
     )
   }
+
+  /**
+   * Lấy đối tượng theo khóa chính
+   * @param {*} id
+   * @returns
+   */
+  getByID(id) {
+    return BaseAPIConfig.get(`${this.controller}/getById/${id}`)
+  }
 }
 export default new BookingRoomAPI()

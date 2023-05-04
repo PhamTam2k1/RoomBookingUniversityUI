@@ -2,15 +2,15 @@
   <div class="table_multi" ref="table_multi">
     <table class="schedule-table">
       <thead>
-        <tr>
-          <th></th>
+        <tr class="tr-data">
+          <th class="sticky"></th>
           <th v-for="room in rooms" :key="room.RoomID">{{ room.RoomName }}</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="timeSlot in timeSlots" :key="timeSlot.dateTime">
           <td
-            class="tdLabel"
+            class="tdLabel sticky"
             :class="{ isActive: dateNow == timeSlot.dateTime }"
           >
             {{ timeSlot.name }}
@@ -18,7 +18,9 @@
           <td
             v-for="room in rooms"
             :key="room.RoomID"
-            @click="onClickCell(timeSlot.dateTime, room.RoomID)"
+            @click="
+              onClickCell(timeSlot.dateTime, room.RoomID), (isShowForm = true)
+            "
             class="rowColor"
             :class="{
               isActive: dateNow == timeSlot.dateTime,
@@ -39,7 +41,7 @@
                 <div
                   @click="
                     onClickCell(booking.dateTime, booking.RoomID),
-                      (indexTooltip = 1)
+                      (isShowForm = true)
                   "
                   v-for="(booking, index) in getSubject(
                     timeSlot.dateTime,
@@ -69,7 +71,7 @@
                   <p
                     v-if="index > 2"
                     class="Seedetail"
-                    @click="showPopUp(timeSlot.dateTime, room.RoomID)"
+                    @click.stop="showPopUp(timeSlot.dateTime, room.RoomID)"
                   >
                     Xem thêm({{
                       getSubject(timeSlot.dateTime, room.RoomID).length - 3
@@ -115,7 +117,10 @@
         <div class="generate">
           <div class="misa-active-status-table flex">
             <div
-              @click="onClickCell(booking.dateTime, booking.RoomID)"
+              @click="
+                onClickCell(booking.dateTime, booking.RoomID),
+                  (isShowForm = true)
+              "
               v-for="(booking, index) in generate"
               :key="index"
               class="misa-cell-active-group"
@@ -129,7 +134,11 @@
                   ),
                 }"
               ></div>
-              <p class="titleSubject">
+              <p
+                class="titleSubject"
+                v-hover
+                @mousemove="handleMouseMove($event, booking, true)"
+              >
                 {{ booking.Subject }}
               </p>
             </div>
@@ -217,29 +226,47 @@ export default {
       return booking.slice(0, 4)
     },
     // lấy vị trí x y khi hover
-    handleMouseMove(event, booking) {
-      this.isShowTooltip = true
-      this.bookingHover = booking
-      var chird = event.currentTarget
-      var widthDisplay = this.$refs.table_multi.clientWidth * 0.8
-      var parent = chird.closest('.rowColor')
-      const elementWidth = parent.clientWidth
-      const elementHeight = chird.clientHeight
-      const parentHeight = parent.clientHeight
-      const elementLeft = parent.offsetLeft
-      const elementTop = chird.offsetTop
-      const parentTop = parent.offsetTop
-      const centerX = elementLeft + elementWidth / 2
-      const centerY = elementTop + elementHeight / 2
-      const parentCenterY = parentTop + parentHeight / 2
-      if (centerX + event.currentTarget.clientWidth < widthDisplay) {
-        this.left = centerX + event.currentTarget.clientWidth + 280
-        this.classArrow = false
+    handleMouseMove(event, booking, popup) {
+      const childElement = event.target
+      const parentElement = childElement.closest('.rowColor')
+        ? childElement.closest('.rowColor')
+        : childElement.closest('.misa-dialog-content')
+      const parentRect = parentElement.getBoundingClientRect()
+      const elementRect = childElement.getBoundingClientRect()
+
+      const tooltipWidth = event.currentTarget.clientWidth
+      const tooltipHeight = event.currentTarget.clientHeight
+      const elementWidth = elementRect.width
+      const elementHeight = elementRect.height
+      const elementLeft = elementRect.left
+      const elementTop = elementRect.top
+      const parentLeft = parentRect.left
+      // const parentTop = parentRect.top
+
+      let left = 0
+      let top = 0
+      let classArrow = false
+      if (
+        elementLeft + tooltipWidth < parentLeft + parentRect.width &&
+        elementLeft + tooltipWidth < 800
+      ) {
+        left = elementLeft + elementWidth + 20
       } else {
-        this.left = centerX - event.currentTarget.clientWidth - 80
-        this.classArrow = true
+        left = elementLeft - parentRect.width - elementWidth - 120
+        classArrow = true
       }
-      this.top = centerY + parentCenterY - 40
+
+      top =
+        elementTop -
+        tooltipHeight / 2 +
+        elementHeight / 2 +
+        parentElement.scrollTop
+
+      this.left = popup ? left + 180 : left
+      this.top = top - 100
+      this.classArrow = classArrow
+      this.bookingHover = booking
+      this.isShowTooltip = true
     },
     getBookingColor(value, RoomID) {
       const booking = this.bookingRooms.find(
@@ -283,6 +310,8 @@ export default {
       this.rooms = uniqueRooms
     },
     onClickCell(TimeSlotID, RoomID) {
+      this.isShowTooltip = false
+      this.popupNoticeMode = false
       console.log('Clicked on timeSlot:', TimeSlotID, 'in room:', RoomID)
     },
     handleDataSource() {
@@ -344,53 +373,75 @@ export default {
           { id: 6, name: 'Thứ 7' },
           { id: 7, name: 'CN' },
         ]
+        // Tạo một mảng các đối tượng thể hiện ngày trong tuần kèm theo ngày hiện tại
+        const daysWithDate = daysOfWeek.map((day) => {
+          const date = new Date(today)
+          const dayOfWeek = date.getDay()
+          const diff = day.id - dayOfWeek
+          date.setDate(today.getDate() + diff)
+          return {
+            id: day.id,
+            name: day.name + ' ' + date.toLocaleDateString('vi-VN'),
+            dateTime: date.toLocaleDateString('vi-VN'),
+            dateTime1: date,
+          }
+        })
+        this.timeSlots = daysWithDate
       } else {
-        daysOfWeek = [
-          { id: 1, name: 'Thứ 2' },
-          { id: 2, name: 'Thứ 3' },
-          { id: 3, name: 'Thứ 4' },
-          { id: 4, name: 'Thứ 5' },
-          { id: 5, name: 'Thứ 6' },
-          { id: 6, name: 'Thứ 7' },
-          { id: 7, name: 'CN' },
-          { id: 8, name: 'Thứ 2' },
-          { id: 9, name: 'Thứ 3' },
-          { id: 10, name: 'Thứ 4' },
-          { id: 11, name: 'Thứ 5' },
-          { id: 12, name: 'Thứ 6' },
-          { id: 13, name: 'Thứ 7' },
-          { id: 14, name: 'CN' },
-          { id: 15, name: 'Thứ 2' },
-          { id: 16, name: 'Thứ 3' },
-          { id: 17, name: 'Thứ 4' },
-          { id: 18, name: 'Thứ 5' },
-          { id: 19, name: 'Thứ 6' },
-          { id: 20, name: 'Thứ 7' },
-          { id: 21, name: 'CN' },
-          { id: 22, name: 'Thứ 2' },
-          { id: 23, name: 'Thứ 3' },
-          { id: 24, name: 'Thứ 4' },
-          { id: 25, name: 'Thứ 5' },
-          { id: 26, name: 'Thứ 6' },
-          { id: 27, name: 'Thứ 7' },
-          { id: 28, name: 'CN' },
-        ]
+        this.timeSlots = this.getDaysInMonth(
+          today.getFullYear(),
+          today.getMonth(),
+        )
       }
-
-      // Tạo một mảng các đối tượng thể hiện ngày trong tuần kèm theo ngày hiện tại
-      const daysWithDate = daysOfWeek.map((day) => {
-        const date = new Date(today)
+    },
+    getDaysInMonth(year, month) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate()
+      const days = []
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day)
         const dayOfWeek = date.getDay()
-        const diff = day.id - dayOfWeek
-        date.setDate(today.getDate() + diff)
-        return {
-          id: day.id,
-          name: day.name + ' ' + date.toLocaleDateString('vi-VN'),
+
+        days.push({
+          date,
+          dayOfWeek,
+          name:
+            this.getMonth(dayOfWeek) + ' ' + date.toLocaleDateString('vi-VN'),
           dateTime: date.toLocaleDateString('vi-VN'),
           dateTime1: date,
-        }
-      })
-      this.timeSlots = daysWithDate
+        })
+      }
+      return days
+    },
+    // hàm chuyển thành Thứ mấy
+    getMonth(value) {
+      var name = ''
+      switch (value) {
+        case 0:
+          name = 'Thứ 2'
+          break
+        case 1:
+          name = 'Thứ 3'
+          break
+        case 2:
+          name = 'Thứ 4'
+          break
+        case 3:
+          name = 'Thứ 5'
+          break
+        case 4:
+          name = 'Thứ 6'
+          break
+        case 5:
+          name = 'Thứ 7'
+          break
+        case 6:
+          name = 'CN'
+          break
+
+        default:
+          break
+      }
+      return name
     },
   },
   computed: {
@@ -426,7 +477,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .misa-cell-avatar-color {
   text-transform: uppercase;
   height: 32px;
@@ -554,7 +605,7 @@ export default {
 }
 
 .misa-cell-active-group:hover {
-  z-index: 99999;
+  z-index: 886;
   cursor: pointer;
   text-decoration: underline;
   color: rgb(167, 30, 151);
@@ -626,7 +677,7 @@ thead {
   overflow: auto;
 }
 
-.misa-active-status-table:hover {
+.schedule-cell .misa-active-status-table:hover {
   background-color: #6691e2;
 }
 .tooltipTable {
@@ -638,5 +689,24 @@ thead {
   background-color: #fff;
   border-radius: 4px;
   padding: 20px;
+}
+.titleSubject {
+  width: 100%;
+  white-space: nowrap;
+}
+.tr-data {
+  position: sticky;
+  z-index: 888;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  border: 1px solid black;
+}
+.sticky {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 887;
+  background-color: #fff;
 }
 </style>

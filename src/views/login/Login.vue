@@ -49,10 +49,10 @@
 </template>
 
 <script>
-import store from "@/store";
-import DxButton from "devextreme-vue/button";
-import DxValidator, { DxValidationRule } from "devextreme-vue/validator";
-import DxTextBox from "devextreme-vue/text-box";
+import store from '@/store'
+import DxButton from 'devextreme-vue/button'
+import DxValidator, { DxValidationRule } from 'devextreme-vue/validator'
+import DxTextBox from 'devextreme-vue/text-box'
 
 export default {
   components: {
@@ -63,28 +63,28 @@ export default {
   },
   data() {
     return {
-      username: "",
-      password: "",
-    };
+      username: '',
+      password: '',
+    }
   },
 
   methods: {
     async handleSubmit() {
-      const user = { Username: this.username, Password: this.password };
-      localStorage.setItem("user", JSON.stringify(user));
+      const user = { Username: this.username, Password: this.password }
+      localStorage.setItem('user', JSON.stringify(user))
       try {
         // Gọi action login trong store để thực hiện yêu cầu đăng nhập
-        await store.dispatch("auth/login", user);
+        await store.dispatch('auth/login', user)
 
         // Chuyển hướng đến trang Dashboard sau khi đăng nhập thành công
-        this.$router.push("/");
+        this.$router.push('/')
       } catch (error) {
         // console.error(error)
         // Hiển thị thông báo lỗi đăng nhập
       }
     },
   },
-};
+}
 </script>
 <style scoped lang="scss">
 aside {
@@ -116,7 +116,7 @@ form {
     width: 100px;
     height: 100px;
     margin: 0 auto;
-    background: url("@/assets/logoUniversity.png") no-repeat;
+    background: url('@/assets/logoUniversity.png') no-repeat;
     background-size: contain;
     margin-bottom: 20px;
   }
@@ -146,7 +146,7 @@ form {
       height: 20px;
       z-index: 1;
       margin-left: -20px;
-      background: url("@/assets/images/Icon_process.2df8445b.svg") no-repeat;
+      background: url('@/assets/images/Icon_process.2df8445b.svg') no-repeat;
 
       &.icon-email {
         background-position: -156px -205px;

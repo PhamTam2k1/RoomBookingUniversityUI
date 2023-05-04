@@ -29,6 +29,7 @@
             @handleBlurInput="validate('Subject')"
             @handleKeyupInput="removeError('Subject')"
             :error="Error['Subject']"
+            :isDisable="isDisable"
           ></base-input>
         </div>
         <div class="t-row">
@@ -39,6 +40,7 @@
             :dataSource="dataRoom"
             optionName="RoomName"
             optionValue="RoomID"
+            v-model:value="bookingRoomData.RoomID"
             :isSearch="true"
             :height="34"
             :tabindex="2"
@@ -47,6 +49,7 @@
             @handleBlurInput="validate('RoomID')"
             @handleKeyupInput="removeError('RoomID')"
             :error="Error['RoomID']"
+            :isDisable="isDisable"
           ></BaseDropdownbox>
         </div>
         <div v-if="this.bookingRoomData.RoomID" class="t-row t-row-infor">
@@ -62,24 +65,35 @@
             </div>
           </div>
         </div>
-        <div class="t-row">
-          <BaseDatePicker
+        <div class="t-row flex">
+          <div class="t-lable-date">Ngày bắt đầu</div>
+          <BaseDate
+            width="165"
+            class="mt-16"
+            :labelMode="'hidden'"
+            :stylingMode="'outlined'"
+            @onValueChanged="onStartDateChanged"
             @change-date="changeDate"
-            lable="Ngày bắt đầu"
+            lable=""
             :tabindex="3"
-            :disabledDate="disabledDate(bookingRoomData.StartDate)"
-            :modelValue="bookingRoomData.StartDate"
-          ></BaseDatePicker>
+            :value="bookingRoomData.StartDate"
+          ></BaseDate>
         </div>
-        <div class="t-row">
-          <BaseDatePicker
-            :disabledDate="disabledDate"
+        <div class="t-row flex">
+          <div class="t-lable-date">Ngày kết thúc</div>
+          <BaseDate
+            width="165"
+            class="mt-16"
+            :labelMode="'hidden'"
+            :stylingMode="'outlined'"
+            @onValueChanged="onEndDateChanged"
             @change-date="changeDate"
-            lable="Ngày kết thúc"
+            lable=""
             :tabindex="4"
-            :modelValue="bookingRoomData.EndDate"
-          ></BaseDatePicker>
+            :value="bookingRoomData.EndDate"
+          ></BaseDate>
         </div>
+
         <div class="t-row">
           <BaseSelectTagBox
             lable="Chọn ca học"
@@ -91,36 +105,24 @@
             optionValue="TimeSlotID"
             placeholder="Chọn 1 hoặc nhiều ca học"
             @onOptionChange="onValueChangeTimeSlot"
-            @onValueChange="onValueChangeRoom"
+            v-model:value="bookingRoomData.TimeSlots"
             @handleBlurInput="validate('TimeSlots')"
             @handleKeyupInput="removeError('TimeSlots')"
             :error="Error['TimeSlots']"
+            :isDisable="isDisable"
           >
           </BaseSelectTagBox>
         </div>
 
-        <div class="t-row flex" style="height: 100px">
-          <!-- <base-input
-            lable="Lý do đặt"
-            classInput="misa-input"
-            :focus="focus"
-            class="misa-input-secondary mgb-8"
-            :required="true"
-            :maxlength="20"
-            :tabindex="6"
-            v-model="bookingRoomData.Description"
-            @handleBlurInput="validate('Description')"
-            @handleKeyupInput="removeError('Description')"
-            :error="Error['Description']"
-          ></base-input> -->
+        <div class="t-row flex" style="height: 120px">
           <div class="t-lable-texarea">Lý do đặt</div>
           <div class="content-reson">
             <textarea
               id="reson"
+              :disabled="isDisable"
               v-model="bookingRoomData.Description"
               rows="4"
               tabindex="6"
-              cols="70"
               placeholder="Lý do"
             >
             </textarea>
@@ -139,6 +141,7 @@
             @handleKeyupInput="removeError('Quantity')"
             :error="Error['Quantity']"
             type="Number"
+            :isDisable="isDisable"
           ></base-input>
         </div>
       </template>
@@ -190,13 +193,13 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BasePopup from '@/components/base/BasePopup.vue'
 import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
-import BaseDatePicker from '@/components/base/BaseDatePicker.vue'
 import { mapActions, mapState } from 'vuex'
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
 import { v4 as uuidv4 } from 'uuid'
-
+import ObjectFunction from '@/commons/CommonFuction'
+import BaseDate from '@/components/base/BaseDate.vue'
 export default {
   name: ' ',
   components: {
@@ -206,14 +209,22 @@ export default {
     BaseButton,
     BasePopup,
     BaseSelectTagBox,
-    BaseDatePicker,
     PopupNotice,
+    BaseDate,
   },
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   props: {
     popupMode: {
       type: Number,
       default: 0,
+    },
+    roomID: {
+      type: String,
+      default: null,
+    },
+    bookingID: {
+      type: String,
+      default: null,
     },
   },
 
@@ -242,6 +253,7 @@ export default {
         Quantity: 0,
         Description: '',
       },
+      isDisable: false,
     }
   },
 
@@ -302,10 +314,10 @@ export default {
         this.$refs.popupDictionary.querySelector('input[tabindex]').focus()
       }
     },
-    disabledDate(time) {
-      const today = new Date()
-      return time.getTime() < today.setHours(0, 0, 0, 0)
-    },
+    // disabledDate(time) {
+    //   const today = new Date();
+    //   return time.getTime() < today.setHours(0, 0, 0, 0);
+    // },
     /**
      * Close popup lỗi và focus và input lỗi đầu tiên
      * PTTAM
@@ -361,7 +373,7 @@ export default {
      */
     validate(fieldName) {
       try {
-        if (!this.bookingRoomData[fieldName]) {
+        if (!this.bookingRoomData[fieldName] && fieldName != 'Description') {
           let field = ''
           if (fieldName == 'RoomID') {
             field = 'Phòng'
@@ -369,8 +381,6 @@ export default {
             field = 'Ca học'
           } else if (fieldName == 'Subject') {
             field = 'Tiêu đề'
-          } else if (fieldName == 'Description') {
-            field = 'Lý do'
           } else if (fieldName == 'Quantity') {
             field = 'Số lượng người tham gia'
           }
@@ -402,8 +412,10 @@ export default {
           )
           BookingRoomApi.insert(this.bookingRoomData).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true
-              this.message = 'Lưu thành công'
+              ObjectFunction.toastMessage(
+                'Gửi yêu cầu đặt phong thành công',
+                Resource.Messenger.Success,
+              )
               this.$emit('onCloseForm')
             }
           })
@@ -411,6 +423,30 @@ export default {
           console.log(error)
         }
       }
+    },
+    /**
+     * Lấy đối tượng user theo khóa chính
+     * PTTAM 3/05/2023
+     */
+    getBookingRoomByID() {
+      BookingRoomApi.getByID(this.bookingID).then((res) => {
+        if (res) {
+          this.bookingRoomData = res.data
+          this.bookingRoomData.TimeSlots = this.bookingRoomData.TimeSlots.split(
+            ',',
+          ).map((item) => `${item}`)
+          this.isDisable =
+            this.bookingRoomData.StatusBooking == 1 ? false : true
+        }
+      })
+    },
+    // cập nhật lại ngày khi chọn lại
+    onStartDateChanged(item) {
+      this.bookingRoomData.StartDate = item.value
+    },
+    // cập nhật lại ngày khi chọn lại
+    onEndDateChanged(item) {
+      this.bookingRoomData.EndDate = item.value
     },
   },
   async created() {
@@ -420,6 +456,14 @@ export default {
       await this.loadDataRooms()
     } catch (error) {
       console.error(error)
+    }
+  },
+  mounted() {
+    debugger
+    if (this.popupMode == Enum.PopupMode.AddMode) {
+      this.bookingRoomData.RoomID = this.roomID
+    } else if (this.popupMode == Enum.PopupMode.EditMode) {
+      this.getBookingRoomByID()
     }
   },
   computed: {
@@ -437,6 +481,7 @@ export default {
 .t-row {
   margin: 10px;
   height: 38px;
+  width: 100%;
 }
 .t-row-infor {
   margin-left: 30%;
@@ -450,6 +495,10 @@ export default {
   width: 30%;
   font-size: 14px;
 }
+.t-lable-date {
+  width: 30%;
+  font-size: 14px;
+}
 .content-reson {
   box-sizing: border-box;
   width: 70%;
@@ -458,9 +507,15 @@ export default {
   padding: 10px;
   border-radius: 3px;
   border: 1px solid #969696;
+  width: 100%;
+}
+#reson:disabled {
+  color: #585959;
+  background-color: #f5f5f5;
+  border: 1px solid var(--border-color) !important;
 }
 #reson:focus {
-  outline: none; /* loại bỏ đường viền màu xanh nhạt mặc định trên Firefox */
-  border-color: #ccc; /* thiết lập màu xám cho khung viền khi tập trung */
+  outline: none;
+  border-color: #ccc;
 }
 </style>

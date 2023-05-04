@@ -203,8 +203,8 @@
 
 .misa-dialog .popup-dictionary-room-detail .misa-dialog-body {
   width: 50vw;
-  min-height: 50vh;
-  max-height: 50vh;
+  min-height: 65vh;
+  max-height: 65vh;
   overflow-x: hidden;
   overflow-y: scroll;
   margin-bottom: 20px;

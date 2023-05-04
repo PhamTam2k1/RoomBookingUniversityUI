@@ -153,9 +153,33 @@
           bounceEnabled: false,
         }"
       />
-      <DxView type="week" height="75vh" />
+      <DxView
+        type="week"
+        height="75vh"
+        :scrolling="{
+          mode: 'virtual',
+          showScrollbar: 'always',
+          scrollByContent: true,
+          useNative: false,
+          useSimulatedScrollbar: true,
+          scrollByThumb: true,
+          bounceEnabled: false,
+        }"
+      />
 
-      <DxView type="month" height="75vh" />
+      <DxView
+        type="month"
+        height="75vh"
+        :scrolling="{
+          mode: 'virtual',
+          showScrollbar: 'always',
+          scrollByContent: true,
+          useNative: false,
+          useSimulatedScrollbar: true,
+          scrollByThumb: true,
+          bounceEnabled: false,
+        }"
+      />
       <DxResource
         :data-source="rooms"
         :allow-multiple="false"
@@ -174,12 +198,19 @@
     </DxScheduler>
 
     <ColumnBookingForWeekTemplate
-      v-if="!showView && !isTypeDay"
+      v-if="showView == false && isTypeDay == false"
       :data="dataSource"
       :view="currentView"
+      :dataDate="currentDate"
     ></ColumnBookingForWeekTemplate>
     <!--Begin Popup detail -->
-    <RoomBookingPopup v-if="isShowForm" @onCloseForm="isShowForm = false" />
+    <RoomBookingPopup
+      v-if="isShowForm"
+      @onCloseForm="isShowForm = false"
+      :roomID="roomID"
+      :bookingID="bookingID"
+      :popupMode="popupMode"
+    />
     <!-- End popup detail -->
   </div>
 </template>
@@ -197,6 +228,7 @@ import ColumnBookingForWeekTemplate from '@/views/booking/template/ColumnBooking
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import { mapActions, mapState } from 'vuex'
 import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
+import Enum from '@/commons/Enum'
 export default {
   name: 'App',
   components: {
@@ -229,6 +261,9 @@ export default {
       lstRoom: [],
       rooms: [],
       isTypeDay: true,
+      roomID: '',
+      bookingID: '',
+      popupMode: 0,
     }
   },
   computed: {
@@ -289,6 +324,7 @@ export default {
     },
     // set view khi click chuyển đổi
     setView(option, name) {
+      debugger
       this.isTypeDay = name == 'day' ? true : false
       this.showView = this.lstRoom.length > 1 ? false : true
       if (option && name) {
@@ -317,6 +353,14 @@ export default {
     onAppointmentClick(e) {
       debugger
       e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
+
+      if (e.appointmentData?.BookingRoomID) {
+        this.bookingID = e.appointmentData.BookingRoomID
+        this.popupMode = Enum.PopupMode.EditMode
+      } else {
+        this.roomID = e.appointmentData.RoomID
+        this.popupMode = Enum.PopupMode.AddMode
+      }
       this.isShowForm = true
     },
     /**
@@ -399,9 +443,9 @@ export default {
 </script>
 <style>
 .input_date {
-  min-width: 260px;
+  min-width: 220px;
   display: flex;
-  width: 260px;
+  width: 220px;
 }
 
 .toolbar {
@@ -421,11 +465,11 @@ export default {
   display: none !important;
 }
 
-.dx-scheduler-group-header {
+.dx-scheduler-work-space-day .dx-scheduler-group-header {
   height: 50px !important;
   width: 200px;
 }
-.dx-scheduler-cell-sizes-horizontal {
+.dx-scheduler-work-space-day .dx-scheduler-cell-sizes-horizontal {
   width: 200px;
 }
 </style>

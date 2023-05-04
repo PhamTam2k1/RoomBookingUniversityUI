@@ -26,6 +26,7 @@
 }
 .dx-datagrid {
   border: 1px solid #e2e8f0;
+  width: 100%;
 }
 .misa-tabble {
   height: calc(100% - 80px);

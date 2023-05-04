@@ -256,11 +256,12 @@
 .t-row-block .drop-down-utc {
   width: 100%;
 }
-.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
-  height: 80px;
-  max-height: 80px;
-  min-height: 80px;
-  vertical-align: top;
-  text-align: right;
-  color: #959595;
+.drop-down-utc.dx-show-invalid-badge.dx-selectbox.dx-textbox.dx-texteditor.dx-dropdowneditor-button-visible.dx-editor-outlined.dx-widget.dx-dropdowneditor.dx-dropdowneditor-field-clickable.dx-state-disabled {
+  color: #000 !important;
+  background-color: #f5f5f5;
+  border: 1px solid var(--border-color);
+}
+.dx-state-disabled .dx-widget,
+.dx-state-disabled.dx-widget {
+  opacity: 1 !important;
 }
