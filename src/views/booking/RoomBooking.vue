@@ -133,6 +133,7 @@
       :scrolling-mode="scrollingMode"
       :time-cell-template="timeCellTemplate"
       :date-cell-template="dateCellTemplate"
+      data-cell-template="dataCellTemplate"
       appointment-template="AppointmentTemplateSlot"
       appointment-tooltip-template="AppointmentTooltipTemplateSlot"
       :on-content-ready="onContentReady"
@@ -195,6 +196,9 @@
           :template-tooltip-model="data"
         />
       </template>
+      <template #dataCellTemplate="{ data: cellData }">
+        <DataCell :cell-data="cellData" />
+      </template>
     </DxScheduler>
 
     <ColumnBookingForWeekTemplate
@@ -229,6 +233,7 @@ import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import { mapActions, mapState } from 'vuex'
 import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
 import Enum from '@/commons/Enum'
+import DataCell from './template/DataCell.vue'
 export default {
   name: 'App',
   components: {
@@ -242,6 +247,7 @@ export default {
     DxView,
     BaseDropdownbox,
     BaseSelectTagBox,
+    DataCell,
   },
   data() {
     return {
@@ -351,9 +357,7 @@ export default {
      * 24.04.2023 PTTAM
      */
     onAppointmentClick(e) {
-      debugger
       e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
-
       if (e.appointmentData?.BookingRoomID) {
         this.bookingID = e.appointmentData.BookingRoomID
         this.popupMode = Enum.PopupMode.EditMode
@@ -361,7 +365,10 @@ export default {
         this.roomID = e.appointmentData.RoomID
         this.popupMode = Enum.PopupMode.AddMode
       }
-      this.isShowForm = true
+      // Lấy thời gian hiện tại
+      var now = new Date()
+      this.isShowForm =
+        new Date(e.appointmentData.startDate) >= now ? true : false
     },
     /**
      * Sự kiện lấy dữ liệu đặt phòng
@@ -454,6 +461,7 @@ export default {
   height: 56px;
   background-color: #f5f5f5;
   align-items: center;
+  position: relative;
 }
 
 .dx-buttongroup_custom {

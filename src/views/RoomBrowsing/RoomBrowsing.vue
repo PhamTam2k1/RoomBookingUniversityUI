@@ -111,6 +111,7 @@ export default {
       keyword: '',
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
+      userID: null,
     })
     var headerTableBookingRoom = [
       {
@@ -234,6 +235,7 @@ export default {
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
           keyword: dataComponent.keyword,
+          userID: dataComponent.userID,
         }).then((res) => {
           dataComponent.dataSource = res.data.Data || []
           dataComponent.pageIndex = res.data.CurrentPage
@@ -378,11 +380,18 @@ export default {
     },
   },
   mounted() {
-    this.getData()
+    debugger
+
     this.dataComponent.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true
         : false
+    this.dataComponent.userID =
+      this.dataComponent.isAdmin == true
+        ? null
+        : JSON.parse(localStorage.getItem('user')).UserID
+
+    this.getData()
   },
 }
 </script>
@@ -392,11 +401,11 @@ export default {
   flex: 1;
   padding: 20px 20px;
   background-color: #efefef;
-  height: calc(100%);
+  height: calc(100% - 75px);
 }
 
 #bd-room-browsing {
-  height: 100%;
+  height: calc(100vh - 180px);
   background: white;
   padding: 20px;
 }

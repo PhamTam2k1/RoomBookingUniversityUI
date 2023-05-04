@@ -360,7 +360,7 @@ export default {
   }
 }
 #bd-building {
-  height: calc(100%);
+  height: calc(100vh - 180px);
   background: white;
   padding: 20px;
 }
