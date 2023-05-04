@@ -8,7 +8,7 @@
       <div class="page-size-infor">
         {{ Resource.Pagging.totalRecordOfPage }}
       </div>
-      <div>
+      <div class="paging-dropdown">
         <BaseDropdownbox
           @onValueChange="selectedPageSize"
           classDropdownbox="dropdown-pageSize "
@@ -107,3 +107,8 @@ export default {
   },
 }
 </script>
+<style scoped>
+.paging-dropdown {
+  margin-top: 4px;
+}
+</style>

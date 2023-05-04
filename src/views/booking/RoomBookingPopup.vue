@@ -29,7 +29,7 @@
             @handleBlurInput="validate('Subject')"
             @handleKeyupInput="removeError('Subject')"
             :error="Error['Subject']"
-            :isDisable="isDisable"
+            :isDisable="isDisable || !isUserBooking"
           ></base-input>
         </div>
         <div class="t-row">
@@ -49,7 +49,7 @@
             @handleBlurInput="validate('RoomID')"
             @handleKeyupInput="removeError('RoomID')"
             :error="Error['RoomID']"
-            :isDisable="isDisable"
+            :isDisable="isDisable || !isUserBooking"
           ></BaseDropdownbox>
         </div>
         <div v-if="this.bookingRoomData.RoomID" class="t-row t-row-infor">
@@ -109,7 +109,7 @@
             @handleBlurInput="validate('TimeSlots')"
             @handleKeyupInput="removeError('TimeSlots')"
             :error="Error['TimeSlots']"
-            :isDisable="isDisable"
+            :isDisable="isDisable || !isUserBooking"
           >
           </BaseSelectTagBox>
         </div>
@@ -141,7 +141,7 @@
             @handleKeyupInput="removeError('Quantity')"
             :error="Error['Quantity']"
             type="Number"
-            :isDisable="isDisable"
+            :isDisable="isDisable || !isUserBooking"
           ></base-input>
         </div>
       </template>
@@ -254,6 +254,7 @@ export default {
         Description: '',
       },
       isDisable: false,
+      isUserBooking: true,
     }
   },
 
@@ -437,6 +438,12 @@ export default {
           ).map((item) => `${item}`)
           this.isDisable =
             this.bookingRoomData.StatusBooking == 1 ? false : true
+
+          this.isUserBooking =
+            this.bookingRoomData.UserID ==
+            JSON.parse(localStorage.getItem('user')).UserID
+              ? true
+              : false
         }
       })
     },

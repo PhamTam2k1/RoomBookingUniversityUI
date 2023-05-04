@@ -358,7 +358,7 @@ export default {
 #body-equipment-dictionary {
   padding: 20px 20px;
   background-color: #efefef;
-  height: calc(100%);
+  height: calc(100% - 75px);
   flex: 1;
 }
 .filter-options {
@@ -392,7 +392,7 @@ export default {
   }
 }
 #bd-equipment {
-  height: 100%;
+  height: calc(100vh - 180px);
   background: white;
   padding: 20px;
 }

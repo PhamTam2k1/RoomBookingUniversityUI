@@ -454,6 +454,7 @@ export default {
   height: 56px;
   background-color: #f5f5f5;
   align-items: center;
+  position: relative;
 }
 
 .dx-buttongroup_custom {
