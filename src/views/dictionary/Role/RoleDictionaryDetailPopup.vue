@@ -94,6 +94,8 @@ import BaseInput from '@/components/base/BaseInput.vue'
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
+import { v4 as uuidv4 } from 'uuid'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
   name: ' ',
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
@@ -135,6 +137,7 @@ export default {
       /**Icon của popup */
       classIconPopup: '',
       role: {
+        RoleID: this.roleData.RoleID || uuidv4(),
         RoleCode: this.roleData.RoleCode || '',
         RoleName: this.roleData.RoleName || '',
       },
@@ -260,14 +263,18 @@ export default {
         try {
           RoleApi.updated(this.roleData.RoleID, this.role).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true
-              this.message = 'Cập nhật thành công'
+              ObjectFunction.toastMessage(
+                Resource.Messenger.UpdateSucces,
+                Resource.Messenger.Success,
+              )
               this.$emit('onShowLoading')
               this.$emit('onCloseForm')
               this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Cập nhật thất bại'
+              ObjectFunction.toastMessage(
+                'Cập nhật thất bại',
+                Resource.Messenger.Error,
+              )
               this.$emit('onCloseForm')
             }
           })
@@ -278,13 +285,17 @@ export default {
         try {
           RoleApi.insert(this.role).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true
-              this.message = 'Lưu thành công'
+              ObjectFunction.toastMessage(
+                Resource.Messenger.InsertSucces,
+                Resource.Messenger.Success,
+              )
               this.$emit('onCloseForm')
               this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Lưu thất bại'
+              ObjectFunction.toastMessage(
+                'Thêm thất bại',
+                Resource.Messenger.Error,
+              )
               this.$emit('onCloseForm')
             }
           })

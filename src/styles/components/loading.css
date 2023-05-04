@@ -20,16 +20,18 @@
   width: 45px;
   height: 45px;
   border: none;
-  background: transparent url("../../assets/images/loading.svg") no-repeat center;
+  background: transparent url('../../assets/images/loading.svg') no-repeat
+    center;
   background-size: 100%;
   -webkit-animation: spin 1s linear infinite;
   animation: spin 1s linear infinite;
-
-
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-

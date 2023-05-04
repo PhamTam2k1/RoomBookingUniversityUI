@@ -1,358 +1,475 @@
-
 <template>
-  <div class="container">
-    
-   
-    <div class="sheduler-content">
-      <DxScheduler
-        @appointment-click="deleteRecurrence"
-        time-zone="America/Los_Angeles"
-        :data-source="dataSource"
-        :views="views"
-        :current-date="currentDate"
-        :height="800"
-        :groups="groups"
-        :first-day-of-week="0"
-        :start-day-hour="9"
-        :end-day-hour="23"
-        :show-all-day-panel="false"
-        :cross-scrolling-enabled="false"
-        :cell-duration="cellDuration"
-        :editing="editing"
-        :on-content-ready="onContentReady"
-        :on-appointment-form-opening="onAppointmentFormOpening"
-        appointment-template="AppointmentTemplateSlot"
-        appointment-tooltip-template="AppointmentTooltipTemplateSlot"
-        current-view="workWeek"
-        :on-appointment-added="onAddedRoom"
-        :on-appointment-updated="onUpdatedRoom"
-        :on-appointment-deleted="onDeletedRoom"
-       
+  <div id="scheduler">
+    <div class="toolbar">
+      <div class="input_date">
+        <div
+          @click="SetDate('reduce')"
+          class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-first-item dx-shape-standard dx-scheduler-navigator-previous"
+          role="button"
+          aria-label="chevronprev"
+        >
+          <div class="dx-button-content">
+            <i class="dx-icon dx-icon-chevronprev"></i>
+          </div>
+        </div>
+        <BaseDate
+          class="mt-16"
+          :labelMode="'hidden'"
+          :stylingMode="'outlined'"
+          :value="currentDate"
+          @onValueChanged="onDateBoxChanged"
+        >
+        </BaseDate>
+        <div
+          @click="SetDate('increase')"
+          class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-icon dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-last-item dx-shape-standard dx-scheduler-navigator-next"
+          role="button"
+          aria-label="chevronnext"
+        >
+          <div class="dx-button-content">
+            <i class="dx-icon dx-icon-chevronnext"></i>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar-filter flex">
+        <div class="t-row">
+          <BaseDropdownbox
+            classDropdownbox="drop-down-utc mgl-16"
+            :dataSource="dataBuilding"
+            optionName="BuildingName"
+            optionValue="BuildingID"
+            :isSearch="true"
+            :height="34"
+            :width="120"
+            placeholder="Chọn vị trí"
+            @onValueChange="onValueChangeBuilding"
+          ></BaseDropdownbox>
+        </div>
+        <div class="t-row">
+          <BaseDropdownbox
+            classDropdownbox="drop-down-utc mgl-16"
+            :dataSource="dataRoom"
+            optionName="RoomName"
+            optionValue="RoomID"
+            :isSearch="true"
+            :height="34"
+            :width="150"
+            placeholder="Chọn phòng"
+            @onValueChange="onValueChangeRoom"
+          ></BaseDropdownbox>
+        </div>
+
+        <div class="t-row">
+          <BaseSelectTagBox
+            :dataSource="dataEquipment"
+            :height="34"
+            :width="250"
+            classDropdownbox="drop-down-utc mgl-16"
+            optionName="EquipmentName"
+            optionValue="EquipmentID"
+            placeholder="Chọn thiết bị"
+            @onOptionChange="onOptionChangeEquipment"
+          >
+          </BaseSelectTagBox>
+        </div>
+      </div>
+      <div
+        role="group"
+        class="dx-buttongroup_custom dx-buttongroup dx-widget"
+        tabindex="0"
       >
-        <DxResource
-          :use-color-as-default="true"
-          :data-source="moviesData"
-          field-expr="movieId"
-        />
-        <!-- <DxResource :data-source="moviesData" field-expr="movieId" /> -->
-        <template #AppointmentTemplateSlot="{ data }">
-          <AppointmentTemplate :scheduler="scheduler" :template-model="data" />
-        </template>
-        <template #AppointmentTooltipTemplateSlot="{ data }">
-          <AppointmentTooltipTemplate
-            :scheduler="scheduler"
-            :template-tooltip-model="data"
-          />
-        </template>
-      </DxScheduler>
+        <div class="dx-buttongroup-wrapper dx-widget dx-collection">
+          <div
+            @click="setView(1, 'day')"
+            :class="{ 'dx-item-selected': currentView == 'day' }"
+            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-first-item dx-shape-standard"
+            role="button"
+            aria-label="Ngày"
+            aria-selected="true"
+          >
+            <div class="dx-button-content">
+              <span class="dx-button-text">Ngày</span>
+            </div>
+          </div>
+          <div
+            @click="setView(2, 'week')"
+            :class="{ 'dx-item-selected': currentView == 'week' }"
+            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard"
+            role="button"
+            aria-label="Tuần"
+            aria-selected="false"
+          >
+            <div class="dx-button-content">
+              <span class="dx-button-text">Tuần</span>
+            </div>
+          </div>
+          <div
+            @click="setView(3, 'month')"
+            :class="{ 'dx-item-selected': currentView == 'month' }"
+            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-last-item dx-shape-standard"
+            role="button"
+            aria-label="Tháng"
+            aria-selected="false"
+          >
+            <div class="dx-button-content">
+              <span class="dx-button-text">Tháng</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    
+
+    <DxScheduler
+      v-if="showView || isTypeDay"
+      :dataSource="dataSource"
+      :current-view="currentView"
+      :current-date="currentDate"
+      :start-day-hour="startDayHour"
+      :end-day-hour="endDayHour"
+      :cell-duration="cellDuration"
+      :first-day-of-week="firstDayOfWeek"
+      :show-all-day-panel="showAllDayPanel"
+      :height="height"
+      :scrolling-mode="scrollingMode"
+      :time-cell-template="timeCellTemplate"
+      :date-cell-template="dateCellTemplate"
+      appointment-template="AppointmentTemplateSlot"
+      appointment-tooltip-template="AppointmentTooltipTemplateSlot"
+      :on-content-ready="onContentReady"
+      :on-appointment-form-opening="onAppointmentClick"
+    >
+      <DxView
+        class="day"
+        type="day"
+        groups="RoomID"
+        height="75vh"
+        :scrolling="{
+          mode: 'virtual',
+          showScrollbar: 'always',
+          scrollByContent: true,
+          useNative: false,
+          useSimulatedScrollbar: true,
+          scrollByThumb: true,
+          bounceEnabled: false,
+        }"
+      />
+      <DxView
+        type="week"
+        height="75vh"
+        :scrolling="{
+          mode: 'virtual',
+          showScrollbar: 'always',
+          scrollByContent: true,
+          useNative: false,
+          useSimulatedScrollbar: true,
+          scrollByThumb: true,
+          bounceEnabled: false,
+        }"
+      />
+
+      <DxView
+        type="month"
+        height="75vh"
+        :scrolling="{
+          mode: 'virtual',
+          showScrollbar: 'always',
+          scrollByContent: true,
+          useNative: false,
+          useSimulatedScrollbar: true,
+          scrollByThumb: true,
+          bounceEnabled: false,
+        }"
+      />
+      <DxResource
+        :data-source="rooms"
+        :allow-multiple="false"
+        field-expr="RoomID"
+        display-expr="text"
+      />
+      <template #AppointmentTemplateSlot="{ data }">
+        <AppointmentTemplate :scheduler="scheduler" :template-model="data" />
+      </template>
+      <template #AppointmentTooltipTemplateSlot="{ data }">
+        <AppointmentTooltipTemplate
+          :scheduler="scheduler"
+          :template-tooltip-model="data"
+        />
+      </template>
+    </DxScheduler>
+
+    <ColumnBookingForWeekTemplate
+      v-if="showView == false && isTypeDay == false"
+      :data="dataSource"
+      :view="currentView"
+      :dataDate="currentDate"
+    ></ColumnBookingForWeekTemplate>
+    <!--Begin Popup detail -->
+    <RoomBookingPopup
+      v-if="isShowForm"
+      @onCloseForm="isShowForm = false"
+      :roomID="roomID"
+      :bookingID="bookingID"
+      :popupMode="popupMode"
+    />
+    <!-- End popup detail -->
   </div>
- <RoomBookingPopup
- v-if="false"
-      @onCloseForm="showFormDetail(false)"
-      @onLoadData="getData()"
-      @onShowLoading="showLoading(true)"
- />
 </template>
 
-
 <script>
-/* eslint-disable */
-import DxScheduler, { DxResource } from "devextreme-vue/scheduler";
-import Query from "devextreme/data/query";
-import AppointmentTemplate from "./template/AppointmentTemplate.vue";
-import AppointmentTooltipTemplate from "./template/AppointmentTooltipTemplate.vue";
-import { DxSelectBox } from "devextreme-vue/select-box";
-import { DxNumberBox } from "devextreme-vue/number-box";
-import { DxCheckBox } from "devextreme-vue/check-box";
-import  ImportRoom  from "../importroom/ImportRoom.vue";
-import RoomBookingPopup from "./RoomBookingPopup.vue";
-import {
-  data,
-  moviesData,
-  theatreData,
-  floors,
-  building,
-  rooms,
-
-} from "../data/data.js";
-
-
-const getMovieById = function (resourceId) {
-  return Query(moviesData).filter("id", resourceId).toArray()[0];
-};
-
+import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler'
+import 'devextreme/dist/css/dx.common.css'
+import 'devextreme/dist/css/dx.light.css'
+import AppointmentTemplate from './template/AppointmentTemplate.vue'
+import AppointmentTooltipTemplate from './template/AppointmentTooltipTemplate.vue'
+import BookingRoomApi from '@/apis/BookingRoomApi'
+import RoomBookingPopup from './RoomBookingPopup.vue'
+import BaseDate from '@/components/base/BaseDate.vue'
+import ColumnBookingForWeekTemplate from '@/views/booking/template/ColumnBookingForWeekTemplate.vue'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+import { mapActions, mapState } from 'vuex'
+import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
+import Enum from '@/commons/Enum'
 export default {
+  name: 'App',
   components: {
     DxScheduler,
-    DxResource,
     AppointmentTemplate,
     AppointmentTooltipTemplate,
-    DxSelectBox,
-    DxNumberBox,
-    DxCheckBox,
-    ImportRoom,
-    RoomBookingPopup
+    RoomBookingPopup,
+    BaseDate,
+    ColumnBookingForWeekTemplate,
+    DxResource,
+    DxView,
+    BaseDropdownbox,
+    BaseSelectTagBox,
   },
   data() {
     return {
-      views: [
-        {
-          name: "Ngày",
-          type: "day",
-          intervalCount: 1,
-          startDate: new Date(2021, 3, 4),
-        },
-        {
-          groups: ["movieId"],
-          name: "Tuần",
-          type: "workWeek",
-          intervalCount: 1,
-          startDate: new Date(2021, 2, 4),
-          groupOrientation: "vertical",
-          intervalCount: 1,
-          // cellDuration: 1440
-          // groupByDate: true,
-        },
-        {
-          name: "Tháng",
-          type: "month",
-          intervalCount: 1,
-        },
-      ],
-      groups: ["movieId"],
-      scheduler: null,
-      groupOrientation: "vertical",
-      currentDate: new Date(2021, 3, 27),
-      dataSource: data,
-      moviesData,
-      theatreData,
-      cellDuration:20,
-      //editing: { allowAdding: true },
-      floors,
-      building,
-      rooms,
-      searchModeOption: "contains",
-      searchExprOption: "Name",
-      searchTimeoutOption: 200,
-      minSearchLengthOption: 0,
-      showDataBeforeSearchOption: false,
-      floorsFilter: [],
-      roomsFilter: [],
-      buildingSelected: "",
-      floorSelected: "",
-      roomSelected: "",
-    };
+      isShowForm: false,
+      dataSource: [],
+      isSelect: 1,
+      showView: true,
+      currentView: 'day',
+      currentDate: new Date(),
+      startDayHour: 7,
+      endDayHour: 21,
+      cellDuration: 60,
+      firstDayOfWeek: 1,
+      showAllDayPanel: false,
+      height: '100%',
+      scrollingMode: 'virtual',
+      lstRoom: [],
+      rooms: [],
+      isTypeDay: true,
+      roomID: '',
+      bookingID: '',
+      popupMode: 0,
+    }
   },
   computed: {
-    editing() {
-      return {
-        allowAdding: false,
-        allowDeleting: true,
-        allowUpdating: true,
-        allowResizing: true,
-        allowDragging: true,
-      };
+    // Gán data
+    ...mapState({
+      dataBuilding: (state) => state.dictionary.dataBuilding,
+      dataEquipment: (state) => state.dictionary.dataEquipment,
+      dataRoom: (state) => state.dictionary.dataRoom,
+    }),
+    timeCellTemplate() {
+      return ({ date }) => {
+        const hours = date.getHours().toString().padStart(2, '0')
+        const minutes = date.getMinutes().toString().padStart(2, '0')
+        return `<div class="time-cell">${hours}:${minutes}</div>`
+      }
+    },
+    dateCellTemplate() {
+      return ({ date }) => {
+        const daysOfWeek = [
+          'CN',
+          'Thứ 2',
+          'Thứ 3',
+          'Thứ 4',
+          'Thứ 5',
+          'Thứ 6',
+          'Thứ 7',
+        ]
+        const dayOfWeek = daysOfWeek[date.getDay()]
+        const day = date.getDate().toString().padStart(2, '0')
+        const month = (date.getMonth() + 1).toString().padStart(2, '0')
+        if (this.currentView == 'month') {
+          return `
+          <div class="date-cell" style="display:flex">
+            <div class="day-of-week">${dayOfWeek} </div>
+          </div>
+        `
+        } else if (this.currentView == 'week') {
+          return `
+          <div class="date-cell" style="display:flex">
+            <div class="day-of-week">${dayOfWeek},&nbsp; </div>
+            <div class="day-of-wee"> ${day}/ </div>
+                <div class="day-of-week">${month} </div>
+          </div>
+        `
+        }
+      }
     },
   },
   methods: {
-    dateCellTemplate() {
-      return ({ date }) => {
-        const daysOfWeek = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
-        const dayOfWeek = daysOfWeek[date.getDay()];
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        return `
-          <div class="date-cell" style="display:flex">
-            <div class="day-of-week">${dayOfWeek} - </div>
-            <div class="day">${day} / </div>
-            <div class="month">${month}</div>
-          </div>
-        `;
+    // Gọi hàm load data từ store
+    ...mapActions({
+      loadDataBuildings: 'dictionary/loadDataBuildings',
+      loadDataEquipments: 'dictionary/loadDataEquipments',
+      loadDataRooms: 'dictionary/loadDataRooms',
+    }),
+    onContentReady(e) {
+      this.scheduler = e.component
+    },
+    // set view khi click chuyển đổi
+    setView(option, name) {
+      debugger
+      this.isTypeDay = name == 'day' ? true : false
+      this.showView = this.lstRoom.length > 1 ? false : true
+      if (option && name) {
+        this.currentView = name
       }
     },
-    onContentReady(e) {
-      this.scheduler = e.component;
+    /**
+     * Sự kiện tăng giảm ngày
+     * 24.04.2023 PTTAM
+     */
+    SetDate(handle) {
+      var date = new Date(this.currentDate)
+      if (handle == 'increase') {
+        // Tăng ngày hiện tại lên 1
+        this.currentDate = date.setDate(date.getDate() + 1)
+      }
+      if (handle == 'reduce') {
+        // Giảm ngày hiện tại xuống 1
+        this.currentDate = date.setDate(date.getDate() - 1)
+      }
     },
-    onAppointmentFormOpening(e) {
-      const { form } = e;
-      let movieInfo = getMovieById(e.appointmentData.movieId) || {};
-      let { startDate } = e.appointmentData;
+    /**
+     * Sự kiện click vào lịch để đặt phòng
+     * 24.04.2023 PTTAM
+     */
+    onAppointmentClick(e) {
+      debugger
+      e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
 
-      form.option("items", [
-        {
-          label: {
-            text: "Movie",
-          },
-          editorType: "dxSelectBox",
-          dataField: "movieId",
-          editorOptions: {
-            items: moviesData,
-            displayExpr: "text",
-            valueExpr: "id",
-            onValueChanged(args) {
-              movieInfo = getMovieById(args.value);
+      if (e.appointmentData?.BookingRoomID) {
+        this.bookingID = e.appointmentData.BookingRoomID
+        this.popupMode = Enum.PopupMode.EditMode
+      } else {
+        this.roomID = e.appointmentData.RoomID
+        this.popupMode = Enum.PopupMode.AddMode
+      }
+      this.isShowForm = true
+    },
+    /**
+     * Sự kiện lấy dữ liệu đặt phòng
+     * 23.04.2024
+     * PTTAM
+     */
+    async loadDataBooking(callback) {
+      try {
+        await BookingRoomApi.getPaging({
+          roomID: null,
+          userID: null,
+          buildingID: null,
+          equipmentIDs: null,
+          capacityMin: null,
+          capacityMax: null,
+        }).then((res) => {
+          this.dataSource = res.data.dataBooking || []
+          this.lstRoom = res.data.dataRoom || []
+          if (res.data.option == 1 || this.isTypeDay) {
+            this.showView = true
+          } else {
+            this.showView = false
+          }
+          callback() // gọi callback để xử lý dataSource
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // cập nhật lại ngày khi chọn lại
+    onDateBoxChanged(item) {
+      this.currentDate = item.value
+    },
+    /**
+     * Convert date để hiển thị lên lịch
+     * PTTAM 23.04.2023
+     */
+    handleDataSource() {
+      this.lstRoom.forEach((element) => {
+        this.rooms.push({
+          id: element.RoomID,
+          code: element.RoomCode,
+          text: element.RoomName,
+        })
+      })
+      for (let i = 0; i < this.dataSource?.length; i++) {
+        const item = this.dataSource[i]
 
-              form.updateData("director", movieInfo.director);
-              form.updateData(
-                "endDate",
-                new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration)
-              );
-            },
-          },
-        },
-        {
-          label: {
-            text: "Tác giả",
-          },
-          name: "director",
-          editorType: "dxTextBox",
-          editorOptions: {
-            value: movieInfo.director,
-            readOnly: true,
-          },
-        },
-        {
-          dataField: "startDate",
-          editorType: "dxDateBox",
-          editorOptions: {
-            width: "100%",
-            type: "datetime",
-            onValueChanged(args) {
-              startDate = args.value;
-              form.updateData(
-                "endDate",
-                new Date(startDate.getTime() + 60 * 1000 * movieInfo.duration)
-              );
-            },
-          },
-        },
-        {
-          name: "endDate",
-          dataField: "endDate",
-          editorType: "dxDateBox",
-          editorOptions: {
-            width: "100%",
-            type: "datetime",
-            readOnly: true,
-          },
-        },
-        {
-          dataField: "price",
-          editorType: "dxRadioGroup",
-          editorOptions: {
-            dataSource: [5, 10, 15, 20],
-            itemTemplate(itemData) {
-              return "$".concat(itemData);
-            },
-          },
-        },
-      ]);
-    },
-    /**
-     * Sự kiện thay đổi tòa nhà
-     */
-    onValueBuildingChanged(data) {
-      this.buildingSelected = data.value;
-      this.roomSelected = "";
-      this.floorSelected = "";
-      this.roomsFilter = [];
-      this.floorsFilter = floors.filter((x) => x.BuildingID == data.value);
-    },
-    /**
-     * Sự kiện thay đổi tầng
-     */
-    onValueFloorChanged(data) {
-      this.floorSelected = data.value;
-      this.roomSelected = "";
-      this.roomsFilter = rooms.filter(
-        (x) => x.BuildingID == this.buildingSelected && x.FloorID == data.value
-      );
-    },
-    /**
-     * Sự kiện thay đổi phòng
-     */
-    onValueRoomChanged(data) {
-      this.roomSelected = data.value;
-    },
+        const startDateObj = new Date(item.StartDate) // tạo đối tượng Date từ chuỗi ngày
+        const startDateString = startDateObj.toString() // chuyển đổi sang chuỗi ngày theo định dạng mặc định
 
-    /**
-     * Sự kiện thêm lịch
-     */
-    onAddedRoom(e) {
-      console.log("Added", e.appointmentData.text, "success");
-    },
-    /**
-     * Sự kiện sửa lịch
-     */
-    onUpdatedRoom(e) {
-      console.log("Updated", e.appointmentData.text, "info");
-    },
-    /**
-     * Sự kiện xóa lịch
-     */
-    onDeletedRoom(e) {
-      console.log("Deleted", e.appointmentData.text, "warning");
+        const endDateObj = new Date(item.EndDate) // tạo đối tượng Date từ chuỗi ngày
+        const endDateString = endDateObj.toString() // chuyển đổi sang chuỗi ngày theo định dạng mặc định
+
+        const timezone = 'Eastern European Summer Time' // múi giờ
+        const dateStartStringWithTimezone = startDateString.replace(
+          /GMT\+\d{2}:\d{2}/,
+          `GMT+00:00 (${timezone})`,
+        ) // chèn múi giờ vào chuỗi ngày
+
+        const dateEndStringWithTimezone = endDateString.replace(
+          /GMT\+\d{2}:\d{2}/,
+          `GMT+00:00 (${timezone})`,
+        ) // chèn múi giờ vào chuỗi ngày
+
+        // Gán lại giá trị cho thuộc tính startDate và endDate
+        item.startDate = dateStartStringWithTimezone
+        item.endDate = dateEndStringWithTimezone
+      }
     },
   },
-};
+  async created() {
+    this.loadDataBooking(this.handleDataSource)
+    await this.loadDataBuildings()
+    await this.loadDataEquipments()
+    await this.loadDataRooms()
+  },
+}
 </script>
-<style lang="scss" scoped>
-.container {
-  // margin: 50px;
-  .select-bar {
-    height: 44px;
-    margin-bottom: 25px;
-    display: flex;
-    position: relative;
-    .item-select {
-      width: 250px;
-    }
-    .item-select:not(:first-child) {
-      margin-left: 25px;
-    }
-    .import-el{
-      position: absolute;
-      right: 10px;
-    }
-  }
-  .sheduler-content {
-    height: 600px !important;
-  }
+<style>
+.input_date {
+  min-width: 220px;
+  display: flex;
+  width: 220px;
 }
 
-.widget-container {
-  margin-right: 320px;
+.toolbar {
+  display: flex;
+  width: 100%;
+  height: 56px;
+  background-color: #f5f5f5;
+  align-items: center;
 }
 
-.current-product {
-  padding-top: 11px;
-}
-
-.current-value {
-  font-weight: bold;
-}
-.dx-scheduler.dx-widget.dx-visibility-change-handler {
-    height: 600px !important;
-    width: calc(100vw - 327px) !important;
-}
-.options {
-  padding: 20px;
-  background-color: rgba(191, 191, 191, 0.15);
+.dx-buttongroup_custom {
   position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 260px;
+  right: 30px;
 }
 
-.caption {
-  font-weight: 500;
-  font-size: 18px;
+.dx-scheduler-header {
+  display: none !important;
 }
 
-.option {
-  margin-top: 10px;
+.dx-scheduler-work-space-day .dx-scheduler-group-header {
+  height: 50px !important;
+  width: 200px;
+}
+.dx-scheduler-work-space-day .dx-scheduler-cell-sizes-horizontal {
+  width: 200px;
 }
 </style>

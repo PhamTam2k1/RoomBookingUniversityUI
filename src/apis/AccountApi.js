@@ -1,23 +1,24 @@
-import BaseAPIConfig from "./BaseApiConfig";
+import BaseAPIConfig from './BaseApiConfig'
 
 class AccountAPI {
-    controller = "Accounts";
-   
-    /**
-    * Mô tả : Lấy toàn bộ dữ liệu phòng ban từ api
-    * @Createdby: PTTAM
-    * Created date: 21:33 1/09/2022
-    */
-    async logIn(user) {
-        return await BaseAPIConfig.post(`${this.controller}/login`,user);
-    }
-    async logOut() {
-        return await BaseAPIConfig.post(`${this.controller}/logout`);
-    }
+  controller = 'Accounts'
 
-
+  /**
+   * Mô tả : Lấy toàn bộ dữ liệu phòng ban từ api
+   * @Createdby: PTTAM
+   * Created date: 21:33 1/09/2022
+   */
+  async logIn(user) {
+    return await BaseAPIConfig.post(`${this.controller}/login`, user)
+  }
+  async logOut() {
+    return await BaseAPIConfig.post(`${this.controller}/logout`)
+  }
+  async changepass(user) {
+    return await BaseAPIConfig.post(`${this.controller}/changepass`, user)
+  }
 }
-export default new  AccountAPI();
+export default new AccountAPI()
 // await UserApi.getUserByID(userID).then(
 //     (res) => {
 //       currentThis.userRoles = res.data.UserRoles;

@@ -1,32 +1,48 @@
-
 <template>
-  <div class="movie-tooltip">
-    <img :src="movieData.image" />
-    <div class="movie-info">
-      <div class="movie-title">{{ movieData.text }} ({{ movieData.year }})</div>
-      <div>Director: {{ movieData.director }}</div>
-      <div>Duration: {{ movieData.duration }} minutes</div>
-      <div>
-        <div>
-          <DxButton icon="trash" @click="(e) => deleteAppointment(e, data)" />
+  <div class="booking-tooltip" ref="tooltip">
+    <div class="header-popover flex">
+      <div class="text-title flex">{{ templateTooltipModel.Subject }}</div>
+      <div class="tool flex"></div>
+    </div>
+    <div class="info">
+      <div class="t-item-line flex">
+        <div class="t-lable">Tên phòng</div>
+        <div class="t-content">{{ templateTooltipModel.RoomName }}</div>
+      </div>
+      <div class="t-item-line flex">
+        <div class="t-lable">Thời gian đặt</div>
+        <div class="t-content">{{ templateTooltipModel.dateTime }}</div>
+      </div>
+      <div class="t-item-line flex">
+        <div class="t-lable">Số người tham dự</div>
+        <div class="t-content"></div>
+      </div>
+      <div class="t-item-line flex">
+        <div class="t-lable">Người đặt phòng</div>
+        <div class="t-content">
+          {{ templateTooltipModel.FullName }}
+          <div class="misa-full-name-avatar-table flex">
+            <div class="misa-cell-avatar-color">
+              {{ templateTooltipModel.AvartarColor }}
+            </div>
+            <div class="misa-cell-FullName">
+              {{ templateTooltipModel.FullName }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <div class="arrow" :class="{ arrow_right: classArrow }"></div>
   </div>
 </template>
 <script>
 /* eslint-disable */
 // import 'devextreme/localization/globalize/date';
 
-import Query from "devextreme/data/query";
-import DxButton from "devextreme-vue/button";
-import { moviesData } from "../../data/data.js";
-
-const dayOfWeekNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-const getMovieById = function (resourceId) {
-  return Query(moviesData).filter("id", resourceId).toArray()[0];
-};
+import Query from 'devextreme/data/query'
+import DxButton from 'devextreme-vue/button'
+import CommonFunction from '@/commons/CommonFuction'
+const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export default {
   components: {
@@ -41,95 +57,92 @@ export default {
       type: Object,
       default: () => {},
     },
+    classArrow: {
+      type: Boolean,
+    },
+  },
+  created() {
+    console.log(this.templateTooltipModel)
   },
   data() {
     return {
       dayOfWeekNames,
-      movieData: getMovieById(
-        this.templateTooltipModel.appointmentData.movieId
-      ),
-    };
+      CommonFunction: CommonFunction,
+    }
   },
   methods: {
     deleteAppointment(e, data) {
-      debugger
-      const schedulerInstance = this.$refs["scheduler"].instance;
-      console.log(schedulerInstance);
+      const schedulerInstance = this.$refs['scheduler'].instance
+      console.log(schedulerInstance)
       // Sennò apre in edit
-      e.event.stopPropagation();
+      e.event.stopPropagation()
 
-      schedulerInstance.deleteAppointment(data.appointmentData);
-      schedulerInstance.hideAppointmentTooltip();
+      schedulerInstance.deleteAppointment(data.appointmentData)
+      schedulerInstance.hideAppointmentTooltip()
     },
   },
-};
+}
 </script>
-<style scoped>
-.appointment-content {
-  width: 360px;
-  margin-top: 3px;
+<style lang="scss" scoped>
+.header-popover {
+  .text-title {
+    font-weight: 700;
+    font-size: 16px;
+  }
 }
 
-.dx-popup-content .appointment-content {
-  margin-top: 7px;
-  height: 50px;
-}
+.info {
+  padding: 10px;
+  .t-item-line {
+    height: 36px;
+    justify-content: space-between;
+    align-items: center;
+    .t-lable {
+      text-align: left;
+      margin-right: 10px;
+      width: 150px;
+    }
 
-.appointment-badge {
-  text-align: center;
-  float: left;
-  margin-right: 12px;
-  color: white;
-  width: 28px;
-  height: 28px;
-  font-size: 20px;
-  line-height: 20px;
-  border-radius: 28px;
-  margin-top: 5px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
+    .t-content {
+      text-align: left;
+      flex: 1;
+      font-weight: 700;
+    }
+  }
+  .misa-full-name-avatar-table.flex {
+    align-items: center;
+  }
 
-.appointment-dates {
-  color: #959595;
-  font-size: 12px;
-  text-align: left;
-  float: left;
+  .misa-cell-avatar-color {
+    text-transform: uppercase;
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    padding-top: 6px;
+    font-size: 14px;
+    color: #fff;
+    font-weight: bolder;
+    margin-right: 8px;
+    text-align: center;
+    min-width: 32px;
+    min-height: 32px;
+  }
 }
-
-.appointment-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 270px;
-  font-size: 15px;
-  text-align: left;
-  float: left;
+.arrow {
+  width: 0;
+  left: -10px;
+  top: 50%;
+  height: 0;
+  position: absolute;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #fff;
+  transform: translateY(-50%);
 }
-
-.delete-appointment {
-  position: relative;
-  border: none;
-  box-shadow: none;
-  top: -8px;
-  height: 50px;
-}
-
-.delete-appointment .dx-button-content {
-  width: 50px;
-  height: 50px;
-  padding-left: 4px;
-}
-
-.delete-appointment.dx-state-hover,
-.dx-list-item.dx-state-hover .dx-button {
-  box-shadow: none;
-  background-color: inherit;
-}
-
-.delete-appointment .dx-icon-trash {
-  color: #337ab7 !important;
-  font-size: 23px !important;
+.arrow_right {
+  border-left: 10px solid #fff;
+  right: -10px;
+  left: auto;
+  border-right: none;
 }
 </style>

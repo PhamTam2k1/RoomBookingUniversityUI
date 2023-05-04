@@ -61,11 +61,6 @@
     </BasePopup>
   </div>
 
-  <DxToast
-    v-model:visible="toastVisible"
-    v-model:message="message"
-    v-model:type="type"
-  />
   <!--Begin Popup Notice Error -->
   <PopupNotice
     :contentPopup="contentPopup"
@@ -88,17 +83,17 @@
 <script>
 import BasePopup from '@/components/base/BasePopup.vue'
 import DepartmentApi from '@/apis/DepartmentApi'
-import { DxToast } from 'devextreme-vue/toast'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
+import { v4 as uuidv4 } from 'uuid'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
   name: ' ',
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   components: {
-    DxToast,
     BasePopup,
     BaseInput,
     BaseButton,
@@ -135,12 +130,11 @@ export default {
       /**Icon của popup */
       classIconPopup: '',
       department: {
+        DepartmentID: this.departmentData.DepartmentID || uuidv4(),
         DepartmentCode: this.departmentData.DepartmentCode || '',
         DepartmentName: this.departmentData.DepartmentName || '',
       },
       validateErrorList: [],
-      toastVisible: false,
-      message: '',
     }
   },
 
@@ -263,14 +257,18 @@ export default {
             this.department,
           ).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true
-              this.message = 'Cập nhật thành công'
+              ObjectFunction.toastMessage(
+                Resource.Messenger.UpdateSucces,
+                Resource.Messenger.Success,
+              )
               this.$emit('onShowLoading')
               this.$emit('onCloseForm')
               this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Cập nhật thất bại'
+              ObjectFunction.toastMessage(
+                'Cập nhật thất bại',
+                Resource.Messenger.Success,
+              )
               this.$emit('onCloseForm')
             }
           })

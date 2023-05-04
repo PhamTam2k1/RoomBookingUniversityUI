@@ -10,6 +10,8 @@ import { iconsSet as icons } from '@/assets/icons'
 import DocsExample from '@/components/DocsExample'
 import 'devextreme/dist/css/dx.light.css'
 import 'element-plus/es/components/date-picker/style/css'
+import { locale } from 'devextreme/localization'
+locale('vi')
 
 const app = createApp(App)
 app.use(store)

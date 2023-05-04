@@ -1,273 +1,273 @@
 .misa-dialog {
-    position: fixed;
-    display: block;
-    background-color: rgba(0, 0, 0, 0.3);
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
+  position: fixed;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.3);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
 }
 
 .misa-dialog .misa-dialog-content,
 .misa-dialog-popup .misa-dialog-content {
-    position: absolute;
-    background-color: #fff;
-    top: 50%;
-    left: 50%;
-    border-radius: 6px;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px rgba(0, 0, 0, .175);
-
+  position: absolute;
+  background-color: #fff;
+  top: 50%;
+  left: 56%;
+  border-radius: 6px;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.175);
 }
 
 .misa-dialog .misa-dialog-close,
 .misa-dialog-popup .misa-dialog-close {
-    position: absolute;
-    right: 0;
-    top: 0;
-    cursor: pointer;
-
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
 }
 
 .misa-dialog .misa-dialog-header,
 .misa-dialog-popup .misa-dialog-header {
-    padding: 24px 64px 0px 24px;
-    border-radius: 4px 4px 0px 0px;
-
+  padding: 24px 64px 0px 24px;
+  border-radius: 4px 4px 0px 0px;
+  background-color: #f4f4f4;
 }
 
 .misa-dialog .misa-dialog-body {
-    padding: 8px 24px 24px 24px;
-
+  padding: 8px 24px 24px 24px;
 }
 
 .misa-dialog .misa-dialog-footer {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    width: 100%;
-    background-color: #F4F4F4;
-    border-radius: 0px 0px 4px 4px;
-    padding: 12px 24px;
-    box-sizing: border-box;
-
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  width: 100%;
+  background-color: #f4f4f4;
+  border-radius: 0px 0px 4px 4px;
+  padding: 12px 24px;
+  box-sizing: border-box;
 }
 
 .misa-dialog-footer button {
-    margin-left: 16px;
+  margin-left: 16px;
 }
 
 .misa-popup-delete {
-
-    background: rgb(255, 255, 255);
-    width: 500px;
-    min-width: 500px;
-    border-radius: 6px;
-
+  background: rgb(255, 255, 255);
+  width: 500px;
+  min-width: 500px;
+  border-radius: 6px;
 }
 
 .misa-popup-edit {
-    background: rgb(255, 255, 255);
-    width: 600px;
-    min-width: 500px;
-    height: auto;
-    border-radius: 6px;
-
+  background: rgb(255, 255, 255);
+  width: 600px;
+  min-width: 500px;
+  height: auto;
+  border-radius: 6px;
 }
 
 .misa-dialog .misa-popup-edit .misa-dialog-body {
-    padding: 24px !important;
-
+  padding: 24px !important;
 }
 
 .misa-popup-delete .misa-dialog-body .content-popup-delete {
-    white-space: break-spaces;
-    width: 100%;
+  white-space: break-spaces;
+  width: 100%;
 }
 
 .misa-dialog-close {
-    margin: 18px 16px 0 0;
+  margin: 18px 16px 0 0;
 }
 
 .misa-popup-delete .misa-icon-popup,
 .misa-popup-edit .misa-icon-popup,
 .misa-dialog-popup .misa-icon-popup {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    padding-left: 5.5px;
-    padding-top: 5.5px;
-    box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  padding-left: 5.5px;
+  padding-top: 5.5px;
+  box-sizing: border-box;
 }
 
 .misa-icon-popup:hover {
-    background-color: #eff1f6 !important;
+  background-color: #eff1f6 !important;
 }
 
 .misa-dialog .misa-popup-delete .misa-dialog-header {
-    padding: 24px;
-    padding-bottom: 0;
-    padding-top: 18px !important;
-    min-height: 53px !important;
+  padding: 24px;
+  padding-bottom: 0;
+  padding-top: 18px !important;
+  min-height: 53px !important;
 }
 
 .misa-dialog .misa-dialog-header.misa-title .title {
-    font-size: 24px;
-    font-weight: 500;
-    letter-spacing: 0.576px;
-    color: rgb(33, 33, 33);
-
-
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.576px;
+  color: rgb(33, 33, 33);
 }
 
 .misa-popup-delete .misa-dialog-footer .misa-button,
 .misa-dialog-popup .misa-dialog-footer .misa-button,
 .popup-dictionary-detail .misa-dialog-footer .misa-button,
+.popup-dictionary-user-detail .misa-dialog-footer .misa-button,
 .popup-dictionary-room-detail .misa-dialog-footer .misa-button {
-    margin-left: 12px;
-    text-align: center
+  margin-left: 12px;
+  text-align: center;
 }
 
 .misa-popup-edit .misa-dialog-footer .misa-button {
-    margin-right: 12px;
-    text-align: center
+  margin-right: 12px;
+  text-align: center;
 }
 
 .misa-dialog-body .misa-cell-avatar-color {
-    text-transform: uppercase;
-    box-sizing: border-box;
-    width: 66px;
-    height: 66px;
-    border-radius: 50%;
-    padding-top: 15px;
-    font-size: 30px;
-    color: #fff;
-    font-weight: bolder;
-    margin-right: 8px;
-    text-align: center;
-
+  text-transform: uppercase;
+  box-sizing: border-box;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  padding-top: 15px;
+  font-size: 30px;
+  color: #fff;
+  font-weight: bolder;
+  margin-right: 8px;
+  text-align: center;
 }
 
 .misa-dialog-popup {
-    position: absolute;
-    top: 1058%;
-    right: -754%;
-    display: block;
-    height: 400px;
-    width: 316px;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-    transition: none 0s ease 0s;
-    visibility: visible;
-    opacity: 1;
-    box-sizing: border-box;
+  position: absolute;
+  top: 1058%;
+  right: -754%;
+  display: block;
+  height: 400px;
+  width: 316px;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  transition: none 0s ease 0s;
+  visibility: visible;
+  opacity: 1;
+  box-sizing: border-box;
 }
 
 .misa-dialog-popup .misa-dialog-content {
-    box-shadow: 0 0 10px rgb(0 0 0 / 18%);
-    color: var(--text-primary-color);
-    width: 316px;
-    border-radius: 4px;
-
+  box-shadow: 0 0 10px rgb(0 0 0 / 18%);
+  color: var(--text-primary-color);
+  width: 316px;
+  border-radius: 4px;
 }
 
 .misa-dialog-popup .misa-dialog-body {
-    padding: 8px 4px 24px 24px;
+  padding: 8px 4px 24px 24px;
 }
 
 .misa-dialog-popup .misa-dialog-header {
-
-    padding: 16px 16px 8px 16px;
+  padding: 16px 16px 8px 16px;
 }
 
 .misa-dialog-popup .misa-dialog-header .title {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: .324px;
-    color: var(--text-primary-color);
-    margin-top: 10px;
-    width: auto;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.324px;
+  color: var(--text-primary-color);
+  margin-top: 10px;
+  width: auto;
 }
 
 .misa-dialog-popup .misa-dialog-body .list-content {
-    overflow-x: auto
+  overflow-x: auto;
 }
 
 .list-group.list-group-item {
-    border-radius: 6px;
-    padding: 8px;
+  border-radius: 6px;
+  padding: 8px;
 }
 
 .misa-dialog-popup .misa-dialog-footer {
-    display: flex;
-    background: #f1f5f9;
-    align-items: center;
-    height: 60px;
-    padding: 15px 20px 15px 58px;
-    box-sizing: border-box;
+  display: flex;
+  background: #f1f5f9;
+  align-items: center;
+  height: 60px;
+  padding: 15px 20px 15px 58px;
+  box-sizing: border-box;
 }
 
 .misa-dialog .popup-dictionary-detail .misa-dialog-body {
-    width: 35vw;
-    height: 20vh;
+  width: 35vw;
+  height: 20vh;
 }
+
 .misa-dialog .popup-dictionary-room-detail .misa-dialog-body {
-    width: 50vw;
-    min-height: 60vh;
-    max-height: 85%;
-    overflow-x: hidden;
-    margin-bottom: 20px;
+  width: 50vw;
+  min-height: 65vh;
+  max-height: 65vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin-bottom: 20px;
 }
-.popup-dictionary-detail .misa-dialog-header,.popup-dictionary-room-detail .misa-dialog-header {
-    padding: 24px 24px 20px 24px !important;
+.misa-dialog .popup-dictionary-user-detail .misa-dialog-body {
+  width: 40vw;
+  min-height: 52vh;
+  max-height: 52vh;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin-bottom: 20px;
+}
+.popup-dictionary-detail .misa-dialog-header,
+.popup-dictionary-room-detail .misa-dialog-header,
+.popup-dictionary-user-detail .misa-dialog-header {
+  padding: 24px 24px 20px 24px !important;
 }
 
 .misa-popup-notice {
-    width: 398px;
-    height: 142px;
+  width: 398px;
+  height: 142px;
 }
 
 .misa-popup-notice .misa-dialog-body {
-    padding: 32px 24px;
+  padding: 32px 24px;
 }
 
 @media only screen and (max-height: 800px) {
-    .list-content {
-        height: 250px;
-    }
+  .list-content {
+    height: 250px;
+  }
 }
 
 @media only screen and (max-height: 1080px) {
-    .list-content {
-        height: 250px;
-    }
+  .list-content {
+    height: 250px;
+  }
 }
 
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 6px;
+  width: 8px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar {
-    height: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cdd3d6;
-    width: 6px;
-    height: 6px;
-    border-radius: 2px;
+  background: #cdd3d6;
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #fff;
+  background: #fff;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1 !important;
+  background: #f1f1f1 !important;
 }

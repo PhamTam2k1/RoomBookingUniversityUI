@@ -1,7 +1,7 @@
 <template>
   <div id="body-equipment-dictionary">
     <!-- Begin body -->
-    <div id="bd-equipment">
+    <div id="bd-equipment" class="Body">
       <div class="filter-options">
         <DxTextBox
           placeholder="Tìm kiếm"
@@ -196,7 +196,7 @@ export default {
      * CreatedBy: PTTAM
      * Created Date: 02-09-2022 14:12:42
      */
-    function onClickShowPopupDelete(id, name) {
+    function onClickShowPopupDelete(id) {
       dataComponent.equipmentData = dataComponent.dataSource.find(
         (x) => x.EquipmentID == id,
       )
@@ -237,7 +237,7 @@ export default {
      * @param {
      * } val
      */
-    const closePopup = (val) => {
+    const closePopup = () => {
       dataComponent.popupVisible = false
     }
 
@@ -356,9 +356,9 @@ export default {
 
 <style lang="scss" scoped>
 #body-equipment-dictionary {
-  padding: 10px 20px;
+  padding: 20px 20px;
   background-color: #efefef;
-  height: calc(100% - 75px);
+  height: calc(100%);
   flex: 1;
 }
 .filter-options {
@@ -392,7 +392,7 @@ export default {
   }
 }
 #bd-equipment {
-  height: calc(100vh - 140px);
+  height: 100%;
   background: white;
   padding: 20px;
 }

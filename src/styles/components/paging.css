@@ -1,110 +1,108 @@
 .misa-paging {
-    display: flex;
-    color: var(--text-primary-color);
-    background: white;
+  display: flex;
+  color: var(--text-primary-color);
+  background: white;
 }
 
 .misa-pagingtion {
-    border-top: none;
-    padding: 10px 0 !important;
-    height: 34px;
-    position: relative;
-    margin: 0 10px 8px 10px;
-    background-color: #f9fafc !important;
+  border-top: none;
+  padding: 0px 0 !important;
+  height: 40px;
+  position: relative;
+  /* margin: 0 10px 8px 10px; */
+  margin-top: 3px;
+  background-color: #f9fafc !important;
 }
 
 .page-size-selector.flex {
-    margin-top: 2px;
 }
 
 .misa-paging .paging-total {
-    flex: 1;
-    line-height: 40px;
-    margin-left: 16px;
+  flex: 1;
+  line-height: 40px;
+  margin-left: 16px;
 }
 
 .pagingation {
-    margin-right: 10px;
-    margin-top: -7px;
-    align-self: center;
+  margin-right: 10px;
+  align-self: center;
 }
 
 .misa-paging .page-size-infor {
-    margin-right: 8px;
-    margin-top: 8px;
+  margin-right: 8px;
+  line-height: 40px;
 }
 
 .misa-paging .page-infor {
-    height: 40px;
-    line-height: 40px;
-    margin: 0 22px;
-    margin-top: -3px;
+  height: 40px;
+  line-height: 40px;
+  margin: 0 22px;
 }
-
+.el-pagination {
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
 .el-pagination .btn-next,
 .el-pagination .btn-prev {
-
-    background-color: transparent !important;
-
+  background-color: transparent !important;
 }
 
 button.btn-prev.is-first {
-    content: "" !important;
-    height: 30px;
-    background-position: -69px -22.57px;
-    width: 34px !important;
-    top: 50%;
-    margin-top: 2px;
-    left: 50%;
-    margin-right: 2px;
-    background-image: url(../../assets/images/Icon.de5bb0db.svg);
+  content: '' !important;
+  height: 30px;
+  background-position: -69px -22.57px;
+  width: 34px !important;
+  top: 50%;
+  margin-top: 2px;
+  left: 50%;
+  margin-right: 2px;
+  background-image: url(../../assets/images/Icon.de5bb0db.svg);
 }
 
 button.btn-next.is-last {
-    content: "" !important;
-    width: 20px;
-    height: 30px !important;
-    background-position: -91px -22px;
-    width: 30px !important;
-    top: 50%;
-    left: 50%;
-    background-image: url(../../assets/images/Icon.de5bb0db.svg);
+  content: '' !important;
+  width: 20px;
+  height: 30px !important;
+  background-position: -91px -22px;
+  width: 30px !important;
+  top: 50%;
+  left: 50%;
+  background-image: url(../../assets/images/Icon.de5bb0db.svg);
 }
 
 button.btn-prev.is-first .el-icon,
 button.btn-next.is-last .el-icon {
-    display: none;
-
+  display: none;
 }
 
 .el-pagination .btn-prev,
 .el-pagination .btn-next {
-
-    background: none;
+  background: none;
 }
 
 .el-pagination button {
-    border: none;
-    padding: none !important;
-    background: 0 0;
-    margin-right: 6px;
-    border-radius: 50%;
-    height: 30px !important;
+  border: none;
+  padding: none !important;
+  background: 0 0;
+  margin-right: 6px;
+  border-radius: 50%;
+  height: 30px !important;
 }
 
 .el-pagination button:hover {
-    background-color: #eff1f6 !important;
-    ;
-    border-radius: 50%;
-    height: 30px;
+  background-color: #eff1f6 !important;
+  border-radius: 50%;
+  height: 30px;
 }
 
 .el-pagination button:disabled {
-    cursor: not-allowed;
-    background-color: transparent !important;
-    /* filter: invert(52%) sepia(5%) saturate(480%) hue-rotate(1216deg) brightness(1212%) contrast(45%); */
+  cursor: not-allowed;
+  background-color: transparent !important;
+  /* filter: invert(52%) sepia(5%) saturate(480%) hue-rotate(1216deg) brightness(1212%) contrast(45%); */
 }
 
 .misa-paging .misa-icon-check {
-    filter: invert(52%) sepia(89%) saturate(505%) hue-rotate(1244deg) brightness(84%) contrast(86%) !important;
+  filter: invert(52%) sepia(89%) saturate(505%) hue-rotate(1244deg)
+    brightness(84%) contrast(86%) !important;
 }

@@ -2,19 +2,22 @@
   <div
     class="base-input"
     ref="title"
-    :class="{ 'misa-input-required': error != '', tooltip: error != '' }"
+    :class="{
+      'misa-input-required': error != '' && !isDisable,
+      tooltip: error != '' && !isDisable,
+    }"
     :data_title="error"
   >
     <div class="lable-input t-title-lable flex" v-if="lable">
       {{ lable }}
       <div v-if="required" :class="{ requiredField: required }">
-        <span class="t-required"> &nbsp;(*)</span>
+        <span class="t-required"> &nbsp;*</span>
       </div>
     </div>
     <slot></slot>
     <input
       ref="input"
-      type="text"
+      :type="type"
       :class="classInput"
       :placeholder="placeholder"
       :value="modelValue"
@@ -23,6 +26,7 @@
       @blur="handleBlur"
       @keyup="handleKeyup"
       :maxlength="maxlength"
+      :disabled="isDisable"
     />
   </div>
 </template>
@@ -75,6 +79,15 @@ export default {
     isCapitaLable: {
       type: Boolean,
       default: false,
+    } /**Viết hoa  */,
+    isDisable: {
+      type: Boolean,
+      default: false,
+    },
+    type: {
+      type: [String, Number],
+      default: 'text',
+      validator: (value) => ['text', 'number'].includes(value),
     },
   },
   data() {
@@ -157,9 +170,9 @@ export default {
   color: #ff4747;
 }
 
-.misa-input {
+/* .misa-input {
   width: 70%;
-}
+} */
 .lable-input {
   width: 30%;
   padding-top: 5px;
@@ -183,7 +196,10 @@ export default {
   font-family: Notosans;
   font-weight: 100;
 }
-
+.misa-input:disabled {
+  color: #585959;
+  background-color: #f5f5f5;
+}
 .tooltip:hover:after {
   display: block;
 }

@@ -1,5 +1,9 @@
 <template>
-  <div class="div flex" :data_title="data_title" :class="{ tooltip: isTooltip }">
+  <div
+    class="div flex"
+    :data_title="data_title"
+    :class="{ tooltip: isTooltip }"
+  >
     <div class="lable-input t-title-lable flex" v-if="lable">
       {{ lable }}
       <div v-if="required" :class="{ requiredField: required }">
@@ -32,23 +36,25 @@ export default {
       // giá trị của input
       type: [String, Date],
     },
-    data_title: { // title của input
+    data_title: {
+      // title của input
       type: String,
-      default: "",
+      default: '',
     },
     errMsg: {
       // lỗi của input trong trường required
       type: String,
-      default: "",
+      default: '',
     },
-    tabindex: { // tabindex của input
+    tabindex: {
+      // tabindex của input
       type: Number,
     },
-    lable:{
+    lable: {
       type: String,
-      default: "",
+      default: '',
     },
-    required:{
+    required: {
       type: Boolean,
       default: false,
     },
@@ -65,22 +71,20 @@ export default {
      * Created date: 16:47 21/08/2022
      */
     modelValue(valNew) {
-      this.valueDate = valNew;
+      this.valueDate = valNew
     },
   },
   data() {
     return {
       /** giá trị ngày */
-      valueDate: "",
-
-
+      valueDate: '',
 
       /**true: thêm border đỏ vào input, false: ngược lại*/
-      isErrorDate: false, 
+      isErrorDate: false,
 
       /**true: hiiển thị tooltip, false: ẩn tooltip*/
-      isTooltip: false, 
-    };
+      isTooltip: false,
+    }
   },
   methods: {
     /**
@@ -91,9 +95,9 @@ export default {
      * Created date: 16:48 21/08/2022
      */
     changeDate() {
-      this.isErrorDateInput(false);
-      this.autoFocus();
-      this.$emit("change-date", this.valueDate);
+      this.isErrorDateInput(false)
+      this.autoFocus()
+      this.$emit('change-date', this.valueDate)
     },
 
     /**
@@ -103,7 +107,7 @@ export default {
      * Created by: PTTAM
      */
     autoFocus() {
-      this.$refs.date.focus();
+      this.$refs.date.focus()
     },
 
     /**
@@ -125,11 +129,11 @@ export default {
      * Created by: PTTAM
      */
     isErrorDateInput(isErr) {
-      this.isErrorDate = isErr;
-      this.isTooltip = isErr;
+      this.isErrorDate = isErr
+      this.isTooltip = isErr
     },
   },
-};
+}
 </script>
 <style scoped>
 .t-required {
@@ -166,5 +170,4 @@ export default {
 .tooltip:hover:after {
   display: block;
 }
-
 </style>

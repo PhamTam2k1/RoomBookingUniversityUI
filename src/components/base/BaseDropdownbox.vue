@@ -31,6 +31,7 @@
       @enterKey="handleEnterkey"
       :onInput="handleInput"
       ref="dropdown"
+      :disabled="isDisable"
     >
       <template #iconDropdown="{}">
         <div class="misa-icon misa-icon-dropdown misa-icon-24"></div>
@@ -130,6 +131,11 @@ export default {
       type: String,
       default: '',
     },
+    /**Disable  */
+    isDisable: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -209,9 +215,6 @@ export default {
   color: #ff4747;
 }
 
-.drop-down-utc {
-  width: 70%;
-}
 .lable-input {
   font-size: 14px;
   width: 30%;

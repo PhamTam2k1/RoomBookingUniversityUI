@@ -1,534 +1,536 @@
 /*Style nhập khẩu*/
 .p-absolute-0 {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  .misa-icon {
-    background: url(../../assets/images/misa-bm_icon_sprites.svg) center no-repeat;
-  }
-  .ic-invalid {
-    background-position: -215px -276px;
-  }
-  .misa-icon.ic-status-record.ic-has-data {
-    background-position: -251px -276px;
-  }
-  .misa-icon.ic-status-record.ic-valid {
-    background-position: -178px -276px;
-  }
-  .misa-icon.ic-close-toastr {
-    background-position: -316px -76px;
-    width: 16px;
-    height: 16px;
-  }
-  .misa-icon.ic-success-toastr {
-    background-position: -292px -148px;
-    width: 16px;
-    height: 16px;
-  }
-  .misa-icon.ic-error-toastr {
-    background-position: -292px -220px;
-    width: 16px;
-    height: 16px;
-  }
-  .align-items-center {
-    align-items: center !important;
-  }
-  .align-self-center {
-    align-self: center !important;
-  }
-  .d-flex {
-    display: flex;
-  }
-  .justify-content-end {
-    justify-content: flex-end !important;
-  }
-  .justify-content-sm-between {
-    justify-content: space-between !important;
-  }
-  .import-container {
-    width: 100%;
-    height: calc(100% - 75px);
-    margin: 0 auto;
-    box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
-    padding: 0 !important;
-    background-color: #fff !important;
-  }
-  .popup-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.misa-icon {
+  background: url(../../assets/images/misa-bm_icon_sprites.svg) center no-repeat;
+}
+.ic-invalid {
+  background-position: -215px -276px;
+}
+.misa-icon.ic-status-record.ic-has-data {
+  background-position: -251px -276px;
+}
+.misa-icon.ic-status-record.ic-valid {
+  background-position: -178px -276px;
+}
+.misa-icon.ic-close-toastr {
+  background-position: -316px -76px;
+  width: 16px;
+  height: 16px;
+}
+.misa-icon.ic-success-toastr {
+  background-position: -292px -148px;
+  width: 16px;
+  height: 16px;
+}
+.misa-icon.ic-error-toastr {
+  background-position: -292px -220px;
+  width: 16px;
+  height: 16px;
+}
+.align-items-center {
+  align-items: center !important;
+}
+.align-self-center {
+  align-self: center !important;
+}
+.d-flex {
+  display: flex;
+}
+.justify-content-end {
+  justify-content: flex-end !important;
+}
+.justify-content-sm-between {
+  justify-content: space-between !important;
+}
+.import-container {
+  width: 100%;
+  // height: calc(100% - 75px);
+  margin: 0 auto;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+  padding: 0 !important;
+  background-color: #fff !important;
+}
+.popup-content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - 65px);
+  padding: 16px 20px 20px;
+  overflow: auto;
+  .step-container {
+    height: 190px;
     position: relative;
-    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: calc(100% - 65px);
-    padding: 16px 20px 20px;
-    overflow: auto;
-    .step-container {
-      height: 190px;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 25px;
+    margin-bottom: 25px;
+  }
+  .step-info {
+    text-align: center;
+    .step-info-item {
+      .title {
+        font-size: 31px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .detail {
+        font-size: 20px;
+      }
     }
-    .step-info {
+  }
+  .step-area {
+    margin: auto;
+    display: flex;
+    .step-item {
       text-align: center;
-      .step-info-item {
-        .title {
-          font-size: 31px;
-          font-weight: bold;
-          margin-bottom: 10px;
-        }
-        .detail {
-          font-size: 20px;
-        }
-      }
-    }
-    .step-area {
-      margin: auto;
-      display: flex;
-      .step-item {
-        text-align: center;
-        min-width: 150px;
-        max-width: 150px;
-        z-index: 1;
-        .prc-icon {
-          height: 60px;
-          width: 60px;
-          margin: auto;
-          border-radius: 50%;
-          background: #fff;
-          margin-bottom: 10px;
-          border: 1px solid #f5f5f5;
-          background-color: #e0e0e0;
-          .step-number {
-            color: #fff;
-            font-family: Roboto-Medium;
-            font-size: 35px;
-            font-weight: 900;
-            vertical-align: middle;
-            height: 50px;
-            line-height: 57px;
-          }
-        }
-        .prc-text {
-          color: #212529;
-        }
-      }
-      .step-item.active {
-        .prc-icon {
-          border: 2px solid #27ae60;
-          background-color: #fff;
-          .step-number {
-            color: #27ae60;
-          }
-        }
-      }
-      .step-item.done {
-        .prc-icon {
-          background: #27ae60;
-          .step-number {
-            color: transparent;
-            height: 12px;
-            width: 8px;
-            border-top: 2px solid #fff;
-            border-left: 2px solid #fff;
-            margin: 16px 0px 0px 20px;
-            transform: rotate(225deg);
-          }
-        }
-        + {
-          .line-space {
-            background: #27ae60;
-          }
-        }
-      }
-      .line-space {
-        height: 2px;
-        width: 120px;
-        background: #f5f5f5;
-        margin: 25px -45px 0 -45px;
-      }
-    }
-    #pnContent {
-      position: relative;
-      flex: 1;
-    }
-    .content-state {
-      .step-content {
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        background: #fff;
-      }
-      .step-content.active {
-        display: block !important;
-        z-index: 3;
-      }
-      .choose-container {
-        display: flex;
+      min-width: 150px;
+      max-width: 150px;
+      z-index: 1;
+      .prc-icon {
+        height: 60px;
+        width: 60px;
         margin: auto;
-        .choose-state {
+        border-radius: 50%;
+        background: #fff;
+        margin-bottom: 10px;
+        border: 1px solid #f5f5f5;
+        background-color: #e0e0e0;
+        .step-number {
+          color: #fff;
+          font-family: Roboto-Medium;
+          font-size: 35px;
+          font-weight: 900;
+          vertical-align: middle;
+          height: 50px;
+          line-height: 57px;
+        }
+      }
+      .prc-text {
+        color: #212529;
+      }
+    }
+    .step-item.active {
+      .prc-icon {
+        border: 2px solid #27ae60;
+        background-color: #fff;
+        .step-number {
+          color: #27ae60;
+        }
+      }
+    }
+    .step-item.done {
+      .prc-icon {
+        background: #27ae60;
+        .step-number {
+          color: transparent;
+          height: 12px;
+          width: 8px;
+          border-top: 2px solid #fff;
+          border-left: 2px solid #fff;
+          margin: 16px 0px 0px 20px;
+          transform: rotate(225deg);
+        }
+      }
+      + {
+        .line-space {
+          background: #27ae60;
+        }
+      }
+    }
+    .line-space {
+      height: 2px;
+      width: 120px;
+      background: #f5f5f5;
+      margin: 25px -45px 0 -45px;
+    }
+  }
+  #pnContent {
+    position: relative;
+    flex: 1;
+  }
+  .content-state {
+    .step-content {
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+    }
+    .step-content.active {
+      display: block !important;
+      z-index: 3;
+    }
+    .choose-container {
+      display: flex;
+      margin: auto;
+      .choose-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+      }
+      .suggest-container {
+        border: 1px solid #e0e0e0;
+        width: 376px;
+        padding: 20px;
+        height: 200px;
+        .content {
           display: flex;
           align-items: center;
           justify-content: center;
-          flex: 1;
-        }
-        .suggest-container {
-          border: 1px solid #e0e0e0;
-          width: 376px;
-          padding: 20px;
-          height: 200px;
-          .content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            flex-direction: column;
-            .ic-download-template {
-              background: url("../../assets/images/Icon_BusmasBBN.svg")
-                center no-repeat;
-              width: 48px;
-              height: 48px;
-              background-position: 2px -480px;
-              margin-bottom: 8px;
-            }
-            #btnDownTempFile {
-              text-align: center;
-              cursor: pointer;
-              color: #429df2;
-              font-style: italic;
-            }
-          }
-          .step-tutorial {
-            display: flex;
-            margin-bottom: 20px;
-            .icon-step {
-              align-self: center;
-              margin-right: 20px;
-            }
-            .text-tutorial {
-              .text-download {
-                color: #429df2;
-                cursor: pointer;
-              }
-            }
-          }
-        }
-        .state-left {
-          margin-right: 32px;
-        }
-        .state-right {
-          .wrap-title {
-            display: flex;
-            justify-content: space-between;
-          }
-        }
-        .suggest-file {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-style: italic;
-          .template-file {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            .icon {
-              width: 22px;
-              height: 24px;
-              background: url("../../assets/images/misa-bm_icon_sprites.svg") center no-repeat;
-              background-position: -313px -144px;
-              margin-right: 8px;
-            }
-          }
-        }
-        .container-import {
-          width: 700px;
-          height: 200px;
-          border: 1px dashed #e0e0e0;
-          font-size: 15px;
-          color: #373737;
-          position: relative;
-          .wrap-notify {
-          }
-          .toastr-notify {
-            position: absolute;
-            width: 100%;
-            height: 36px;
-            color: #fff;
-            font-size: 13px;
-            border-radius: 4px;
-            padding: 0 10px 0 20px;
-            .icon-toastr {
-              margin-right: 16px;
-            }
-            .icon-close-toastr {
-              cursor: pointer;
-            }
-          }
-          .toastr-success {
-            background-color: #15ab15;
-            z-index: 2;
-          }
-          .toastr-error {
-            background-color: #ff5252;
-          }
-          .drop-file {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-          .up-file {
-            position: relative;
-            width: 90px;
-            color: #429df2;
-            cursor: pointer;
-            .txt-file-import {
-              opacity: 0;
-              width: 100%;
-              cursor: pointer;
-            }
-          }
-          .text-file {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            text-align: center;
-          }
-          .bg-icon {
-            background: url("../../assets/images/Icon_BusmasBBN.svg")
-              center no-repeat;
+          width: 100%;
+          height: 100%;
+          flex-direction: column;
+          .ic-download-template {
+            background: url('../../assets/images/Icon_BusmasBBN.svg') center
+              no-repeat;
             width: 48px;
             height: 48px;
-            background-position: -148px -480px;
+            background-position: 2px -480px;
             margin-bottom: 8px;
           }
-          .import-file {
-            padding: 15px;
+          #btnDownTempFile {
+            text-align: center;
+            cursor: pointer;
+            color: #429df2;
+            font-style: italic;
           }
-          .file-item {
-            display: flex;
-            align-items: center;
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            .file-icon {
-              margin-right: 18px;
-              width: 30px;
-              min-width: 30px;
-              height: 32px;
-              background: url("../../assets/images/misa-bm_icon_sprites.svg") center no-repeat;
-              background-position: -76px -243px;
-            }
-            .delete-file {
-              width: 19px;
-              min-width: 19px;
-              height: 20px;
-              background: url("../../assets/images/misa-bm_icon_sprites.svg") center no-repeat;
-              background-position: -291px -74px;
+        }
+        .step-tutorial {
+          display: flex;
+          margin-bottom: 20px;
+          .icon-step {
+            align-self: center;
+            margin-right: 20px;
+          }
+          .text-tutorial {
+            .text-download {
+              color: #429df2;
               cursor: pointer;
-              margin-left: 18px;
             }
           }
         }
       }
-      .text {
-        font-size: 13px;
-        color: #373737 !important;
+      .state-left {
+        margin-right: 32px;
       }
-      .text-bold {
-        font-weight: 700;
-        color: #333333;
+      .state-right {
+        .wrap-title {
+          display: flex;
+          justify-content: space-between;
+        }
       }
-      .text-link {
-        color: #429df2;
-      }
-      .title-large {
-        font-size: 20px;
-        font-weight: 700;
-        color: #333333;
-      }
-      .title-normal {
-        font-size: 18px;
-        font-weight: 700;
-        color: #333333;
-        margin-bottom: 20px;
-      }
-      .row-content {
+      .suggest-file {
         display: flex;
-      }
-      .m-lr-20px {
-        margin-left: 20px;
-        margin-right: 20px;
-      }
-    }
-    .pairing-container {
-      margin: 0 130px;
-      .fixed-column-left {
-        min-width: 214px;
-        max-width: 310px;
-        margin-right: 20px;
-        .title-parring {
-          span {
-            font-size: 18px;
-            color: #454f63;
-            font-weight: bold;
+        justify-content: space-between;
+        align-items: center;
+        font-style: italic;
+        .template-file {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          .icon {
+            width: 22px;
+            height: 24px;
+            background: url('../../assets/images/misa-bm_icon_sprites.svg')
+              center no-repeat;
+            background-position: -313px -144px;
+            margin-right: 8px;
           }
         }
-        .ic-search {
-          background: url("../../assets/images/misa-bm_icon_sprites.svg")
-            center no-repeat;
-          background-position: -28px -4px;
+      }
+      .container-import {
+        width: 376px;
+        height: 200px;
+        border: 1px dashed #e0e0e0;
+        font-size: 15px;
+        color: #373737;
+        position: relative;
+        .wrap-notify {
+        }
+        .toastr-notify {
           position: absolute;
-          width: 16px;
-          height: 16px;
-          margin: 8px;
-          right: 0;
+          width: 100%;
+          height: 36px;
+          color: #fff;
+          font-size: 13px;
+          border-radius: 4px;
+          padding: 0 10px 0 20px;
+          .icon-toastr {
+            margin-right: 16px;
+          }
+          .icon-close-toastr {
+            cursor: pointer;
+          }
+        }
+        .toastr-success {
+          background-color: #15ab15;
+          z-index: 2;
+        }
+        .toastr-error {
+          background-color: #ff5252;
+        }
+        .drop-file {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .up-file {
+          position: relative;
+          width: 90px;
+          color: #429df2;
+          cursor: pointer;
+          .txt-file-import {
+            opacity: 0;
+            width: 100%;
+            cursor: pointer;
+          }
+        }
+        .text-file {
+          position: absolute;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100%;
+          text-align: center;
+        }
+        .bg-icon {
+          background: url('../../assets/images/Icon_BusmasBBN.svg') center
+            no-repeat;
+          width: 48px;
+          height: 48px;
+          background-position: -148px -480px;
+          margin-bottom: 8px;
+        }
+        .import-file {
+          padding: 15px;
+        }
+        .file-item {
+          display: flex;
+          align-items: center;
+          position: absolute;
+          bottom: 30px;
+          left: 50%;
+          transform: translateX(-50%);
+          white-space: nowrap;
+          .file-icon {
+            margin-right: 18px;
+            width: 30px;
+            min-width: 30px;
+            height: 32px;
+            background: url('../../assets/images/misa-bm_icon_sprites.svg')
+              center no-repeat;
+            background-position: -76px -243px;
+          }
+          .delete-file {
+            width: 19px;
+            min-width: 19px;
+            height: 20px;
+            background: url('../../assets/images/misa-bm_icon_sprites.svg')
+              center no-repeat;
+            background-position: -291px -74px;
+            cursor: pointer;
+            margin-left: 18px;
+          }
         }
       }
     }
-    .wrap-container {
-      display: flex;
-      bottom: 15px;
+    .text {
+      font-size: 13px;
+      color: #373737 !important;
     }
-    .checking-container {
-      left: 15px;
-      right: 15px;
-      .fixed-column-left {
-        min-width: 285px;
-        max-width: 350px;
-        margin-right: 20px;
-        padding-top: 27px;
-      }
-      .fixed-column-right {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-      }
+    .text-bold {
+      font-weight: 700;
+      color: #333333;
     }
-    .wrap-record {
-      height: 64px;
-      border: 1px solid #dee2e6;
-      display: flex;
-      padding: 0 16px;
+    .text-link {
+      color: #429df2;
+    }
+    .title-large {
+      font-size: 20px;
+      font-weight: 700;
+      color: #333333;
+    }
+    .title-normal {
       font-size: 18px;
-      font-weight: bold;
-      .invalid-record {
-        color: #33b369;
-      }
-      .valid-record {
-        color: #ff7575;
-      }
-      .hasdata-record {
-        color: #ffcb62;
-      }
-      .record-text {
-        display: flex;
-        line-height: 62px;
-        white-space: nowrap;
-      }
-      .wrap-icon {
-        margin-right: 16px;
-        width: 37px;
-        height: 36px;
-        align-self: center;
-      }
-    }
-    .wrap-record.mg-bt-20 {
+      font-weight: 700;
+      color: #333333;
       margin-bottom: 20px;
     }
-    .download-file {
-      margin-top: 8px;
-      .download-link {
-        font-style: italic;
-        cursor: pointer;
-      }
-      .ic-download {
-        width: 20px;
-        height: 20px;
-        background: url("../../assets/images/Icon_BusmasBBN.svg")
-          center no-repeat !important;
-        background-position: -49px -363px !important;
-      }
-    }
-    .result-container {
-      padding: 0 250px;
+    .row-content {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      .wrap-image {
-        display: flex;
-        align-items: center;
-        margin-right: 60px;
+    }
+    .m-lr-20px {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  }
+  .pairing-container {
+    margin: 0 130px;
+    .fixed-column-left {
+      min-width: 214px;
+      max-width: 310px;
+      margin-right: 20px;
+      .title-parring {
+        span {
+          font-size: 18px;
+          color: #454f63;
+          font-weight: bold;
+        }
+      }
+      .ic-search {
+        background: url('../../assets/images/misa-bm_icon_sprites.svg') center
+          no-repeat;
+        background-position: -28px -4px;
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        margin: 8px;
+        right: 0;
       }
     }
-    .grid-list-container {
+  }
+  .wrap-container {
+    display: flex;
+    bottom: 15px;
+  }
+  .checking-container {
+    left: 15px;
+    right: 15px;
+    .fixed-column-left {
+      min-width: 285px;
+      max-width: 350px;
+      margin-right: 20px;
+      padding-top: 27px;
+    }
+    .fixed-column-right {
       flex: 1;
-      padding: 0 !important;
-      position: absolute;
-      top: 27px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      tr {
-        th.requeried {
-          .th-inner {
-            &:after {
-              content: "";
-              width: 14px;
-              height: 19px;
-              background: url("../../assets/images/misa-bm_icon_sprites.svg")
-                center no-repeat;
-              background-position: -317px -99px;
-              display: block;
-            }
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+  }
+  .wrap-record {
+    height: 64px;
+    border: 1px solid #dee2e6;
+    display: flex;
+    padding: 0 16px;
+    font-size: 18px;
+    font-weight: bold;
+    .invalid-record {
+      color: #33b369;
+    }
+    .valid-record {
+      color: #ff7575;
+    }
+    .hasdata-record {
+      color: #ffcb62;
+    }
+    .record-text {
+      display: flex;
+      line-height: 62px;
+      white-space: nowrap;
+    }
+    .wrap-icon {
+      margin-right: 16px;
+      width: 37px;
+      height: 36px;
+      align-self: center;
+    }
+  }
+  .wrap-record.mg-bt-20 {
+    margin-bottom: 20px;
+  }
+  .download-file {
+    margin-top: 8px;
+    .download-link {
+      font-style: italic;
+      cursor: pointer;
+    }
+    .ic-download {
+      width: 20px;
+      height: 20px;
+      background: url('../../assets/images/Icon_BusmasBBN.svg') center no-repeat !important;
+      background-position: -49px -363px !important;
+    }
+  }
+  .result-container {
+    padding: 0 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .wrap-image {
+      display: flex;
+      align-items: center;
+      margin-right: 60px;
+    }
+  }
+  .grid-list-container {
+    flex: 1;
+    padding: 0 !important;
+    position: absolute;
+    top: 27px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    tr {
+      th.requeried {
+        .th-inner {
+          &:after {
+            content: '';
+            width: 14px;
+            height: 19px;
+            background: url('../../assets/images/misa-bm_icon_sprites.svg')
+              center no-repeat;
+            background-position: -317px -99px;
+            display: block;
           }
         }
       }
-      .fixed-table-container {
-        border: 1px solid #dee2e6 !important;
-      }
-      .fixed-table-header {
-        border-top: none !important;
-      }
-      .fixed-table-border {
-        display: none;
-      }
-      td.col-medium {
-        background-color: #f5f5f5;
-      }
     }
-    .text-link-style {
-      color: #429df2;
-      font-style: italic;
+    .fixed-table-container {
+      border: 1px solid #dee2e6 !important;
+    }
+    .fixed-table-header {
+      border-top: none !important;
+    }
+    .fixed-table-border {
+      display: none;
+    }
+    td.col-medium {
+      background-color: #f5f5f5;
     }
   }
-  .popup-footer {
-    position: relative;
-    height: 65px;
-    background-color: #f5f5f5;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
+  .text-link-style {
+    color: #429df2;
+    font-style: italic;
   }
-  .text-valid {
-    color: #33b369;
-  }
-  .text-exits {
-    color: #ffcb62;
-  }
-  .text-not-valid {
-    color: #ff7575;
-  }
+}
+.popup-footer {
+  position: relative;
+  height: 65px;
+  background-color: #f5f5f5;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.text-valid {
+  color: #33b369;
+}
+.text-exits {
+  color: #ffcb62;
+}
+.text-not-valid {
+  color: #ff7575;
+}

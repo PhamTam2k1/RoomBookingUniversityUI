@@ -1,52 +1,35 @@
 <template>
   <CDropdown variant="nav-item">
     <CDropdownToggle placement="bottom-end" class="py-0" :caret="false">
-      <CAvatar :src="avatar" size="md" />
+      <CAvatar :src="avatar" size="md" @click.prevent />
     </CDropdownToggle>
     <CDropdownMenu class="pt-0">
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
-        Account
+        Thiết lập
       </CDropdownHeader>
       <CDropdownItem>
-        <CIcon icon="cil-bell" /> Updates
-        <CBadge color="info" class="ms-auto">{{ itemsCount }}</CBadge>
+        <CIcon icon="cil-user" /> Thông tin tài khoản
       </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-envelope-open" /> Messages
-        <CBadge color="success" class="ms-auto">{{ itemsCount }}</CBadge>
+      <CDropdownItem> <CIcon icon="cil-settings" /> Thiết lập </CDropdownItem>
+      <CDropdownItem @click="handleChangePass">
+        <CIcon icon="cil-pencil" /> Đổi mật khẩu
       </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-task" /> Tasks
-        <CBadge color="danger" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-comment-square" /> Comments
-        <CBadge color="warning" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
-        Settings
-      </CDropdownHeader>
-      <CDropdownItem> <CIcon icon="cil-user" /> Profile </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-settings" /> Settings </CDropdownItem>
-      <CDropdownItem>
+      <!-- <CDropdownItem>
         <CIcon icon="cil-dollar" /> Payments
         <CBadge color="secondary" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
-      <CDropdownItem>
-        <CIcon icon="cil-file" /> Projects
-        <CBadge color="primary" class="ms-auto">{{ itemsCount }}</CBadge>
-      </CDropdownItem>
+      </CDropdownItem> -->
+
       <CDropdownDivider />
-      <CDropdownItem>
-        <CIcon icon="cil-shield-alt" /> Lock Account
+      <CDropdownItem @click="handleLogout">
+        <CIcon icon="cil-lock-locked" /> Đăng xuất
       </CDropdownItem>
-      <CDropdownItem> <CIcon icon="cil-lock-locked" /> Logout </CDropdownItem>
     </CDropdownMenu>
   </CDropdown>
 </template>
 
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'AppHeaderDropdownAccnt',
   setup() {
@@ -54,6 +37,24 @@ export default {
       avatar: avatar,
       itemsCount: 42,
     }
+  },
+  computed: {
+    ...mapState({
+      isLoggedInn: (state) => state.auth.isLoggedIn,
+      currentUser: (state) => state.auth.user,
+    }),
+  },
+  methods: {
+    ...mapActions({
+      logout: 'auth/logout',
+    }),
+    handleChangePass() {
+      alert('changePass')
+    },
+    handleLogout() {
+      this.logout()
+      this.$router.push('/login')
+    },
   },
 }
 </script>

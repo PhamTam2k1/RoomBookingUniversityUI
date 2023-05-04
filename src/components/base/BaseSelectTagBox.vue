@@ -29,6 +29,7 @@
       :opened="opened"
       @enterKey="handleEnterkey"
       @focusIn="handleFocusIn"
+      :disabled="isDisable"
     >
       <template #iconDropdown="{}">
         <div class="misa-icon misa-icon-dropdown misa-icon-24"></div>
@@ -45,8 +46,8 @@
     >
   </div>
 </template>
-  <script>
-import DxTagBox from "devextreme-vue/tag-box";
+<script>
+import DxTagBox from 'devextreme-vue/tag-box'
 
 export default {
   components: {
@@ -66,13 +67,13 @@ export default {
     /**Tên class */
     classDropdownbox: {
       type: String,
-      default: "",
+      default: '',
     },
 
     /**Placholder */
     placeholder: {
       type: String,
-      default: "",
+      default: '',
     },
     /**Mảng data */
     dataSource: Object,
@@ -80,13 +81,13 @@ export default {
     /**Tên */
     optionName: {
       type: String,
-      default: "",
+      default: '',
     },
 
     /**Giá trị */
     optionValue: {
       type: String,
-      default: "",
+      default: '',
     },
 
     /**Tabindex của popup */
@@ -97,7 +98,7 @@ export default {
     /** lỗi của input trong trường required*/
     error: {
       type: String,
-      default: "",
+      default: '',
     },
     required: {
       type: Boolean,
@@ -105,26 +106,31 @@ export default {
     },
     lable: {
       type: String,
-      default: "",
+      default: '',
+    },
+    /**Disable  */
+    isDisable: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
     return {
       /**biến check lỗi của select tag box: không có lỗi - valid, có lỗi - invalid */
-      isError: "valid",
+      isError: 'valid',
       opened: false,
-    };
+    }
   },
   methods: {
     /** Mô tả: Gửi sự kiện khi có sự thay đổi giá trị
      * CreatedBy: PTTAM
      */
     onOptionChange(e) {
-      if (e.name == "selectedItems" && e.value.length > 0) {
-        this.$emit("onOptionChange", e.value);
+      if (e.name == 'selectedItems' && e.value.length > 0) {
+        this.$emit('onOptionChange', e.value)
       }
-      if (e.name == "selectedItems" && e.value.length <= 0) {
-        this.$emit("onOptionChange", []);
+      if (e.name == 'selectedItems' && e.value.length <= 0) {
+        this.$emit('onOptionChange', [])
       }
     },
     /**
@@ -132,36 +138,36 @@ export default {
      * @Createdby: PTTAM
      */
     autoFocus() {
-      let input = this.$refs["dropdown"].$el.querySelector(
-        ".dx-texteditor-input"
-      );
-      input.focus();
+      let input = this.$refs['dropdown'].$el.querySelector(
+        '.dx-texteditor-input',
+      )
+      input.focus()
     },
 
     /** Mô tả: Sự kiện enter
      * CreatedBy: PTTAM
      */
     handleEnterkey() {
-      this.opened = true;
+      this.opened = true
     },
     /** Mô tả: Gửi sự kiện focus
      * CreatedBy: PTTAM
      */
     handleFocusIn() {
-      this.opened = true;
-      this.$emit("handleKeyupInput");
+      this.opened = true
+      this.$emit('handleKeyupInput')
     },
     /** Mô tả: sự kiện focus out của select box
      * CreatedBy: PTTAM
      */
-    validateError(e) {
-      this.opened = false;
-      this.$emit("handleBlurInput");
+    validateError() {
+      this.opened = false
+      this.$emit('handleBlurInput')
     },
   },
-};
+}
 </script>
-  <style  scoped>
+<style scoped>
 @import url(../../styles/components/dropdown-box.css);
 @import url(../../styles/components/icon.css);
 .drop-down.dx-show-invalid-badge.dx-tagbox.dx-selectbox.dx-textbox.dx-texteditor.dx-dropdowneditor-button-visible.dx-editor-outlined.dx-texteditor-empty.dx-widget.dx-tagbox-default-template.dx-dropdowneditor.dx-dropdowneditor-field-clickable.dx-invalid {
@@ -200,4 +206,3 @@ export default {
   display: block;
 }
 </style>
-  

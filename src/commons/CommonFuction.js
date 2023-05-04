@@ -22,6 +22,7 @@ const CommonFunction = Object.freeze({
    */
   splitFullName(fullName) {
     if (fullName) {
+      fullName = fullName.trim()
       var firstName = fullName.split(' ').slice(0, -1).join(' ')
       var lastName = fullName.split(' ').slice(-1).join(' ')
       if (firstName == '') return fullName[0]

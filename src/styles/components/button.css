@@ -1,148 +1,143 @@
 .misa-button {
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
-    height: 36px !important;
-    border-radius: 4px;
-    padding: 0px 16px;
-
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 36px !important;
+  border-radius: 4px;
+  padding: 0px 16px;
 }
 
 .misa-button-primary {
-    background-color: var(--button-primary-normal-bg-color) !important;
-    color: var(--button-primary-color);
-    color: #fff !important;
+  background-color: var(--button-primary-normal-bg-color) !important;
+  color: var(--button-primary-color);
+  color: #fff !important;
 }
 
 .misa-button-normal {
-    background-color: #fff;
-    border: 1px solid #e2e8f0;
-    color: #1e1e1e;
-    text-align: center;
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  color: #1e1e1e;
+  text-align: center;
 }
 
 .misa-button-normal:hover {
-    background-color: #dbf4ff;
-    color: #0c9cdd;
-    border: 1px solid #eaebef;
+  background-color: #dbf4ff;
+  color: #0c9cdd;
+  border: 1px solid #eaebef;
 }
 
 .misa-button .misa-button-text {
-    line-height: 36px;
-    font-weight: 500;
-    font-family: inherit;
+  line-height: 36px;
+  font-weight: 500;
+  font-family: inherit;
 }
 
 .misa-button-normal .misa-button-text {
-    line-height: 33px;
+  line-height: 33px;
 }
 
 .misa-button-normal:active {
-    background-color: #f5f5f5;
-    color: #0c9cdd;
-    border: 1px solid #eaebef;
+  background-color: #f5f5f5;
+  color: #0c9cdd;
+  border: 1px solid #eaebef;
 }
 
 .misa-button-wrap {
-    width: max-content !important;
-    border-radius: 4px;
-    padding: 0px 17px 0px 13px;
-    align-items: center;
-
+  width: max-content !important;
+  border-radius: 4px;
+  padding: 0px 17px 0px 13px;
+  align-items: center;
 }
 
-
-
 .misa-button-wrap .misa-icon {
-    margin-right: 4px;
-    filter: brightness(0) invert(1);
+  margin-right: 4px;
+  filter: brightness(0) invert(1);
 }
 
 .misa-button-wrap:hover {
-    background-color: var(--button-primary-normal-bg-color) !important;
-    color: var(--button-primary-color);
+  background-color: var(--button-primary-normal-bg-color) !important;
+  color: var(--button-primary-color);
 }
 
 .misa-button-wrap:focus {
-    background-color: var(--button-primary-focus-bg-color);
-    color: var(--button-primary-color);
-    border: 1px solid var(--button-primary-focus-border-color);
+  background-color: var(--button-primary-focus-bg-color);
+  color: var(--button-primary-color);
+  border: 1px solid var(--button-primary-focus-border-color);
 }
 
 .misa-button-wrap:active {
-
-    background-color: var(--button-primary-active-bg-color);
-    color: var(--button-primary-color);
-    border: 1px solid var(--button-primary-active-border-color);
+  background-color: var(--button-primary-active-bg-color);
+  color: var(--button-primary-color);
+  border: 1px solid var(--button-primary-active-border-color);
 }
 
 .misa-button-wrap .misa-icon-run-process {
-    margin-left: 5px;
-    margin-right: 3px;
+  margin-left: 5px;
+  margin-right: 3px;
 }
 
 .misa-btn-danger {
-    background-color: #e61d1d;
-    color: #fff;
-    border: 1px solid #e61d1d;
+  background-color: #e61d1d;
+  color: #fff;
+  border: 1px solid #e61d1d;
 }
 
 .misa-btn-danger:hover {
-    background-color: #d81010;
-    color: #fff;
-    border: 1px solid #d81010;
+  background-color: #d81010;
+  color: #fff;
+  border: 1px solid #d81010;
 }
 
 .misa-btn-danger:active {
-    background-color: rgba(196, 13, 13, .1568627451);
-    color: #fff;
-    border: 1px solid #c40d0d;
+  background-color: rgba(196, 13, 13, 0.1568627451);
+  color: #fff;
+  border: 1px solid #c40d0d;
 }
 
 .misa-btn-warning {
-    background-color: #e6711ddb;
-    color: #fff;
-    border: 1px solid #e6711ddb;
-    text-align: center;
+  background-color: #e6711ddb;
+  color: #fff;
+  border: 1px solid #e6711ddb;
+  text-align: center;
 }
 
 .misa-btn-warning:active {
-    background-color: rgba(196, 135, 13, 0.157);
-    color: #fff;
-    border: 1px solid #c40d0d;
+  background-color: rgba(196, 135, 13, 0.157);
+  color: #fff;
+  border: 1px solid #c40d0d;
 }
 
 .misa-btn-warning:hover {
-    background-color: #da742ad6;
-    color: #fff;
+  background-color: #da742ad6;
+  color: #fff;
 }
 
 .misa-button:focus-visible {
-    background-color: #dbf4ff;
-    color: #0c9cdd;
-    border: 1px solid #eaebef;
-    outline: unset;
+  background-color: #dbf4ff;
+  color: #0c9cdd;
+  border: 1px solid #eaebef;
+  outline: unset;
 }
 
 .misa-button-wrap .misa-button {
-    height: 36px !important;
-    margin-right: 0px;
-    padding: 0;
-    border: unset;
-    color: #fff;
-    background: inherit;
+  height: 36px !important;
+  margin-right: 0px;
+  padding: 0;
+  border: unset;
+  color: #fff;
+  background: inherit;
 }
 
 .button .misa-button.w-0 {
-    /* width: 0px; */
-    padding: 0px;
-    margin: 0px;
-    border: none;
+  /* width: 0px; */
+  padding: 0px;
+  margin: 0px;
+  border: none;
 }
 
 button[disabled] {
-    pointer-events: none;
-    opacity: 0.5;
+  pointer-events: none;
+  opacity: 0.5;
 }

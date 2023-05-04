@@ -17,9 +17,9 @@ const Resource = Object.freeze({
       'Bạn có thực sự muốn xóa những nhân viên đã chọn không?',
     ChangeData: 'Dữ liệu đã bị thay đổi. Bạn có muốn lưu không?',
     IsNotChangeData: 'Dữ liệu không có gì thay đổi.',
-    UpdateSucces: 'Cập nhật người dùng thành công.',
-    InsertSucces: 'Thêm người dùng thành công.',
-    DeleteSucces: 'Xóa người dùng thành công.',
+    UpdateSucces: 'Cập nhật thành công.',
+    InsertSucces: 'Thêm mới thành công.',
+    DeleteSucces: 'Xóa thành công.',
     Success: 'success',
     Error: 'error',
     Warning: 'warning',
@@ -173,5 +173,18 @@ const Resource = Object.freeze({
       StatusValue: Enum.BookingStatus.IsUsed,
     },
   ],
+
+  /**Mảng chứa trạng thái của người dùng */
+  BookingStatusColor: {
+    // Chờ duyệt
+    Await: '#dc3545',
+    // Đồng ý
+    Approve: '#3d75de',
+    // Từ chối
+    Reject: '#000',
+    //Hủy
+    Cancel: '',
+  },
+  PassWordDefault: '12345678@Utc',
 })
 export default Resource
