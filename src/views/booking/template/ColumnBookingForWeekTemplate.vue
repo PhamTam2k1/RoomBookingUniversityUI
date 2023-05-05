@@ -96,7 +96,7 @@
         :classArrow="classArrow"
       ></AppointmentTooltipTemplate>
     </div>
-    <p v-if="isShowForm" @onCloseForm="isShowForm = false" />
+    <RoomBookingPopup v-if="isShowForm" @onCloseForm="isShowForm = false" />
     <BasePopup
       v-if="popupNoticeMode"
       class="misa-dialog"
