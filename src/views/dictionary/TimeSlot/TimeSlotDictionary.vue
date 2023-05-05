@@ -397,7 +397,7 @@ export default {
   }
 }
 #bd-timeSlot {
-  height: calc(100vh - 140px);
+  height: calc(100vh - 160px);
   background: white;
   padding: 20px;
 }
