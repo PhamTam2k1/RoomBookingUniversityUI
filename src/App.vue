@@ -118,4 +118,7 @@ button {
 .tooltip {
   opacity: 1 !important;
 }
+.container-lg {
+  padding: 0 !important;
+}
 </style>

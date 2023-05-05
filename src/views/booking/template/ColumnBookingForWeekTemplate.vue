@@ -96,7 +96,7 @@
         :classArrow="classArrow"
       ></AppointmentTooltipTemplate>
     </div>
-    <RoomBookingPopup v-if="isShowForm" @onCloseForm="isShowForm = false" />
+    <p v-if="isShowForm" @onCloseForm="isShowForm = false" />
     <BasePopup
       v-if="popupNoticeMode"
       class="misa-dialog"
@@ -708,5 +708,7 @@ thead {
   top: 0;
   z-index: 887;
   background-color: #fff;
+  border-top: 2px solid #ddd;
+  border-bottom: 2px solid #ddd;
 }
 </style>
