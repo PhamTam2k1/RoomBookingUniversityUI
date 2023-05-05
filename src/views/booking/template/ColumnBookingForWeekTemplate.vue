@@ -636,7 +636,6 @@ export default {
 }
 
 .misa-cell-active-group {
-  margin-top: 10px;
   display: flex;
   color: black;
 }
@@ -644,7 +643,7 @@ export default {
 .Seedetail {
   position: absolute;
   right: 10px;
-  bottom: 3px;
+  bottom: -15px;
   font-size: 10px;
 }
 
@@ -693,6 +692,7 @@ thead {
 .titleSubject {
   width: 100%;
   white-space: nowrap;
+  height: 10px;
 }
 .tr-data {
   position: sticky;
