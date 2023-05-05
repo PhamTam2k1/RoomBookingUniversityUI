@@ -224,14 +224,17 @@
 }
 
 .misa-popup-notice {
-  width: 398px;
+  width: 422px;
   height: 142px;
 }
 
 .misa-popup-notice .misa-dialog-body {
   padding: 32px 24px;
+  background: inherit;
 }
-
+.misa-dialog-content.misa-popup-notice .misa-dialog-header.misa-title{
+  padding: 12px 12px 12px 24px;
+}
 @media only screen and (max-height: 800px) {
   .list-content {
     height: 250px;

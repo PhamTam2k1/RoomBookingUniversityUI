@@ -201,7 +201,7 @@ import Resource from '@/commons/Resource'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
 import { v4 as uuidv4 } from 'uuid'
 import { mapActions, mapState } from 'vuex'
-import CommonFunction from '@/commons/CommonFuction'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
   name: ' ',
   components: {
@@ -231,6 +231,12 @@ export default {
       focus: true,
       user: {
         UserID: this.userID || uuidv4(),
+        UserCode: '',
+        FullName: '',
+        RoleID: '',
+        DepartmentID: '',
+        PhoneNumber: '',
+        Email: '',
       },
       /**Mảng chứa lỗi */
       validateErrorList: [],
@@ -342,7 +348,7 @@ export default {
      */
     validate(fieldName) {
       try {
-        if (!this.user[fieldName]) {
+        if (!this.user[fieldName] && fieldName != 'Address') {
           let field = ''
           if (fieldName == 'FullName') {
             field = 'Tên giảng viên'
@@ -378,13 +384,20 @@ export default {
       if (this.popupMode == Enum.PopupMode.EditMode) {
         try {
           UserApi.updated(this.userID, this.user).then((res) => {
-            if (res && res.IsSuccess) {
-              this.toastVisible = true
-              this.message = 'Cập nhật thành công'
-              this.$emit('closePopup', false)
+            if (res && res.data) {
+              ObjectFunction.toastMessage(
+                Resource.Messenger.UpdateSucces,
+                Resource.Messenger.Success,
+              )
+              this.$emit('onShowLoading')
+              this.$emit('onCloseForm')
+              this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Cập nhật thất bại'
+              ObjectFunction.toastMessage(
+                'Cập nhật thất bại',
+                Resource.Messenger.Error,
+              )
+              this.$emit('onCloseForm')
             }
           })
         } catch (error) {
@@ -392,16 +405,23 @@ export default {
         }
       } else {
         try {
-          this.user.AvatarColor = CommonFunction.generateRandomColor()
+          this.user.AvartarColor = ObjectFunction.generateRandomColor()
           this.user.Password = Resource.PassWordDefault
           UserApi.insert(this.user).then((res) => {
-            if (res && res.IsSuccess) {
-              this.toastVisible = true
-              this.message = 'Lưu thành công'
-              this.$emit('closePopup', false)
+            if (res && res.data) {
+              ObjectFunction.toastMessage(
+                Resource.Messenger.InsertSucces,
+                Resource.Messenger.Success,
+              )
+              this.$emit('onShowLoading')
+              this.$emit('onCloseForm')
+              this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Lưu thất bại'
+              ObjectFunction.toastMessage(
+                'Thêm thất bại',
+                Resource.Messenger.Error,
+              )
+              this.$emit('onCloseForm')
             }
           })
         } catch (error) {

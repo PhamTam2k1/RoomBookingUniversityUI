@@ -117,5 +117,6 @@ button {
 }
 .tooltip {
   opacity: 1 !important;
+  padding: 0 !important;
 }
 </style>

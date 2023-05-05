@@ -2,6 +2,7 @@
   <BasePopup
     :buttonCancel="false"
     class="misa-dialog"
+    :titlePopup="titlePopup"
     classPopup="misa-popup-notice"
     :popupMode="popupMode"
     @onClickClosePopup="onClickClosePopup"
@@ -43,6 +44,10 @@ export default {
     /**Icon của popup */
     classIcon: {
       type: String,
+    },
+    titlePopup: {
+      type: String,
+      default: '',
     },
   },
   data() {
