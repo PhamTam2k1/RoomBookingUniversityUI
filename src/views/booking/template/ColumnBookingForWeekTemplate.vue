@@ -96,7 +96,7 @@
         :classArrow="classArrow"
       ></AppointmentTooltipTemplate>
     </div>
-    <RoomBookingPopup v-if="isShowForm" @onCloseForm="isShowForm = false" />
+    <p v-if="isShowForm" @onCloseForm="isShowForm = false" />
     <BasePopup
       v-if="popupNoticeMode"
       class="misa-dialog"
@@ -636,7 +636,6 @@ export default {
 }
 
 .misa-cell-active-group {
-  margin-top: 10px;
   display: flex;
   color: black;
 }
@@ -644,7 +643,7 @@ export default {
 .Seedetail {
   position: absolute;
   right: 10px;
-  bottom: 3px;
+  bottom: -15px;
   font-size: 10px;
 }
 
@@ -693,6 +692,7 @@ thead {
 .titleSubject {
   width: 100%;
   white-space: nowrap;
+  height: 10px;
 }
 .tr-data {
   position: sticky;
@@ -708,5 +708,7 @@ thead {
   top: 0;
   z-index: 887;
   background-color: #fff;
+  border-top: 2px solid #ddd;
+  border-bottom: 2px solid #ddd;
 }
 </style>

@@ -324,10 +324,11 @@ export default {
 <style lang="scss" scoped>
 #body-room-dictionary {
   flex: 1;
-  padding: 10px 20px;
+  padding: 20px 0px;
   background-color: #efefef;
   height: calc(100% - 75px);
 }
+
 #bd-room {
   height: calc(100vh - 160px);
   background: white;
@@ -339,10 +340,12 @@ export default {
   justify-content: flex-start;
   margin-bottom: 20px;
   position: relative;
+
   .btn-add {
     right: 0;
     position: absolute;
   }
+
   .input-field {
     position: relative;
     display: flex;
@@ -364,6 +367,7 @@ export default {
     }
   }
 }
+
 .approve {
   color: #4cae4c !important;
   padding-right: 5px !important;
