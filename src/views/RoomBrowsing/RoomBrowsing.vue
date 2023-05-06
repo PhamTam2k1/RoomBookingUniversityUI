@@ -380,8 +380,6 @@ export default {
     },
   },
   mounted() {
-    debugger
-
     this.dataComponent.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true

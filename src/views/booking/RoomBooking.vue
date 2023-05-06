@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="toolbar-filter flex">
-        <div class="t-row">
+        <!-- <div class="t-row">
           <BaseDropdownbox
             classDropdownbox="drop-down-utc mgl-16"
             :dataSource="dataBuilding"
@@ -57,7 +57,7 @@
             placeholder="Chọn phòng"
             @onValueChange="onValueChangeRoom"
           ></BaseDropdownbox>
-        </div>
+        </div> -->
 
         <div class="t-row">
           <BaseSelectTagBox
@@ -71,6 +71,21 @@
             @onOptionChange="onOptionChangeEquipment"
           >
           </BaseSelectTagBox>
+        </div>
+        <div class="t-row">
+          <DxRangeSelector
+            id="range-selector"
+            :data-source="rooms"
+            v-model:value="rangeCapacity"
+            data-source-field="Capacity"
+          >
+            <DxScale :tick-interval="1" :minor-tick-interval="1">
+              <DxLabel>
+                <DxFormat type="decimal" />
+              </DxLabel>
+            </DxScale>
+            <DxBehavior call-value-changed="onMoving" />
+          </DxRangeSelector>
         </div>
       </div>
       <div
@@ -118,104 +133,127 @@
         </div>
       </div>
     </div>
-
-    <DxScheduler
-      v-if="showView || isTypeDay"
-      :dataSource="dataSource"
-      :current-view="currentView"
-      :current-date="currentDate"
-      :start-day-hour="startDayHour"
-      :end-day-hour="endDayHour"
-      :cell-duration="cellDuration"
-      :first-day-of-week="firstDayOfWeek"
-      :show-all-day-panel="showAllDayPanel"
-      :height="height"
-      :scrolling-mode="scrollingMode"
-      :time-cell-template="timeCellTemplate"
-      :date-cell-template="dateCellTemplate"
-      data-cell-template="dataCellTemplate"
-      appointment-template="AppointmentTemplateSlot"
-      appointment-tooltip-template="AppointmentTooltipTemplateSlot"
-      :on-content-ready="onContentReady"
-      :on-appointment-form-opening="onAppointmentClick"
-    >
-      <DxView
-        class="day"
-        type="day"
+    <div v-if="lstRoom.length === 0">
+      <NoData />
+    </div>
+    <div v-else>
+      <DxScheduler
+        v-if="showView || isTypeDay"
+        :dataSource="dataSource"
+        :current-view="currentView"
+        :current-date="currentDate"
+        :start-day-hour="startDayHour"
+        :end-day-hour="endDayHour"
+        :cell-duration="cellDuration"
+        :first-day-of-week="firstDayOfWeek"
+        :show-all-day-panel="showAllDayPanel"
+        :height="height"
+        :scrolling-mode="scrollingMode"
+        :time-cell-template="timeCellTemplate"
+        :date-cell-template="dateCellTemplate"
+        appointment-template="AppointmentTemplateSlot"
+        :on-content-ready="onContentReady"
+        :on-appointment-form-opening="onAppointmentClick"
+        :on-cell-click="onCellClick"
+        :on-appointment-click="onAppointmentClick"
+        resource-cell-template="resourceCellTemplate"
         groups="RoomID"
-        height="75vh"
-        :scrolling="{
-          mode: 'virtual',
-          showScrollbar: 'always',
-          scrollByContent: true,
-          useNative: false,
-          useSimulatedScrollbar: true,
-          scrollByThumb: true,
-          bounceEnabled: false,
-        }"
-      />
-      <DxView
-        type="week"
-        height="75vh"
-        :scrolling="{
-          mode: 'virtual',
-          showScrollbar: 'always',
-          scrollByContent: true,
-          useNative: false,
-          useSimulatedScrollbar: true,
-          scrollByThumb: true,
-          bounceEnabled: false,
-        }"
-      />
-
-      <DxView
-        type="month"
-        height="75vh"
-        :scrolling="{
-          mode: 'virtual',
-          showScrollbar: 'always',
-          scrollByContent: true,
-          useNative: false,
-          useSimulatedScrollbar: true,
-          scrollByThumb: true,
-          bounceEnabled: false,
-        }"
-      />
-      <DxResource
-        :data-source="rooms"
-        :allow-multiple="false"
-        field-expr="RoomID"
-        display-expr="text"
-      />
-      <template #AppointmentTemplateSlot="{ data }">
-        <AppointmentTemplate :scheduler="scheduler" :template-model="data" />
-      </template>
-      <template #AppointmentTooltipTemplateSlot="{ data }">
-        <AppointmentTooltipTemplate
-          :scheduler="scheduler"
-          :template-tooltip-model="data"
+      >
+        <DxView
+          class="day"
+          type="day"
+          height="75vh"
+          :scrolling="{
+            mode: 'virtual',
+            showScrollbar: 'always',
+            scrollByContent: true,
+            useNative: false,
+            useSimulatedScrollbar: true,
+            scrollByThumb: true,
+            bounceEnabled: false,
+          }"
         />
-      </template>
-      <template #dataCellTemplate="{ data: cellData }">
-        <DataCell :cell-data="cellData" />
-      </template>
-    </DxScheduler>
+        <DxView
+          type="week"
+          height="75vh"
+          :scrolling="{
+            mode: 'virtual',
+            showScrollbar: 'always',
+            scrollByContent: true,
+            useNative: false,
+            useSimulatedScrollbar: true,
+            scrollByThumb: true,
+            bounceEnabled: false,
+          }"
+        />
 
-    <ColumnBookingForWeekTemplate
-      v-if="showView == false && isTypeDay == false"
-      :data="dataSource"
-      :view="currentView"
-      :dataDate="currentDate"
-    ></ColumnBookingForWeekTemplate>
+        <DxView
+          type="month"
+          height="75vh"
+          :scrolling="{
+            mode: 'virtual',
+            showScrollbar: 'always',
+            scrollByContent: true,
+            useNative: false,
+            useSimulatedScrollbar: true,
+            scrollByThumb: true,
+            bounceEnabled: false,
+          }"
+        />
+        <DxResource
+          :data-source="rooms"
+          :allow-multiple="false"
+          field-expr="RoomID"
+        />
+        <template #resourceCellTemplate="{ data: room }">
+          <el-tooltip placement="bottom" effect="light">
+            <template v-slot:content>
+              <HeaderTooltip :room="room.data"></HeaderTooltip>
+            </template>
+            {{ room.data.RoomName }}
+          </el-tooltip>
+        </template>
+
+        <template #AppointmentTemplateSlot="{ data }">
+          <el-tooltip placement="top" effect="light">
+            <template v-slot:content>
+              <AppointmentTooltipTemplate
+                :scheduler="scheduler"
+                :template-tooltip-model="data"
+              />
+            </template>
+            <AppointmentTemplate
+              :scheduler="scheduler"
+              :template-model="data"
+            />
+          </el-tooltip>
+          <!-- <AppointmentTemplate :scheduler="scheduler" :template-model="data" /> -->
+        </template>
+        <!-- <template #AppointmentTooltipTemplateSlot>
+          <div class="dx-tooltip-wrapper" style="display: none"></div>
+        </template> -->
+      </DxScheduler>
+      <ColumnBookingForWeekTemplate
+        v-if="showView == false && isTypeDay == false"
+        :data="dataSource"
+        :dataRoom="lstRoom"
+        :view="currentView"
+        :dataDate="currentDate"
+      ></ColumnBookingForWeekTemplate>
+    </div>
+
     <!--Begin Popup detail -->
     <RoomBookingPopup
       v-if="isShowForm"
       @onCloseForm="isShowForm = false"
+      @onShowLoading="showLoading(true)"
       :roomID="roomID"
       :bookingID="bookingID"
       :popupMode="popupMode"
+      @onLoadData="loadDataBooking()"
     />
     <!-- End popup detail -->
+    <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
   </div>
 </template>
 
@@ -224,16 +262,24 @@ import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler'
 import 'devextreme/dist/css/dx.common.css'
 import 'devextreme/dist/css/dx.light.css'
 import AppointmentTemplate from './template/AppointmentTemplate.vue'
-import AppointmentTooltipTemplate from './template/AppointmentTooltipTemplate.vue'
+import AppointmentTooltipTemplate from './template/AppointmentTooltipTemplateVerDX.vue'
 import BookingRoomApi from '@/apis/BookingRoomApi'
 import RoomBookingPopup from './RoomBookingPopup.vue'
 import BaseDate from '@/components/base/BaseDate.vue'
 import ColumnBookingForWeekTemplate from '@/views/booking/template/ColumnBookingForWeekTemplate.vue'
-import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+// import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import { mapActions, mapState } from 'vuex'
 import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
 import Enum from '@/commons/Enum'
-import DataCell from './template/DataCell.vue'
+import NoData from './template/NoData.vue'
+import BaseLoading from '@/components/base/BaseLoading.vue'
+import HeaderTooltip from './template/HeaderTooltip.vue'
+import {
+  DxRangeSelector,
+  DxScale,
+  DxFormat,
+  DxBehavior,
+} from 'devextreme-vue/range-selector'
 export default {
   name: 'App',
   components: {
@@ -245,9 +291,15 @@ export default {
     ColumnBookingForWeekTemplate,
     DxResource,
     DxView,
-    BaseDropdownbox,
+    // BaseDropdownbox,
     BaseSelectTagBox,
-    DataCell,
+    NoData,
+    BaseLoading,
+    HeaderTooltip,
+    DxRangeSelector,
+    DxScale,
+    DxFormat,
+    DxBehavior,
   },
   data() {
     return {
@@ -255,7 +307,7 @@ export default {
       dataSource: [],
       isSelect: 1,
       showView: true,
-      currentView: 'day',
+      currentView: 'week',
       currentDate: new Date(),
       startDayHour: 7,
       endDayHour: 21,
@@ -266,10 +318,21 @@ export default {
       scrollingMode: 'virtual',
       lstRoom: [],
       rooms: [],
-      isTypeDay: true,
+      isTypeDay: false,
       roomID: '',
       bookingID: '',
       popupMode: 0,
+      filterOption: {
+        RoomID: null,
+        BuildingID: null,
+        EquipmentIDs: null,
+        UserID: null,
+        CapacityMin: null,
+        CapacityMax: null,
+      },
+      rangeCapacity: [],
+      /** Biến show loading: true- show, false - hide*/
+      isShowLoading: false,
     }
   },
   computed: {
@@ -327,15 +390,24 @@ export default {
     }),
     onContentReady(e) {
       this.scheduler = e.component
+      this.showLoading(false)
     },
     // set view khi click chuyển đổi
     setView(option, name) {
-      debugger
       this.isTypeDay = name == 'day' ? true : false
       this.showView = this.lstRoom.length > 1 ? false : true
       if (option && name) {
         this.currentView = name
       }
+    },
+
+    /**
+     * Mô tả : Hàm show/hide loading
+     * @param {Boolean} isShow true: hiển thị loading, false: ẩn loading
+     * @Createdby: PTTAM
+     */
+    showLoading(isShow) {
+      this.isShowLoading = isShow
     },
     /**
      * Sự kiện tăng giảm ngày
@@ -357,6 +429,7 @@ export default {
      * 24.04.2023 PTTAM
      */
     onAppointmentClick(e) {
+      debugger
       e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
       if (e.appointmentData?.BookingRoomID) {
         this.bookingID = e.appointmentData.BookingRoomID
@@ -366,24 +439,41 @@ export default {
         this.popupMode = Enum.PopupMode.AddMode
       }
       // Lấy thời gian hiện tại
-      var now = new Date()
-      this.isShowForm =
-        new Date(e.appointmentData.startDate) >= now ? true : false
+      this.isShowForm = true
+      // var now = new Date()
+      // this.isShowForm =
+      //   new Date(e.appointmentData.startDate) >= now ? true : false
+    },
+    onCellClick(e) {
+      this.roomID = e.cellData.groups.RoomID
+      this.popupMode = Enum.PopupMode.AddMode
+      this.isShowForm = true
+      // // Lấy thời gian hiện tại
+      // var now = new Date()
+      // this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
     },
     /**
      * Sự kiện lấy dữ liệu đặt phòng
      * 23.04.2024
      * PTTAM
      */
-    async loadDataBooking(callback) {
+    async loadDataBooking() {
       try {
         await BookingRoomApi.getPaging({
-          roomID: null,
-          userID: null,
-          buildingID: null,
-          equipmentIDs: null,
-          capacityMin: null,
-          capacityMax: null,
+          roomID: this.filterOption.RoomID ? this.filterOption.RoomID : null,
+          userID: this.filterOption.UserID ? this.filterOption.UserID : null,
+          buildingID: this.filterOption.BuildingID
+            ? this.filterOption.BuildingID
+            : null,
+          equipmentIDs: this.filterOption.EquipmentIDs
+            ? this.filterOption.EquipmentIDs
+            : null,
+          capacityMin: this.filterOption.CapacityMin
+            ? this.filterOption.CapacityMin
+            : null,
+          capacityMax: this.filterOption.CapacityMax
+            ? this.filterOption.CapacityMax
+            : null,
         }).then((res) => {
           this.dataSource = res.data.dataBooking || []
           this.lstRoom = res.data.dataRoom || []
@@ -392,7 +482,8 @@ export default {
           } else {
             this.showView = false
           }
-          callback() // gọi callback để xử lý dataSource
+
+          this.handleDataSource()
         })
       } catch (error) {
         console.log(error)
@@ -400,6 +491,7 @@ export default {
     },
     // cập nhật lại ngày khi chọn lại
     onDateBoxChanged(item) {
+      this.showLoading(true)
       this.currentDate = item.value
     },
     /**
@@ -407,11 +499,14 @@ export default {
      * PTTAM 23.04.2023
      */
     handleDataSource() {
+      this.rooms = []
       this.lstRoom.forEach((element) => {
         this.rooms.push({
           id: element.RoomID,
           code: element.RoomCode,
-          text: element.RoomName,
+          RoomName: element.RoomName,
+          Capacity: element.Capacity,
+          ListEquipmentName: element.ListEquipmentName,
         })
       })
       for (let i = 0; i < this.dataSource?.length; i++) {
@@ -438,10 +533,48 @@ export default {
         item.startDate = dateStartStringWithTimezone
         item.endDate = dateEndStringWithTimezone
       }
+      this.showLoading(false)
+    },
+    /**
+     * Sự kiện thay đổi phòng
+     * @param {*} value
+     */
+    onValueChangeRoom(value) {
+      this.filterOption.RoomID = value
+      this.showLoading(true)
+      this.loadDataBooking()
+    },
+    /**
+     * Sự kiện thay đổi tòa nhà
+     */
+    onValueChangeBuilding(value) {
+      this.filterOption.BuildingID = value
+      this.showLoading(true)
+      this.loadDataBooking()
+    },
+    /**
+     * Sự kiện thay đổi lọc thiết bị trong phòng học
+     * @param {*} values
+     */
+    onOptionChangeEquipment(values) {
+      if (values) {
+        let ids = ''
+
+        values?.forEach((element) => {
+          console.log(element)
+
+          ids += element.EquipmentID.trim() + ','
+        })
+        ids = ids.slice(0, -1)
+        this.filterOption.EquipmentIDs = ids
+        this.showLoading(true)
+        this.loadDataBooking(this.handleDataSource)
+      }
     },
   },
   async created() {
-    this.loadDataBooking(this.handleDataSource)
+    this.showLoading(true)
+    this.loadDataBooking()
     await this.loadDataBuildings()
     await this.loadDataEquipments()
     await this.loadDataRooms()
@@ -479,5 +612,17 @@ export default {
 }
 .dx-scheduler-work-space-day .dx-scheduler-cell-sizes-horizontal {
   width: 200px;
+}
+th.dx-scheduler-group-header {
+  font-size: 16px;
+}
+.dx-buttongroup-wrapper {
+  cursor: pointer;
+}
+tr.dx-scheduler-group-row {
+  border-bottom: 1px solid rgba(221, 221, 221, 0.6) !important;
+}
+#range-selector {
+  height: 35px;
 }
 </style>

@@ -61,7 +61,7 @@
           <div class="t-infor-item flex">
             <div class="t-lable-info">Thiết bị:</div>
             <div class="t-content mgl-16">
-              {{ this.roomChoose.ListEquipment }}
+              {{ this.roomChoose.ListEquipmentName }}
             </div>
           </div>
         </div>
@@ -105,7 +105,7 @@
             optionValue="TimeSlotID"
             placeholder="Chọn 1 hoặc nhiều ca học"
             @onOptionChange="onValueChangeTimeSlot"
-            v-model:value="bookingRoomData.TimeSlots"
+            v-model:value="lstTime1"
             @handleBlurInput="validate('TimeSlots')"
             @handleKeyupInput="removeError('TimeSlots')"
             :error="Error['TimeSlots']"
@@ -200,6 +200,7 @@ import PopupNotice from '@/components/popup/PopupNotice.vue'
 import { v4 as uuidv4 } from 'uuid'
 import ObjectFunction from '@/commons/CommonFuction'
 import BaseDate from '@/components/base/BaseDate.vue'
+import moment from 'moment'
 export default {
   name: ' ',
   components: {
@@ -250,11 +251,13 @@ export default {
         Subject: '',
         StartDate: new Date(),
         EndDate: new Date(),
-        Quantity: 0,
+        Quantity: null,
         Description: '',
       },
       isDisable: false,
       isUserBooking: true,
+      lstTime: [],
+      lstTime1: ['35c94ecf-31c9-4c2b-2cbf-2d1df1341b8b'],
     }
   },
 
@@ -406,19 +409,24 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
-      // this.$emit("onShowLoading"); // hiển thị loading
       if (this.popupMode == Enum.PopupMode.AddMode) {
         try {
-          this.bookingRoomData.Quantity = parseInt(
-            this.bookingRoomData.Quantity,
-          )
+          this.bookingRoomData.StartDate = moment(
+            this.bookingRoomData.StartDate,
+          ).format('YYYY/MM/DD')
+          this.bookingRoomData.EndDate = moment(
+            this.bookingRoomData.EndDate,
+          ).format('YYYY/MM/DD')
           BookingRoomApi.insert(this.bookingRoomData).then((res) => {
             if (res && res.data) {
               ObjectFunction.toastMessage(
                 'Gửi yêu cầu đặt phong thành công',
                 Resource.Messenger.Success,
               )
+
               this.$emit('onCloseForm')
+              this.$emit('onShowLoading') // hiển thị loading
+              this.$emit('onLoadData')
             }
           })
         } catch (error) {
@@ -434,9 +442,11 @@ export default {
       BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
           this.bookingRoomData = res.data
-          this.bookingRoomData.TimeSlots = this.bookingRoomData.TimeSlots.split(
-            ',',
-          ).map((item) => `${item}`)
+          this.lstTime = this.bookingRoomData.TimeSlots.split(',').map((id) =>
+            id.trim(),
+          )
+          console.log(this.lstTime)
+          this.lstTime1 = this.lstTime
           this.isDisable =
             this.bookingRoomData.StatusBooking == 1 ? false : true
 
@@ -467,7 +477,6 @@ export default {
     }
   },
   mounted() {
-    debugger
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.bookingRoomData.RoomID = this.roomID
     } else if (this.popupMode == Enum.PopupMode.EditMode) {

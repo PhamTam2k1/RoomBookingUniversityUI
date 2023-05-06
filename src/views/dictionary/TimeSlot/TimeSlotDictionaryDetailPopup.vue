@@ -221,7 +221,6 @@ export default {
      * @param {String} fieldName
      */
     removeError(fieldName) {
-      debugger
       if (this.timeSlot[fieldName]) {
         this.Error[fieldName] = ''
       }
@@ -245,7 +244,6 @@ export default {
      * @Createdby: PTTAM
      */
     beforeSaveData() {
-      debugger
       this.validateErrorList = [] // Gán lại array = []
       // Lấy danh sách các trường (fields) của object timeSlot
       const fields = Object.keys(this.timeSlot)

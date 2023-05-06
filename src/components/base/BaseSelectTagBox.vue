@@ -30,6 +30,7 @@
       @enterKey="handleEnterkey"
       @focusIn="handleFocusIn"
       :disabled="isDisable"
+      :multiline="false"
     >
       <template #iconDropdown="{}">
         <div class="misa-icon misa-icon-dropdown misa-icon-24"></div>

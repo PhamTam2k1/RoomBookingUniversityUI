@@ -17,7 +17,7 @@
           text="Thêm mới"
           type="default"
           styling-mode="contained"
-          @click="addBuilding"
+          @click="addUser"
         />
       </div>
       <!-- Begin table -->
@@ -65,6 +65,37 @@
     @onShowLoading="showLoading(true)"
     :userID="JSON.parse(JSON.stringify(dataComponent.userID))"
   />
+
+  <!-- Begin popup delete -->
+  <DeleteUserPopupVue
+    @onClickClosePopup="onClickClosePopup"
+    @onLoadData="getData()"
+    @showPopupNotice="showPopup"
+    @onShowLoading="showLoading(true)"
+    @onHideLoading="showLoading(false)"
+    :popupMode="dataComponent.popupMode"
+    v-if="dataComponent.popupMode == Enum.PopupMode.DeleteMode"
+    :userData="JSON.parse(JSON.stringify(dataComponent.userData))"
+  />
+  <!-- End popup delete -->
+  <!--Begin Popup Notice Error -->
+  <PopupNotice
+    titlePopup="Xóa không thành công"
+    :contentPopup="dataComponent.contentPopup"
+    classIcon="misa-icon-notice"
+    @onClickClosePopup="onClickClosePopupNotice"
+    v-if="dataComponent.popupNoticeMode == Enum.PopupMode.NotifyMode"
+  >
+    <BaseButton
+      :tabindex="1"
+      :initFocus="true"
+      @keydown.enter="onClickClosePopupNotice"
+      @click="onClickClosePopupNotice"
+      lableButton="Đóng"
+      classButton="misa-button-normal w-80 misa-btn-warning"
+    ></BaseButton>
+  </PopupNotice>
+  <!--End Popup Notice Error -->
 </template>
 <script>
 import BasePaging from '@/components/base/BasePaging.vue'
@@ -78,6 +109,9 @@ import DxTextBox from 'devextreme-vue/text-box'
 import UserApi from '@/apis/UserApi'
 import BaseLoading from '@/components/base/BaseLoading.vue'
 import UserDictionaryDetail from './UserDictionaryDetail.vue'
+import DeleteUserPopupVue from './DeleteUserPopup.vue'
+import PopupNotice from '@/components/popup/PopupNotice.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 export default {
   components: {
     DxTextBox,
@@ -87,6 +121,9 @@ export default {
     BaseCellTemplace,
     UserDictionaryDetail,
     BaseLoading,
+    DeleteUserPopupVue,
+    PopupNotice,
+    BaseButton,
   },
   props: {
     weekID: {
@@ -111,6 +148,9 @@ export default {
       userID: '',
       isEdit: false,
       popupMode: 0,
+      userData: {},
+      popupNoticeMode: -1,
+      contentPopup: '',
     })
 
     /**
@@ -175,6 +215,22 @@ export default {
     function showFormDetail(isShow) {
       dataComponent.isShowForm = isShow
     }
+    /** Mô tả: Hiển thị popup
+     * @param
+     * CreatedBy: PTTAM
+     */
+    function showPopup(FullName) {
+      dataComponent.contentPopup =
+        'Giảng viên ' + FullName + ' đã có dữ liệu đặt phòng.'
+      dataComponent.popupNoticeMode = Enum.PopupMode.NotifyMode
+    }
+
+    /**
+     * Đóng popup notice
+     */
+    function onClickClosePopupNotice() {
+      dataComponent.popupNoticeMode = -1
+    }
     /**
      * Mô tả : Hàm show/hide loading
      * @param {Boolean} isShow true: hiển thị loading, false: ẩn loading
@@ -191,6 +247,9 @@ export default {
      */
     function onClickShowPopupDelete(id) {
       dataComponent.userID = id
+      dataComponent.userData = dataComponent.dataSource.find(
+        (x) => x.UserID == id,
+      )
       dataComponent.popupMode = Enum.PopupMode.DeleteMode //
     }
 
@@ -204,7 +263,17 @@ export default {
       dataComponent.popupMode = Enum.PopupMode.EditMode // Gán lại trạng thái của popup
       showFormDetail(true)
     }
-
+    function addUser() {
+      dataComponent.popupMode = Enum.PopupMode.AddMode // Gán lại trạng thái của popup
+      showFormDetail(true)
+    }
+    /** Mô tả: ẩn popup
+     * CreatedBy: PTTAM
+     * Created Date: 11-09-2022 08:22:11
+     */
+    function onClickClosePopup() {
+      dataComponent.popupMode = -1
+    }
     /**
      * lấy dữ liệu
      *
@@ -227,14 +296,6 @@ export default {
         console.log(error)
       }
     }
-
-    const deleteBuilding = (event) => {
-      let id = event.element.accessKey
-      dataComponent.userData = dataComponent.dataSource.find(
-        (x) => x.UserID == id,
-      )
-      dataComponent.deleteVisible = true
-    }
     /**
      * Sự kiện thay đổi số bản ghi/trang
      * PTTAM 09/04/2023
@@ -255,31 +316,30 @@ export default {
       getData()
     }
 
-    const addBuilding = () => {
-      dataComponent.title = 'Thêm mới'
-      dataComponent.userData = {}
-      showFormDetail(true)
-      dataComponent.popupMode = Enum.PopupMode.AddMode
-    }
-
     return {
       dataComponent,
       getData,
       pageSizeSelected,
       currentPage,
-      addBuilding,
-      deleteBuilding,
       headerTableUser,
       onClickShowPopupDelete,
       onClickShowPopupEdit,
       showLoading,
       showFormDetail,
+      showPopup,
+      onClickClosePopup,
+      onClickClosePopupNotice,
+      addUser,
     }
   },
   computed: {
     ...mapState({
       roleOption: (state) => state.auth.roleOption,
     }),
+    // Đăng ký đối tượng Enum trong phạm vi của component
+    Enum() {
+      return Enum
+    },
   },
   mounted() {
     this.showLoading(true)

@@ -278,7 +278,6 @@ export default {
     }
   },
   mounted() {
-    debugger
     this.filterOption.DateFilter = Date.now()
   },
 }

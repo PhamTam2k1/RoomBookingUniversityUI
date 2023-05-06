@@ -1,17 +1,23 @@
 <template>
   <div class="dx-scheduler-appointment-tooltip booking-tooltip" ref="tooltip">
     <div class="header-popover flex">
-      <div class="text-title flex">{{ templateTooltipModel.Subject }}</div>
+      <div class="text-title flex">
+        {{ templateTooltipModel.appointmentData.Subject }}
+      </div>
       <div class="tool flex"></div>
     </div>
     <div class="info">
       <div class="t-item-line flex">
         <div class="t-lable">Tên phòng</div>
-        <div class="t-content">{{ templateTooltipModel.RoomName }}</div>
+        <div class="t-content">
+          {{ templateTooltipModel.appointmentData.RoomName }}
+        </div>
       </div>
       <div class="t-item-line flex">
         <div class="t-lable">Thời gian đặt</div>
-        <div class="t-content">{{ templateTooltipModel.dateTime }}</div>
+        <div class="t-content">
+          {{ templateTooltipModel.appointmentData.TimeSlotName }}
+        </div>
       </div>
       <div class="t-item-line flex">
         <div class="t-lable">Số người tham dự</div>
@@ -24,13 +30,18 @@
             <div
               class="misa-cell-avatar-color"
               :style="{
-                backgroundColor: templateTooltipModel.AvartarColor,
+                backgroundColor:
+                  templateTooltipModel.appointmentData.AvartarColor,
               }"
             >
-              {{ CommonFunction.splitFullName(templateTooltipModel.FullName) }}
+              {{
+                CommonFunction.splitFullName(
+                  templateTooltipModel.appointmentData.FullName,
+                )
+              }}
             </div>
             <div class="misa-cell-FullName">
-              {{ templateTooltipModel.FullName }}
+              {{ templateTooltipModel.appointmentData.FullName }}
             </div>
           </div>
         </div>
@@ -88,6 +99,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.booking-tooltip{
+  font-size: 14px;
+}
 .header-popover {
   .text-title {
     font-weight: 700;
