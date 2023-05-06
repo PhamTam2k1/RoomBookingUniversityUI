@@ -20,9 +20,8 @@
           <td
             class="tdLabel sticky"
             :class="{ isActive: dateNow == timeSlot.dateTime }"
-          >
-            {{ timeSlot.name }}
-          </td>
+            v-html="timeSlot.name"
+          ></td>
           <td
             v-for="room in rooms"
             :key="room.RoomID"
@@ -178,6 +177,7 @@ import clickOutSide from '@mahdikhashan/vue3-click-outside'
 import RoomBookingPopup from '@/views/booking/RoomBookingPopup.vue'
 import AppointmentTooltipTemplate from '@/views/booking/template/AppointmentTooltipTemplate.vue'
 import HeaderTooltip from './HeaderTooltip.vue'
+import moment from 'moment'
 export default {
   components: {
     BasePopup,
@@ -393,9 +393,11 @@ export default {
           const dayOfWeek = date.getDay()
           const diff = day.id - dayOfWeek
           date.setDate(today.getDate() + diff)
+          const momentObj = moment(date)
+          const formattedString = momentObj.format('DD/MM')
           return {
             id: day.id,
-            name: day.name + ' ' + date.toLocaleDateString('vi-VN'),
+            name: day.name + '<br>' + formattedString,
             dateTime: date.toLocaleDateString('vi-VN'),
             dateTime1: date,
           }
@@ -414,12 +416,12 @@ export default {
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day)
         const dayOfWeek = date.getDay()
-
+        const momentObj = moment(date)
+        const formattedString = momentObj.format('DD/MM')
         days.push({
           date,
           dayOfWeek,
-          name:
-            this.getMonth(dayOfWeek) + ' ' + date.toLocaleDateString('vi-VN'),
+          name: this.getMonth(dayOfWeek) + '<br>' + formattedString,
           dateTime: date.toLocaleDateString('vi-VN'),
           dateTime1: date,
         })
@@ -653,6 +655,7 @@ export default {
 
 .tdLabel {
   width: 150px;
+  font-weight: 500;
 }
 
 .misa-active-status-table {
