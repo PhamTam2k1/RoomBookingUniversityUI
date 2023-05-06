@@ -21,6 +21,9 @@
 .mgb-8 {
   margin-bottom: 8px;
 }
+.mgl-8p {
+  margin-left: 8px;
+}
 .flex {
   display: flex;
 }

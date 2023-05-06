@@ -204,7 +204,6 @@ export default {
      * @param {String} fieldName
      */
     removeError(fieldName) {
-      debugger
       if (this.role[fieldName]) {
         this.Error[fieldName] = ''
       }

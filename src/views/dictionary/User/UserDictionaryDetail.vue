@@ -323,7 +323,6 @@ export default {
      * @Createdby: PTTAM
      */
     beforeSaveData() {
-      debugger
       this.validateErrorList = [] // Gán lại array = []
       // Lấy danh sách các trường (fields) của object bookingRoomData
       const fields = Object.keys(this.user)
@@ -446,7 +445,6 @@ export default {
      * PTTAM 1/05/2023
      */
     getUserByID() {
-      debugger
       UserApi.getByID(this.userID).then((res) => {
         if (res) {
           let data = res.data
