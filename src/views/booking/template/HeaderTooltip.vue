@@ -26,7 +26,7 @@ export default {
 .t-content-tooltip {
   width: 200px;
   height: 120px;
-  font-size: 14px;
+  font-size: 15px;
   padding: 10px;
 }
 .t-title-tooltip {

@@ -17,7 +17,7 @@
           text="Thêm mới"
           type="default"
           styling-mode="contained"
-          @click="addBuilding"
+          @click="addUser"
         />
       </div>
       <!-- Begin table -->
@@ -263,6 +263,10 @@ export default {
       dataComponent.popupMode = Enum.PopupMode.EditMode // Gán lại trạng thái của popup
       showFormDetail(true)
     }
+    function addUser() {
+      dataComponent.popupMode = Enum.PopupMode.AddMode // Gán lại trạng thái của popup
+      showFormDetail(true)
+    }
     /** Mô tả: ẩn popup
      * CreatedBy: PTTAM
      * Created Date: 11-09-2022 08:22:11
@@ -325,6 +329,7 @@ export default {
       showPopup,
       onClickClosePopup,
       onClickClosePopupNotice,
+      addUser,
     }
   },
   computed: {

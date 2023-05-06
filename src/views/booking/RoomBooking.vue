@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="toolbar-filter flex">
-        <div class="t-row">
+        <!-- <div class="t-row">
           <BaseDropdownbox
             classDropdownbox="drop-down-utc mgl-16"
             :dataSource="dataBuilding"
@@ -57,7 +57,7 @@
             placeholder="Chọn phòng"
             @onValueChange="onValueChangeRoom"
           ></BaseDropdownbox>
-        </div>
+        </div> -->
 
         <div class="t-row">
           <BaseSelectTagBox
@@ -71,6 +71,21 @@
             @onOptionChange="onOptionChangeEquipment"
           >
           </BaseSelectTagBox>
+        </div>
+        <div class="t-row">
+          <DxRangeSelector
+            id="range-selector"
+            :data-source="rooms"
+            v-model:value="rangeCapacity"
+            data-source-field="Capacity"
+          >
+            <DxScale :tick-interval="1" :minor-tick-interval="1">
+              <DxLabel>
+                <DxFormat type="decimal" />
+              </DxLabel>
+            </DxScale>
+            <DxBehavior call-value-changed="onMoving" />
+          </DxRangeSelector>
         </div>
       </div>
       <div
@@ -142,11 +157,11 @@
         :on-cell-click="onCellClick"
         :on-appointment-click="onAppointmentClick"
         resource-cell-template="resourceCellTemplate"
+        groups="RoomID"
       >
         <DxView
           class="day"
           type="day"
-          groups="RoomID"
           height="75vh"
           :scrolling="{
             mode: 'virtual',
@@ -252,13 +267,19 @@ import BookingRoomApi from '@/apis/BookingRoomApi'
 import RoomBookingPopup from './RoomBookingPopup.vue'
 import BaseDate from '@/components/base/BaseDate.vue'
 import ColumnBookingForWeekTemplate from '@/views/booking/template/ColumnBookingForWeekTemplate.vue'
-import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+// import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import { mapActions, mapState } from 'vuex'
 import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
 import Enum from '@/commons/Enum'
 import NoData from './template/NoData.vue'
 import BaseLoading from '@/components/base/BaseLoading.vue'
 import HeaderTooltip from './template/HeaderTooltip.vue'
+import {
+  DxRangeSelector,
+  DxScale,
+  DxFormat,
+  DxBehavior,
+} from 'devextreme-vue/range-selector'
 export default {
   name: 'App',
   components: {
@@ -270,11 +291,15 @@ export default {
     ColumnBookingForWeekTemplate,
     DxResource,
     DxView,
-    BaseDropdownbox,
+    // BaseDropdownbox,
     BaseSelectTagBox,
     NoData,
     BaseLoading,
     HeaderTooltip,
+    DxRangeSelector,
+    DxScale,
+    DxFormat,
+    DxBehavior,
   },
   data() {
     return {
@@ -305,6 +330,7 @@ export default {
         CapacityMin: null,
         CapacityMax: null,
       },
+      rangeCapacity: [],
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
     }
@@ -592,5 +618,11 @@ th.dx-scheduler-group-header {
 }
 .dx-buttongroup-wrapper {
   cursor: pointer;
+}
+tr.dx-scheduler-group-row {
+  border-bottom: 1px solid rgba(221, 221, 221, 0.6) !important;
+}
+#range-selector {
+  height: 35px;
 }
 </style>

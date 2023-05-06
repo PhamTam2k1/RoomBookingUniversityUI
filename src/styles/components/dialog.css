@@ -218,11 +218,12 @@
   margin-bottom: 20px;
 }
 .popup-dictionary-detail .misa-dialog-header,
-.popup-dictionary-room-detail .misa-dialog-header,
 .popup-dictionary-user-detail .misa-dialog-header {
   padding: 24px 24px 20px 24px !important;
 }
-
+.popup-dictionary-room-detail .misa-dialog-header{
+  padding: 14px 24px!important;
+}
 .misa-popup-notice {
   width: 422px;
   height: 142px;

@@ -61,7 +61,7 @@ export default {
           break
       }
       return corlor
-    }
+    },
   },
   mounted() {
     console.log(this.templateModel)
@@ -74,6 +74,8 @@ export default {
 }
 .misa-active-status-table {
   height: 100%;
+
+  font-size: 14px;
 }
 .misa-cell-active-color {
   height: 8px;
