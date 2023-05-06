@@ -711,7 +711,7 @@ thead {
 }
 
 .schedule-cell .misa-active-status-table:hover {
-  background-color: #6691e2;
+  background-color: rgba(221, 221, 221, 0.6);
 }
 .tooltipTable {
   position: absolute;

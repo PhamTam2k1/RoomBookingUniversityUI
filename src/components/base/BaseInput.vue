@@ -177,6 +177,7 @@ export default {
   width: 30%;
   padding-top: 5px;
   font-size: 14px;
+  white-space: nowrap;
 }
 .tooltip:after {
   content: attr(data_title);
