@@ -195,7 +195,6 @@ export default {
      * @param {String} fieldName
      */
     removeError(fieldName) {
-      debugger
       if (this.department[fieldName]) {
         this.Error[fieldName] = ''
       }

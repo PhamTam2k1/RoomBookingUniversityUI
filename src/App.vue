@@ -21,6 +21,9 @@
 .mgb-8 {
   margin-bottom: 8px;
 }
+.mgl-8p {
+  margin-left: 8px;
+}
 .flex {
   display: flex;
 }
@@ -117,6 +120,7 @@ button {
 }
 .tooltip {
   opacity: 1 !important;
+  padding: 0 !important;
 }
 .container-lg {
   padding: 0 !important;

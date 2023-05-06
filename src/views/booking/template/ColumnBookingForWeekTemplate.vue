@@ -4,7 +4,15 @@
       <thead>
         <tr class="tr-data">
           <th class="sticky"></th>
-          <th v-for="room in rooms" :key="room.RoomID">{{ room.RoomName }}</th>
+
+          <th v-for="room in rooms" :key="room.RoomID">
+            <el-tooltip placement="bottom" effect="light">
+              <template v-slot:content>
+                <HeaderTooltip :room="room"></HeaderTooltip>
+              </template>
+              {{ room.RoomName }}
+            </el-tooltip>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -12,9 +20,8 @@
           <td
             class="tdLabel sticky"
             :class="{ isActive: dateNow == timeSlot.dateTime }"
-          >
-            {{ timeSlot.name }}
-          </td>
+            v-html="timeSlot.name"
+          ></td>
           <td
             v-for="room in rooms"
             :key="room.RoomID"
@@ -66,7 +73,7 @@
                     v-hover
                     @mousemove="handleMouseMove($event, booking)"
                   >
-                    {{ booking.Subject }}
+                    {{ booking.TimeSlotName }} - {{ booking.Subject }}
                   </p>
                   <p
                     v-if="index > 2"
@@ -169,11 +176,14 @@ import BasePopup from '@/components/base/BasePopup.vue'
 import clickOutSide from '@mahdikhashan/vue3-click-outside'
 import RoomBookingPopup from '@/views/booking/RoomBookingPopup.vue'
 import AppointmentTooltipTemplate from '@/views/booking/template/AppointmentTooltipTemplate.vue'
+import HeaderTooltip from './HeaderTooltip.vue'
+import moment from 'moment'
 export default {
   components: {
     BasePopup,
     AppointmentTooltipTemplate,
     RoomBookingPopup,
+    HeaderTooltip,
   },
   // do not forget this section
   directives: {
@@ -191,6 +201,10 @@ export default {
     },
     dataDate: {
       type: String,
+      required: true,
+    },
+    dataRoom: {
+      type: Array,
       required: true,
     },
   },
@@ -279,7 +293,7 @@ export default {
       const booking = this.bookingRooms.find(
         (item) => item.dateTime === value && item.RoomID === RoomID,
       )
-      let status = booking ? booking.RoomStatus : 0
+      let status = booking ? booking.StatusBooking : 0
       let corlor = ''
       switch (status) {
         case Enum.OptionRequest.Await:
@@ -303,11 +317,11 @@ export default {
         element.color = '#008000'
       })
       // Lọc danh sách phòng không bị trùng BookingRoomID
-      const uniqueRooms = this.dataSource.filter(
-        (room, index, self) =>
-          index === self.findIndex((r) => r.RoomID === room.RoomID),
-      )
-      this.rooms = uniqueRooms
+      // const uniqueRooms = this.dataSource.filter(
+      //   (room, index, self) =>
+      //     index === self.findIndex((r) => r.RoomID === room.RoomID),
+      // )
+      // this.rooms = uniqueRooms
     },
     onClickCell(TimeSlotID, RoomID) {
       this.isShowTooltip = false
@@ -379,9 +393,11 @@ export default {
           const dayOfWeek = date.getDay()
           const diff = day.id - dayOfWeek
           date.setDate(today.getDate() + diff)
+          const momentObj = moment(date)
+          const formattedString = momentObj.format('DD/MM')
           return {
             id: day.id,
-            name: day.name + ' ' + date.toLocaleDateString('vi-VN'),
+            name: day.name + '<br>' + formattedString,
             dateTime: date.toLocaleDateString('vi-VN'),
             dateTime1: date,
           }
@@ -400,12 +416,12 @@ export default {
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day)
         const dayOfWeek = date.getDay()
-
+        const momentObj = moment(date)
+        const formattedString = momentObj.format('DD/MM')
         days.push({
           date,
           dayOfWeek,
-          name:
-            this.getMonth(dayOfWeek) + ' ' + date.toLocaleDateString('vi-VN'),
+          name: this.getMonth(dayOfWeek) + '<br>' + formattedString,
           dateTime: date.toLocaleDateString('vi-VN'),
           dateTime1: date,
         })
@@ -461,8 +477,9 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.dataSource = this.data
+    this.rooms = this.dataRoom
     this.loadDataBooking()
     this.dateCellTemplate()
   },
@@ -472,6 +489,12 @@ export default {
     },
     dataDate: function () {
       this.dateCellTemplate()
+    },
+    data() {
+      this.dataSource = this.data
+    },
+    dataRoom() {
+      this.rooms = this.dataRoom
     },
   },
 }
@@ -512,22 +535,29 @@ export default {
 }
 
 .schedule-table {
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   border-collapse: collapse;
   width: 100%;
 }
 
-.schedule-table th,
 .schedule-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
 }
-
+.schedule-table th {
+  border-bottom: 1px solid #ddd;
+  border-top: none;
+  border-left: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.1); /* thêm dòng này */
+}
 .schedule-table td {
   height: 115px;
   padding: 0px;
   min-width: 159px;
+  z-index: 0;
 }
 
 .schedule-table td :hover {
@@ -536,6 +566,7 @@ export default {
 
 .schedule-table th {
   font-weight: bold;
+  z-index: 1;
 }
 
 .schedule-cell {
@@ -624,6 +655,7 @@ export default {
 
 .tdLabel {
   width: 150px;
+  font-weight: 500;
 }
 
 .misa-active-status-table {
@@ -652,7 +684,8 @@ export default {
 }
 
 thead {
-  height: 50px;
+  height: 65px;
+  border-bottom: 1px solid #ddd;
 }
 
 .rowColor {
@@ -700,7 +733,7 @@ thead {
   left: 0;
   top: 0;
   background-color: #fff;
-  border: 1px solid black;
+  border-top: none;
 }
 .sticky {
   position: sticky;

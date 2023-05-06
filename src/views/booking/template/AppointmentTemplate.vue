@@ -6,12 +6,13 @@
           <div
             class="misa-cell-active-color"
             :style="{
-              backgroundColor: 'blue',
+              backgroundColor: getBookingStatusColor(),
             }"
           ></div>
 
           <div class="misa-cell-active-text" :style="{ color: black }">
-            {{ templateModel.targetedAppointmentData.TimeSlotName }}
+            {{ templateModel.targetedAppointmentData.TimeSlotName }} -
+            {{ templateModel.targetedAppointmentData.Subject }}
           </div>
         </div>
       </div>
@@ -22,7 +23,8 @@
 /* eslint-disable */
 // import localization from 'devextreme/localization';
 import DxButton from 'devextreme-vue/button'
-
+import Enum from '@/commons/Enum'
+import Resource from '@/commons/Resource'
 const dayOfWeekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 export default {
@@ -45,9 +47,21 @@ export default {
     }
   },
   methods: {
-    // getFormatDate(value) {
-    //   return localization.formatDate(value, 'shortTime');
-    // },
+    getBookingStatusColor() {
+      let status = this.templateModel.targetedAppointmentData.StatusBooking
+      let corlor = ''
+      switch (status) {
+        case Enum.OptionRequest.Await:
+          corlor = Resource.BookingStatusColor.Await
+          break
+        case Enum.OptionRequest.Approve:
+          corlor = Resource.BookingStatusColor.Approve
+          break
+        default:
+          break
+      }
+      return corlor
+    },
   },
   mounted() {
     console.log(this.templateModel)
@@ -60,6 +74,8 @@ export default {
 }
 .misa-active-status-table {
   height: 100%;
+
+  font-size: 14px;
 }
 .misa-cell-active-color {
   height: 8px;
