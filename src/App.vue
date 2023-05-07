@@ -122,4 +122,7 @@ button {
   opacity: 1 !important;
   padding: 0 !important;
 }
+.container-lg {
+  padding: 0 !important;
+}
 </style>

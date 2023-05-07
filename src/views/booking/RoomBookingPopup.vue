@@ -334,6 +334,7 @@ export default {
      * PTTAM
      */
     onClickClosePopup() {
+      debugger
       this.popupNoticeMode = -1
       if (this.validateErrorList.length > 0) {
         this.$refs.popupDictionary
