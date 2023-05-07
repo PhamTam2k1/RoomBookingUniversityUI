@@ -359,7 +359,6 @@ export default {
 
 <style lang="scss" scoped>
 #body-department-dictionary {
-  padding: 10px 20px;
   background-color: #efefef;
   height: calc(100% - 75px);
   flex: 1;

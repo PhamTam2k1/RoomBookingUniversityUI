@@ -11,16 +11,16 @@
         <div class="flex">
           <el-tooltip content="Sửa" placement="bottom">
             <div
-              v-if="popupMode == Enum.PopupMode.EditMode"
+              v-if="popupMode == Enum.PopupMode.EditMode || isDisable == true"
               class="misa-icon misa-icon-pencil misa-icon-24"
-              @click="onCloseForm"
+              @click="onClickUpdate"
             ></div>
           </el-tooltip>
           <el-tooltip content="Xóa" placement="bottom">
             <div
               v-if="popupMode == Enum.PopupMode.EditMode"
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
-              @click="onCloseForm"
+              @click="onClickDelete"
             ></div>
           </el-tooltip>
           <el-tooltip content="Đóng" placement="bottom">
@@ -132,7 +132,7 @@
           <div class="content-reson">
             <textarea
               id="reson"
-              :disabled="isDisable"
+              :disabled="isDisable || !isUserBooking"
               v-model="bookingRoomData.Description"
               rows="4"
               tabindex="6"
@@ -419,6 +419,7 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
+      debugger
       if (this.popupMode == Enum.PopupMode.AddMode) {
         try {
           this.bookingRoomData.StartDate = moment(
@@ -458,6 +459,38 @@ export default {
         } catch (error) {
           console.log(error)
         }
+      } else if (this.popupMode == Enum.PopupMode.EditMode) {
+        try {
+          this.bookingRoomData.StartDate = moment(
+            this.bookingRoomData.StartDate,
+          ).format('YYYY/MM/DD')
+          this.bookingRoomData.EndDate = moment(
+            this.bookingRoomData.EndDate,
+          ).format('YYYY/MM/DD')
+          BookingRoomApi.updated(this.bookingID, this.bookingRoomData).then(
+            (res) => {
+              if (res && res.data) {
+                if (res.data.IsSusses) {
+                  ObjectFunction.toastMessage(
+                    Resource.Messenger.UpdateSucces,
+                    Resource.Messenger.Success,
+                  )
+                  this.$emit('onShowLoading')
+                  this.$emit('onCloseForm')
+                  this.$emit('onLoadData')
+                } else {
+                  ObjectFunction.toastMessage(
+                    'Cập nhật thất bại',
+                    Resource.Messenger.Error,
+                  )
+                  this.$emit('onCloseForm')
+                }
+              }
+            },
+          )
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     /**
@@ -467,7 +500,19 @@ export default {
     getBookingRoomByID() {
       BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
-          this.bookingRoomData = res.data
+          let data = res.data
+          this.bookingRoomData = {
+            BookingRoomID: data.BookingRoomID,
+            UserID: data.UserID,
+            RoomID: data.RoomID,
+            StatusBooking: data.StatusBooking,
+            Subject: data.Subject,
+            Description: data.Description,
+            TimeSlots: data.TimeSlots,
+            StartDate: data.StartDate,
+            EndDate: data.EndDate,
+            Quantity: data.Quantity,
+          }
           this.lstTime = this.bookingRoomData.TimeSlots.split(',').map((id) =>
             id.trim(),
           )
@@ -483,6 +528,9 @@ export default {
               : false
         }
       })
+    },
+    onClickUpdate() {
+      this.isDisable = false
     },
     // cập nhật lại ngày khi chọn lại
     onStartDateChanged(item) {
