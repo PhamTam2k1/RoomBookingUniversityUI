@@ -34,10 +34,8 @@
         <base-input
           lable="Thời gian bắt đầu"
           classInput="misa-input w-135 mgb-8"
-          :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
           v-model="timeSlot.StartTime"
           :tabindex="2"
           @handleBlurInput="validate('StartTime')"
@@ -47,10 +45,8 @@
         <base-input
           lable="Thời gian kết thúc"
           classInput="misa-input w-135"
-          :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
           v-model="timeSlot.EndTime"
           :tabindex="2"
           @handleBlurInput="validate('EndTime')"
@@ -74,11 +70,6 @@
     </BasePopup>
   </div>
 
-  <DxToast
-    v-model:visible="toastVisible"
-    v-model:message="message"
-    v-model:type="type"
-  />
   <!--Begin Popup Notice Error -->
   <PopupNotice
     :contentPopup="contentPopup"
@@ -101,7 +92,6 @@
 <script>
 import BasePopup from '@/components/base/BasePopup.vue'
 import TimeSlotApi from '@/apis/TimeSlotApi'
-import { DxToast } from 'devextreme-vue/toast'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import Enum from '@/commons/Enum'
@@ -114,7 +104,6 @@ export default {
   name: ' ',
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   components: {
-    DxToast,
     BasePopup,
     BaseInput,
     BaseButton,
@@ -157,7 +146,6 @@ export default {
         TimeSlotID: this.timeSlotData.TimeSlotID || uuidv4(),
       },
       validateErrorList: [],
-      toastVisible: false,
       message: '',
     }
   },

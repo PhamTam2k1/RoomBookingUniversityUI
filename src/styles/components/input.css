@@ -18,6 +18,9 @@
 .t-row-block .misa-input {
   width: 100%;
 }
+.t-row-capacityMin input.misa-input,.t-row-capacityMax input.misa-input{
+  width: 165px;
+}
 
 .misa-input-wrap .misa-input {
   height: 100%;

@@ -2,7 +2,14 @@
   background: url(../../assets/images/Icon.de5bb0db.svg);
   cursor: pointer;
 }
-
+.misa-icon1 {
+  background: url(../../assets/images/Icon.de5bb0db.svg);
+  cursor: pointer;
+}
+.icon-booking {
+  background: url(../../assets/images/ICON.svg);
+  cursor: pointer;
+}
 .misa-icon-navbar {
   background: url(../../assets/images/Icon_process.2df8445b.svg);
   cursor: pointer;
@@ -33,6 +40,17 @@
   height: 8px;
   min-width: 8px;
   min-height: 8px;
+}
+.t-icon-import-excel {
+  background-position: -1265px -90px;
+}
+.t-icon-location {
+  background-position: -157px -177px;
+}
+.t-icon-option {
+  background-position: -168px -72px;
+  filter: invert(53%) sepia(4%) saturate(36%) hue-rotate(127deg) brightness(19%)
+    contrast(9%);
 }
 .t-icon-dashboard {
   background-position: -33px -1587px;

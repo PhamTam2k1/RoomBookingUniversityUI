@@ -93,7 +93,7 @@ export default {
 
     /**Giá trị của dropdown khi là số */
     value: {
-      type: Number,
+      type: [Number, String],
     },
 
     /**Placholder */

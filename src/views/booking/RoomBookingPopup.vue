@@ -8,12 +8,28 @@
       :tabindex="9"
     >
       <template #iconPopup>
-        <el-tooltip content="Đóng" placement="bottom">
-          <div
-            class="misa-icon misa-icon-close misa-icon-24"
-            @click="onCloseForm"
-          ></div>
-        </el-tooltip>
+        <div class="flex">
+          <el-tooltip content="Sửa" placement="bottom">
+            <div
+              v-if="popupMode == Enum.PopupMode.EditMode"
+              class="misa-icon misa-icon-pencil misa-icon-24"
+              @click="onCloseForm"
+            ></div>
+          </el-tooltip>
+          <el-tooltip content="Xóa" placement="bottom">
+            <div
+              v-if="popupMode == Enum.PopupMode.EditMode"
+              class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
+              @click="onCloseForm"
+            ></div>
+          </el-tooltip>
+          <el-tooltip content="Đóng" placement="bottom">
+            <div
+              class="misa-icon misa-icon-close misa-icon-24 mgl-8p"
+              @click="onCloseForm"
+            ></div>
+          </el-tooltip>
+        </div>
       </template>
       <template #contentPopup>
         <div class="t-row">
@@ -23,7 +39,6 @@
             classInput="misa-input"
             class="misa-input-secondary mgb-8"
             :required="true"
-            :maxlength="20"
             :tabindex="1"
             v-model="bookingRoomData.Subject"
             @handleBlurInput="validate('Subject')"
@@ -73,7 +88,6 @@
             :labelMode="'hidden'"
             :stylingMode="'outlined'"
             @onValueChanged="onStartDateChanged"
-            @change-date="changeDate"
             lable=""
             :tabindex="3"
             :value="bookingRoomData.StartDate"
@@ -87,7 +101,6 @@
             :labelMode="'hidden'"
             :stylingMode="'outlined'"
             @onValueChanged="onEndDateChanged"
-            @change-date="changeDate"
             lable=""
             :tabindex="4"
             :value="bookingRoomData.EndDate"
@@ -105,7 +118,7 @@
             optionValue="TimeSlotID"
             placeholder="Chọn 1 hoặc nhiều ca học"
             @onOptionChange="onValueChangeTimeSlot"
-            v-model:value="lstTime1"
+            :value="lstTime"
             @handleBlurInput="validate('TimeSlots')"
             @handleKeyupInput="removeError('TimeSlots')"
             :error="Error['TimeSlots']"
@@ -134,7 +147,6 @@
             classInput="misa-input"
             class="misa-input-secondary mgb-8"
             :required="true"
-            :maxlength="20"
             :tabindex="7"
             v-model="bookingRoomData.Quantity"
             @handleBlurInput="validate('Quantity')"
@@ -161,11 +173,6 @@
     </BasePopup>
   </div>
 
-  <DxToast
-    v-model:visible="toastVisible"
-    v-model:message="message"
-    v-model:type="type"
-  />
   <!--Begin Popup Notice Error -->
   <PopupNotice
     :contentPopup="contentPopup"
@@ -187,7 +194,6 @@
 
 <script>
 import BookingRoomApi from '@/apis/BookingRoomApi'
-import { DxToast } from 'devextreme-vue/toast'
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -204,7 +210,6 @@ import moment from 'moment'
 export default {
   name: ' ',
   components: {
-    DxToast,
     BaseDropdownbox,
     BaseInput,
     BaseButton,
@@ -226,6 +231,9 @@ export default {
     bookingID: {
       type: String,
       default: null,
+    },
+    dateBooking: {
+      type: Date,
     },
   },
 
@@ -249,15 +257,14 @@ export default {
         RoomID: null,
         TimeSlots: null,
         Subject: '',
-        StartDate: new Date(),
-        EndDate: new Date(),
+        StartDate: this.dateBooking,
+        EndDate: this.dateBooking,
         Quantity: null,
         Description: '',
       },
       isDisable: false,
       isUserBooking: true,
       lstTime: [],
-      lstTime1: ['35c94ecf-31c9-4c2b-2cbf-2d1df1341b8b'],
     }
   },
 
@@ -445,8 +452,8 @@ export default {
           this.lstTime = this.bookingRoomData.TimeSlots.split(',').map((id) =>
             id.trim(),
           )
-          console.log(this.lstTime)
-          this.lstTime1 = this.lstTime
+          // console.log(this.lstTime)
+          // this.lstTime1 = this.lstTime
           this.isDisable =
             this.bookingRoomData.StatusBooking == 1 ? false : true
 
@@ -501,7 +508,7 @@ export default {
   width: 100%;
 }
 .t-row-infor {
-  margin-left: 30%;
+  margin-left: 33%;
   height: 60px !important;
   opacity: 0.5;
 }

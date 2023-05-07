@@ -48,7 +48,7 @@ export default {
 
     /**giá trị của input */
     modelValue: {
-      type: String,
+      type: [String, Number],
     },
 
     /**Tên class của input */
@@ -87,7 +87,7 @@ export default {
     type: {
       type: [String, Number],
       default: 'text',
-      validator: (value) => ['text', 'number'].includes(value),
+      validator: (value) => ['text', 'number'].includes(value.toLowerCase()),
     },
   },
   data() {
@@ -177,6 +177,7 @@ export default {
   width: 30%;
   padding-top: 5px;
   font-size: 14px;
+  white-space: nowrap;
 }
 .tooltip:after {
   content: attr(data_title);

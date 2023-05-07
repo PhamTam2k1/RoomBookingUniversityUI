@@ -37,7 +37,7 @@
           :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
+          :maxlength="255"
           v-model="department.DepartmentName"
           :tabindex="2"
           @handleBlurInput="validate('DepartmentName')"
@@ -278,13 +278,17 @@ export default {
         try {
           DepartmentApi.insert(this.department).then((res) => {
             if (res && res.data) {
-              this.toastVisible = true
-              this.message = 'Lưu thành công'
+              ObjectFunction.toastMessage(
+                Resource.Messenger.InsertSucces,
+                Resource.Messenger.Success,
+              )
               this.$emit('onCloseForm')
               this.$emit('onLoadData')
             } else {
-              this.toastVisible = true
-              this.message = 'Lưu thất bại'
+              ObjectFunction.toastMessage(
+                'Thêm thất bại',
+                Resource.Messenger.Error,
+              )
               this.$emit('onCloseForm')
             }
           })
