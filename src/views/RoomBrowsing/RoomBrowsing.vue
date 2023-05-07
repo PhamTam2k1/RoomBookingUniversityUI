@@ -174,8 +174,8 @@ export default {
         },
       },
       {
-        dataField: 'Description',
-        caption: 'Tiêu đề',
+        dataField: 'StatusBooking',
+        caption: 'Trạng thái',
         visible: true,
         width: 250,
       },

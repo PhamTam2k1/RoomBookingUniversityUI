@@ -175,6 +175,7 @@
 
   <!--Begin Popup Notice Error -->
   <PopupNotice
+    :titlePopup="titlePopup"
     :contentPopup="contentPopup"
     :classIcon="classIconPopup"
     @onClickClosePopup="onClickClosePopup"
@@ -186,7 +187,7 @@
       @keydown.enter="onClickClosePopup"
       @click="onClickClosePopup"
       lableButton="Đóng"
-      classButton="misa-button-normal w-80 misa-btn-warning"
+      classButton="misa-button-normal w-80 misa-btn-nomarl"
     ></BaseButton>
   </PopupNotice>
   <!--End Popup Notice Error -->
@@ -250,6 +251,7 @@ export default {
       validateErrorList: [],
       /**Trạng thái của popup */
       popupNoticeMode: -1,
+      titlePopup: '',
       Error: {},
       bookingRoomData: {
         BookingRoomID: uuidv4(),
@@ -305,9 +307,10 @@ export default {
      * @param
      * CreatedBy: PTTAM
      */
-    showPopup(iconPopup, contentPopup) {
+    showPopup(iconPopup, contentPopup, titlePopup) {
       this.classIconPopup = iconPopup
       this.contentPopup = contentPopup
+      this.titlePopup = titlePopup
     },
     /** Mô tả: Gửi sự kiện đóng form
      * CreatedBy: PTTAM
@@ -375,7 +378,7 @@ export default {
         this.saveData()
       } else {
         // Ngược lại
-        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput) // Hiển thị popup
+        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput, '') // Hiển thị popup
         this.popupNoticeMode = Enum.PopupMode.NotifyMode
       }
     },
@@ -425,15 +428,31 @@ export default {
             this.bookingRoomData.EndDate,
           ).format('YYYY/MM/DD')
           BookingRoomApi.insert(this.bookingRoomData).then((res) => {
-            if (res && res.data) {
-              ObjectFunction.toastMessage(
-                'Gửi yêu cầu đặt phong thành công',
-                Resource.Messenger.Success,
-              )
+            if (res) {
+              if (res.data.IsSucess) {
+                ObjectFunction.toastMessage(
+                  'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
+                  Resource.Messenger.Success,
+                )
 
-              this.$emit('onCloseForm')
-              this.$emit('onShowLoading') // hiển thị loading
-              this.$emit('onLoadData')
+                this.$emit('onCloseForm')
+                this.$emit('onShowLoading') // hiển thị loading
+                this.$emit('onLoadData')
+              } else {
+                let data = res.data.Data
+                let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
+                message += data
+                  .map(
+                    (item, index) =>
+                      `<span style="display:block;margin-top:10px">${
+                        index + 1
+                      }. ${item.DescriptionError}</span>`,
+                  )
+                  .join('')
+                this.showPopup('t-infomation', message, 'Đặt phòng bị trùng')
+
+                this.popupNoticeMode = Enum.PopupMode.NotifyMode
+              }
             }
           })
         } catch (error) {

@@ -244,12 +244,11 @@
     <RoomBookingPopup
       v-if="isShowForm"
       @onCloseForm="isShowForm = false"
-      @onShowLoading="showLoading(true)"
+      @onShowLoading="showLoading(false)"
       :roomID="roomID"
       :bookingID="bookingID"
       :dateBooking="dateBooking"
       :popupMode="popupMode"
-      @onLoadData="loadDataBooking()"
     />
     <ImportRoom
       v-if="isShowImportScheduler"
@@ -326,6 +325,7 @@ export default {
         CapacityMin: null,
         CapacityMax: null,
       },
+      scheduler: null,
       rangeCapacity: [],
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
@@ -410,8 +410,7 @@ export default {
       loadDataRooms: 'dictionary/loadDataRooms',
     }),
     onContentReady(e) {
-      console.log(e)
-      this.showLoading(false)
+      this.scheduler = e.component
     },
     // set view khi click chuyển đổi
     setView(option, name) {
@@ -525,6 +524,7 @@ export default {
      * PTTAM 23.04.2023
      */
     handleDataSource() {
+      this.showLoading(false)
       this.rooms = []
       this.lstRoom.forEach((element) => {
         this.rooms.push({
@@ -559,7 +559,6 @@ export default {
         item.startDate = dateStartStringWithTimezone
         item.endDate = dateEndStringWithTimezone
       }
-      this.showLoading(false)
     },
     /**
      * Sự kiện thay đổi phòng

@@ -41,6 +41,10 @@
   min-width: 8px;
   min-height: 8px;
 }
+.t-infomation {
+  background-position: -1232px -312px;
+  transform: scale(2);
+}
 .t-icon-import-excel {
   background-position: -1265px -90px;
 }
@@ -99,8 +103,8 @@
 }
 
 .misa-icon-notice {
-  background-position: -454px -173px;
-  transform: scale(2);
+  background-position: -593px -145px;
+  transform: scale(1.5);
 }
 
 .misa-icon-search {
