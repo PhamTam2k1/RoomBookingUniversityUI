@@ -59,12 +59,6 @@
       </template>
     </BasePopup>
   </div>
-
-  <DxToast
-    v-model:visible="toastVisible"
-    v-model:message="message"
-    v-model:type="type"
-  />
   <!--Begin Popup Notice Error -->
   <PopupNotice
     :contentPopup="contentPopup"
@@ -87,7 +81,6 @@
 <script>
 import BasePopup from '@/components/base/BasePopup.vue'
 import RoleApi from '@/apis/RoleApi'
-import { DxToast } from 'devextreme-vue/toast'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import Enum from '@/commons/Enum'
@@ -99,7 +92,6 @@ export default {
   name: ' ',
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   components: {
-    DxToast,
     BasePopup,
     BaseInput,
     BaseButton,
@@ -141,7 +133,6 @@ export default {
         RoleName: this.roleData.RoleName || '',
       },
       validateErrorList: [],
-      toastVisible: false,
       message: '',
     }
   },

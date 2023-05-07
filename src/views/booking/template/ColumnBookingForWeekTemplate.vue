@@ -76,7 +76,6 @@
                     <el-tooltip placement="top" effect="light">
                       <template v-slot:content>
                         <AppointmentTooltipTemplate
-                          :scheduler="scheduler"
                           :templateTooltipModel="booking"
                         />
                       </template>
@@ -98,18 +97,7 @@
         </tr>
       </tbody>
     </table>
-    <div
-      class="tooltipTable"
-      :style="{ left: left + 'px', top: top + 'px' }"
-      v-if="isShowTooltip"
-      @click="isShowForm = true"
-    >
-      <AppointmentTooltipTemplate
-        :scheduler="scheduler"
-        :templateTooltipModel="bookingHover"
-        :classArrow="classArrow"
-      ></AppointmentTooltipTemplate>
-    </div>
+
     <RoomBookingPopup
       v-if="isShowForm"
       @onCloseForm="isShowForm = false"
@@ -161,7 +149,6 @@
                 <el-tooltip placement="top" effect="light">
                   <template v-slot:content>
                     <AppointmentTooltipTemplate
-                      :scheduler="scheduler"
                       :templateTooltipModel="booking"
                     />
                   </template>
@@ -359,16 +346,7 @@ export default {
     onClickCell(TimeSlotID, RoomID, BookingRoomID) {
       this.isShowTooltip = false
       this.popupNoticeMode = false
-      console.log(
-        'Clicked on timeSlot:',
-        TimeSlotID,
-        'in room:',
-        RoomID,
-        'BookingRoomID :',
-        BookingRoomID,
-      )
-      debugger
-      this.dateBooking = TimeSlotID
+      this.dateBooking = moment(TimeSlotID, 'DD/MM/YYYY').toDate()
       if (BookingRoomID) {
         this.bookingID = BookingRoomID
         this.popupMode = Enum.PopupMode.EditMode
@@ -744,9 +722,14 @@ thead {
 .rowColor {
   background-color: #fff;
 }
-
+.rowColor:hover {
+  background-color: rgba(221, 221, 221, 0.6);
+}
 .rowColor.isActive {
   background-color: #fffcf2 !important;
+}
+.rowColor.isActive:hover {
+  background-color: rgba(206, 238, 249, 0.6) !important;
 }
 
 .rowColor.isDisable {
@@ -762,9 +745,9 @@ thead {
   overflow: auto;
 }
 
-.schedule-cell .misa-active-status-table:hover {
+/* .schedule-cell .misa-active-status-table:hover {
   background-color: rgba(221, 221, 221, 0.6);
-}
+} */
 .misa-cell-active-group:hover {
   color: black;
 }

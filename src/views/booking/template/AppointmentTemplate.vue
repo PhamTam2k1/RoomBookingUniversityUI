@@ -10,7 +10,7 @@
             }"
           ></div>
 
-          <div class="misa-cell-active-text" :style="{ color: black }">
+          <div class="misa-cell-active-text">
             {{ templateModel.targetedAppointmentData.TimeSlotName }} -
             {{ templateModel.targetedAppointmentData.Subject }}
           </div>
@@ -32,10 +32,6 @@ export default {
     DxButton,
   },
   props: {
-    scheduler: {
-      type: Object,
-      default: () => {},
-    },
     templateModel: {
       type: Object,
       default: () => {},

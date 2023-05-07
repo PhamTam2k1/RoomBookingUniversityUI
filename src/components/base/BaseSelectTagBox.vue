@@ -38,7 +38,7 @@
       </template>
       <template #customItem="{ data }">
         <el-tooltip
-          :content="data[optionName]"
+          :content="data[optionName].toString()"
           placement="top"
           :hide-after="50"
         >

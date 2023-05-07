@@ -116,7 +116,6 @@
               </div>
             </el-tooltip>
             <RoomBookingSetting
-              v-if="isShowPopup"
               :isShowPopup="isShowPopup"
               @onClickClosePopup="isShowPopup = false"
               @valueFilterRoom="valueFilterRoom"
@@ -159,7 +158,7 @@
         :on-cell-click="onCellClick"
         :on-appointment-click="onAppointmentClick"
         resource-cell-template="resourceCellTemplate"
-        groups="RoomID"
+        :groups="['RoomID']"
       >
         <DxView
           class="day"
@@ -201,6 +200,7 @@
             scrollByThumb: true,
             bounceEnabled: false,
           }"
+          :max-appointments-per-cell="5"
         />
         <DxResource
           :data-source="rooms"
@@ -219,15 +219,9 @@
         <template #AppointmentTemplateSlot="{ data }">
           <el-tooltip placement="top" effect="light">
             <template v-slot:content>
-              <AppointmentTooltipTemplate
-                :scheduler="scheduler"
-                :template-tooltip-model="data"
-              />
+              <AppointmentTooltipTemplate :template-tooltip-model="data" />
             </template>
-            <AppointmentTemplate
-              :scheduler="scheduler"
-              :template-model="data"
-            />
+            <AppointmentTemplate :template-model="data" />
           </el-tooltip>
           <!-- <AppointmentTemplate :scheduler="scheduler" :template-model="data" /> -->
         </template>
@@ -359,7 +353,6 @@ export default {
       )
     },
     dataRoomWithAll() {
-      debugger
       const dataRoom = this.dataRoom
       let roomsFilter = dataRoom?.filter(
         (room) => room.BuildingID === this.filterOption.BuildingID,
@@ -417,7 +410,7 @@ export default {
       loadDataRooms: 'dictionary/loadDataRooms',
     }),
     onContentReady(e) {
-      this.scheduler = e.component
+      console.log(e)
       this.showLoading(false)
     },
     // set view khi click chuyển đổi
@@ -474,8 +467,6 @@ export default {
       //   new Date(e.appointmentData.startDate) >= now ? true : false
     },
     onCellClick(e) {
-      debugger
-
       this.dateBooking = e.cellData.startDate
       this.roomID = e.cellData.groups.RoomID
       this.popupMode = Enum.PopupMode.AddMode

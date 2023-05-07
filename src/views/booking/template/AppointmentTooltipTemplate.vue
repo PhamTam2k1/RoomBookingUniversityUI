@@ -52,10 +52,6 @@ export default {
     DxButton,
   },
   props: {
-    scheduler: {
-      type: Object,
-      default: () => {},
-    },
     templateTooltipModel: {
       type: Object,
       default: () => {},
@@ -73,17 +69,7 @@ export default {
       CommonFunction: CommonFunction,
     }
   },
-  methods: {
-    deleteAppointment(e, data) {
-      const schedulerInstance = this.$refs['scheduler'].instance
-      console.log(schedulerInstance)
-      // Sennò apre in edit
-      e.event.stopPropagation()
-
-      schedulerInstance.deleteAppointment(data.appointmentData)
-      schedulerInstance.hideAppointmentTooltip()
-    },
-  },
+  methods: {},
 }
 </script>
 <style lang="scss" scoped>

@@ -48,7 +48,7 @@ export default {
 
     /**giá trị của input */
     modelValue: {
-      type: String,
+      type: [String, Number],
     },
 
     /**Tên class của input */

@@ -173,11 +173,6 @@
     </BasePopup>
   </div>
 
-  <DxToast
-    v-model:visible="toastVisible"
-    v-model:message="message"
-    v-model:type="type"
-  />
   <!--Begin Popup Notice Error -->
   <PopupNotice
     :contentPopup="contentPopup"
@@ -199,7 +194,6 @@
 
 <script>
 import BookingRoomApi from '@/apis/BookingRoomApi'
-import { DxToast } from 'devextreme-vue/toast'
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -216,7 +210,6 @@ import moment from 'moment'
 export default {
   name: ' ',
   components: {
-    DxToast,
     BaseDropdownbox,
     BaseInput,
     BaseButton,
@@ -367,7 +360,6 @@ export default {
      * @Createdby: PTTAM
      */
     beforeSaveData() {
-      debugger
       this.validateErrorList = [] // Gán lại array = []
       // Lấy danh sách các trường (fields) của object bookingRoomData
       const fields = Object.keys(this.bookingRoomData)
@@ -515,7 +507,7 @@ export default {
   width: 100%;
 }
 .t-row-infor {
-  margin-left: 30%;
+  margin-left: 33%;
   height: 60px !important;
   opacity: 0.5;
 }
