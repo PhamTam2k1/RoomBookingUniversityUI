@@ -5,7 +5,7 @@
         :title="data.value"
         v-if="
           dataField != 'FullName' &&
-          (dataField != 'RoomStatus') & (dataField != '')
+          (dataField != 'StatusBooking') & (dataField != '')
         "
         class="wrap-text"
       >
@@ -22,18 +22,18 @@
           <div class="misa-cell-FullName">{{ data.value }}</div>
         </div>
       </div>
-      <div v-if="dataField == 'RoomStatus'">
+      <div v-if="dataField == 'StatusBooking'">
         <div class="misa-active-status-table flex">
           <div
             class="misa-cell-active-color"
-            :style="{ backgroundColor: data.data.RoomStatusColor }"
+            :style="{ backgroundColor: data.data.BookingStatusColor }"
           ></div>
 
           <div
             class="misa-cell-active-text"
-            :style="{ color: data.data.RoomStatusColor }"
+            :style="{ color: data.data.BookingStatusColor }"
           >
-            {{ data.data.RoomStatusName }}
+            {{ data.data.BookingStatusName }}
           </div>
         </div>
       </div>

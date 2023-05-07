@@ -327,7 +327,6 @@ export default {
 <style lang="scss" scoped>
 #body-room-dictionary {
   flex: 1;
-  padding: 20px 0px;
   background-color: #efefef;
   height: calc(100% - 75px);
 }

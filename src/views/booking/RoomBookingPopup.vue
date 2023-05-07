@@ -11,16 +11,16 @@
         <div class="flex">
           <el-tooltip content="Sửa" placement="bottom">
             <div
-              v-if="popupMode == Enum.PopupMode.EditMode"
+              v-if="popupMode == Enum.PopupMode.EditMode || isDisable == true"
               class="misa-icon misa-icon-pencil misa-icon-24"
-              @click="onCloseForm"
+              @click="onClickUpdate"
             ></div>
           </el-tooltip>
           <el-tooltip content="Xóa" placement="bottom">
             <div
               v-if="popupMode == Enum.PopupMode.EditMode"
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
-              @click="onCloseForm"
+              @click="onClickDelete"
             ></div>
           </el-tooltip>
           <el-tooltip content="Đóng" placement="bottom">
@@ -132,7 +132,7 @@
           <div class="content-reson">
             <textarea
               id="reson"
-              :disabled="isDisable"
+              :disabled="isDisable || !isUserBooking"
               v-model="bookingRoomData.Description"
               rows="4"
               tabindex="6"
@@ -175,6 +175,7 @@
 
   <!--Begin Popup Notice Error -->
   <PopupNotice
+    :titlePopup="titlePopup"
     :contentPopup="contentPopup"
     :classIcon="classIconPopup"
     @onClickClosePopup="onClickClosePopup"
@@ -186,7 +187,7 @@
       @keydown.enter="onClickClosePopup"
       @click="onClickClosePopup"
       lableButton="Đóng"
-      classButton="misa-button-normal w-80 misa-btn-warning"
+      classButton="misa-button-normal w-80 misa-btn-nomarl"
     ></BaseButton>
   </PopupNotice>
   <!--End Popup Notice Error -->
@@ -250,6 +251,7 @@ export default {
       validateErrorList: [],
       /**Trạng thái của popup */
       popupNoticeMode: -1,
+      titlePopup: '',
       Error: {},
       bookingRoomData: {
         BookingRoomID: uuidv4(),
@@ -305,9 +307,10 @@ export default {
      * @param
      * CreatedBy: PTTAM
      */
-    showPopup(iconPopup, contentPopup) {
+    showPopup(iconPopup, contentPopup, titlePopup) {
       this.classIconPopup = iconPopup
       this.contentPopup = contentPopup
+      this.titlePopup = titlePopup
     },
     /** Mô tả: Gửi sự kiện đóng form
      * CreatedBy: PTTAM
@@ -375,7 +378,7 @@ export default {
         this.saveData()
       } else {
         // Ngược lại
-        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput) // Hiển thị popup
+        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput, '') // Hiển thị popup
         this.popupNoticeMode = Enum.PopupMode.NotifyMode
       }
     },
@@ -416,6 +419,7 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
+      debugger
       if (this.popupMode == Enum.PopupMode.AddMode) {
         try {
           this.bookingRoomData.StartDate = moment(
@@ -425,17 +429,65 @@ export default {
             this.bookingRoomData.EndDate,
           ).format('YYYY/MM/DD')
           BookingRoomApi.insert(this.bookingRoomData).then((res) => {
-            if (res && res.data) {
-              ObjectFunction.toastMessage(
-                'Gửi yêu cầu đặt phong thành công',
-                Resource.Messenger.Success,
-              )
+            if (res) {
+              if (res.data.IsSucess) {
+                ObjectFunction.toastMessage(
+                  'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
+                  Resource.Messenger.Success,
+                )
 
-              this.$emit('onCloseForm')
-              this.$emit('onShowLoading') // hiển thị loading
-              this.$emit('onLoadData')
+                this.$emit('onCloseForm')
+                this.$emit('onShowLoading') // hiển thị loading
+                this.$emit('onLoadData')
+              } else {
+                let data = res.data.Data
+                let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
+                message += data
+                  .map(
+                    (item, index) =>
+                      `<span style="display:block;margin-top:10px">${
+                        index + 1
+                      }. ${item.DescriptionError}</span>`,
+                  )
+                  .join('')
+                this.showPopup('t-infomation', message, 'Đặt phòng bị trùng')
+
+                this.popupNoticeMode = Enum.PopupMode.NotifyMode
+              }
             }
           })
+        } catch (error) {
+          console.log(error)
+        }
+      } else if (this.popupMode == Enum.PopupMode.EditMode) {
+        try {
+          this.bookingRoomData.StartDate = moment(
+            this.bookingRoomData.StartDate,
+          ).format('YYYY/MM/DD')
+          this.bookingRoomData.EndDate = moment(
+            this.bookingRoomData.EndDate,
+          ).format('YYYY/MM/DD')
+          BookingRoomApi.updated(this.bookingID, this.bookingRoomData).then(
+            (res) => {
+              if (res && res.data) {
+                if (res.data.IsSusses) {
+                  ObjectFunction.toastMessage(
+                    Resource.Messenger.UpdateSucces,
+                    Resource.Messenger.Success,
+                  )
+                  this.$emit('onShowLoading')
+                  this.$emit('onCloseForm')
+                  this.$emit('onLoadData')
+                } else {
+                  ObjectFunction.toastMessage(
+                    'Cập nhật thất bại',
+                    Resource.Messenger.Error,
+                  )
+                  this.$emit('onCloseForm')
+                }
+              }
+            },
+          )
         } catch (error) {
           console.log(error)
         }
@@ -448,7 +500,19 @@ export default {
     getBookingRoomByID() {
       BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
-          this.bookingRoomData = res.data
+          let data = res.data
+          this.bookingRoomData = {
+            BookingRoomID: data.BookingRoomID,
+            UserID: data.UserID,
+            RoomID: data.RoomID,
+            StatusBooking: data.StatusBooking,
+            Subject: data.Subject,
+            Description: data.Description,
+            TimeSlots: data.TimeSlots,
+            StartDate: data.StartDate,
+            EndDate: data.EndDate,
+            Quantity: data.Quantity,
+          }
           this.lstTime = this.bookingRoomData.TimeSlots.split(',').map((id) =>
             id.trim(),
           )
@@ -464,6 +528,9 @@ export default {
               : false
         }
       })
+    },
+    onClickUpdate() {
+      this.isDisable = false
     },
     // cập nhật lại ngày khi chọn lại
     onStartDateChanged(item) {

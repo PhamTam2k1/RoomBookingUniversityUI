@@ -355,7 +355,6 @@ export default {
 <style lang="scss" scoped>
 #body-user-dictionary {
   flex: 1;
-  padding: 10px 20px;
   background-color: #efefef;
   height: calc(100% - 75px);
 }

@@ -73,5 +73,17 @@ class BookingRoomAPI {
   getByID(id) {
     return BaseAPIConfig.get(`${this.controller}/getById/${id}`)
   }
+  /**
+   * Update lịch đặt
+   * @param {*} id - khóa chính
+   * @param {*} entity - vai trò
+   * @returns
+   */
+  updated(id, entity) {
+    return BaseAPIConfig.put(
+      `${this.controller}/updateBookingRequest/${id}`,
+      entity,
+    )
+  }
 }
 export default new BookingRoomAPI()

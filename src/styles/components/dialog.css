@@ -231,8 +231,8 @@
   padding: 14px 24px !important;
 }
 .misa-popup-notice {
-  width: 422px;
-  height: 142px;
+  width: 400x;
+  /* height: 142px; */
 }
 
 .misa-popup-notice .misa-dialog-body {

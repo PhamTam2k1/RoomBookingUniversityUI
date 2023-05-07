@@ -435,7 +435,7 @@ export default {
         notify(
           {
             message: `Chưa tải lên file nhập khẩu!`,
-            width: 450,
+            width: 270,
           },
           'error',
           2000,
@@ -473,7 +473,7 @@ export default {
         notify(
           {
             message: `Kích thước file vượt quá 2MB`,
-            width: 450,
+            width: 270,
           },
           'error',
           2000,

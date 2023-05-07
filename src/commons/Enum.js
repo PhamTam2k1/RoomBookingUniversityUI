@@ -25,7 +25,14 @@ const Enum = Object.freeze({
     /**Đang sử dụng */
     IsUsed: 2,
   },
+  /**Trạng thái lọc lịch họp */
+  SchedulerConnection: {
+    /**tất cả */
+    ALL: 1,
 
+    /**Còn trống */
+    Me: 2,
+  },
   /**Vai trò người dùng */
   RoleOption: {
     /**Người dùng */

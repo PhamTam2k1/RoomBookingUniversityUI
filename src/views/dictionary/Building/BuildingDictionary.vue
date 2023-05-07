@@ -327,7 +327,6 @@ export default {
 
 <style lang="scss" scoped>
 #body-building-dictionary {
-  padding: 20px 20px;
   background-color: #efefef;
   height: calc(100%);
   flex: 1;

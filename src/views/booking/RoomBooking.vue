@@ -67,7 +67,17 @@
         tabindex="0"
       >
         <div class="flex">
-          <div class="dx-buttongroup-wrapper dx-widget dx-collection">
+          <BaseDropdownbox
+            classDropdownbox="drop-down-filter"
+            :dataSource="schedulerConnection"
+            :height="34"
+            :width="160"
+            optionName="Text"
+            optionValue="Value"
+            :value="schedulerConnection[0].Value"
+            @onValueChange="onValueChangeShedulerConnection"
+          ></BaseDropdownbox>
+          <div class="dx-buttongroup-wrapper dx-widget dx-collection mgl-8p">
             <div
               @click="setView(1, 'day')"
               :class="{ 'dx-item-selected': currentView == 'day' }"
@@ -124,7 +134,7 @@
           <el-tooltip content="Nhập khẩu lịch học" placement="top">
             <div
               v-if="isAdmin"
-              class="misa-icon-style mgl-16 mgt-7"
+              class="misa-icon-style mgl-16 mgtr-7"
               @click="isShowImportScheduler = !isShowImportScheduler"
               ref="buttonSetting"
             >
@@ -244,12 +254,11 @@
     <RoomBookingPopup
       v-if="isShowForm"
       @onCloseForm="isShowForm = false"
-      @onShowLoading="showLoading(true)"
+      @onShowLoading="showLoading(false)"
       :roomID="roomID"
       :bookingID="bookingID"
       :dateBooking="dateBooking"
       :popupMode="popupMode"
-      @onLoadData="loadDataBooking()"
     />
     <ImportRoom
       v-if="isShowImportScheduler"
@@ -278,6 +287,7 @@ import BaseLoading from '@/components/base/BaseLoading.vue'
 import HeaderTooltip from './template/HeaderTooltip.vue'
 import RoomBookingSetting from './RoomBookingSetting.vue'
 import ImportRoom from '../importroom/ImportRoom.vue'
+import Resource from '@/commons/Resource'
 export default {
   name: 'App',
   components: {
@@ -326,6 +336,7 @@ export default {
         CapacityMin: null,
         CapacityMax: null,
       },
+      scheduler: null,
       rangeCapacity: [],
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
@@ -334,6 +345,7 @@ export default {
       /**Biến show popup import  */
       isShowImportScheduler: false,
       isAdmin: false,
+      schedulerConnection: Resource.SchedulerConnection,
     }
   },
   computed: {
@@ -410,8 +422,7 @@ export default {
       loadDataRooms: 'dictionary/loadDataRooms',
     }),
     onContentReady(e) {
-      console.log(e)
-      this.showLoading(false)
+      this.scheduler = e.component
     },
     // set view khi click chuyển đổi
     setView(option, name) {
@@ -525,6 +536,7 @@ export default {
      * PTTAM 23.04.2023
      */
     handleDataSource() {
+      this.showLoading(false)
       this.rooms = []
       this.lstRoom.forEach((element) => {
         this.rooms.push({
@@ -559,7 +571,6 @@ export default {
         item.startDate = dateStartStringWithTimezone
         item.endDate = dateEndStringWithTimezone
       }
-      this.showLoading(false)
     },
     /**
      * Sự kiện thay đổi phòng
@@ -567,6 +578,22 @@ export default {
      */
     onValueChangeRoom(value) {
       this.filterOption.RoomID = value ? value : null
+      this.showLoading(true)
+      this.loadDataBooking()
+    },
+    /**
+     * Sự kiện thay đổi phòng
+     * @param {*} value
+     */
+    onValueChangeShedulerConnection(value) {
+      if (value == Enum.SchedulerConnection.ALL) {
+        this.filterOption.UserID = null
+      } else {
+        this.filterOption.UserID = JSON.parse(
+          localStorage.getItem('user'),
+        ).UserID
+      }
+
       this.showLoading(true)
       this.loadDataBooking()
     },
@@ -629,8 +656,9 @@ export default {
 .mgt-5 {
   margin-top: 5px;
 }
-.mgt-7 {
+.mgtr-7 {
   margin-top: 7px;
+  margin-right: 8px;
 }
 .dx-scheduler-header {
   display: none !important;
