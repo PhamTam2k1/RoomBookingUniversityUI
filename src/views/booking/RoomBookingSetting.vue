@@ -6,9 +6,6 @@
     width="400"
     height="300"
     popper-class="my-popper-class"
-    :reference="$refs.buttonSetting"
-    offset="20,10"
-    v-show="isShowPopup"
     style="transform: translateX(-50%)"
   >
     <div class="t-header-setting flex">
@@ -31,7 +28,7 @@
           optionName="EquipmentName"
           optionValue="EquipmentID"
           placeholder="Chọn thiết bị"
-          v-model:value="valueFilter.EquipmentIDs"
+          :value="Equipment"
           @onOptionChange="onOptionChangeEquipment"
         >
         </BaseSelectTagBox>
@@ -43,7 +40,6 @@
             <BaseInput
               placeholder="Tối thiểu"
               classInput="misa-input"
-              :focus="focus"
               class="misa-input-secondary"
               :tabindex="1"
               type="Number"
@@ -122,6 +118,7 @@ export default {
         CapacityMax: null,
         EquipmentIDs: null,
       },
+      Equipment: [],
     }
   },
   methods: {

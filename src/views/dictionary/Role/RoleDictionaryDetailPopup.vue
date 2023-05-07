@@ -34,10 +34,9 @@
         <base-input
           lable="Tên vai trò"
           classInput="misa-input w-135"
-          :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
+          :maxlength="255"
           v-model="role.RoleName"
           :tabindex="2"
           @handleBlurInput="validate('RoleName')"

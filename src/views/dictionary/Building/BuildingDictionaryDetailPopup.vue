@@ -37,7 +37,7 @@
           :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
+          :maxlength="255"
           v-model="building.BuildingName"
           :tabindex="2"
           @handleBlurInput="validate('BuildingName')"

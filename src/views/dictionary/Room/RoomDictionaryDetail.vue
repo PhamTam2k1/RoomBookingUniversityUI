@@ -31,10 +31,9 @@
           <base-input
             lable="Tên phòng"
             classInput="misa-input"
-            :focus="focus"
             class="misa-input-secondary mgb-8"
             :required="true"
-            :maxlength="20"
+            :maxlength="255"
             :tabindex="1"
           ></base-input>
         </div>
@@ -42,10 +41,9 @@
           <base-input
             lable="Sức chứa"
             classInput="misa-input"
-            :focus="focus"
             class="misa-input-secondary mgb-8"
             :required="true"
-            :maxlength="20"
+            type="Number"
             :tabindex="1"
           ></base-input>
         </div>

@@ -37,7 +37,7 @@
           :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
+          :maxlength="255"
           v-model="department.DepartmentName"
           :tabindex="2"
           @handleBlurInput="validate('DepartmentName')"

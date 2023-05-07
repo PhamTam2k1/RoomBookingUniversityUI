@@ -34,10 +34,8 @@
         <base-input
           lable="Thời gian bắt đầu"
           classInput="misa-input w-135 mgb-8"
-          :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
           v-model="timeSlot.StartTime"
           :tabindex="2"
           @handleBlurInput="validate('StartTime')"
@@ -47,10 +45,8 @@
         <base-input
           lable="Thời gian kết thúc"
           classInput="misa-input w-135"
-          :focus="focusUser == true"
           class="misa-input-secondary"
           :required="true"
-          :maxlength="20"
           v-model="timeSlot.EndTime"
           :tabindex="2"
           @handleBlurInput="validate('EndTime')"

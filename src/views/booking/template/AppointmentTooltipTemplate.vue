@@ -36,7 +36,6 @@
         </div>
       </div>
     </div>
-    <div class="arrow" :class="{ arrow_right: classArrow }"></div>
   </div>
 </template>
 <script>

@@ -18,6 +18,7 @@
       :value-expr="optionValue"
       :placeholder="placeholder"
       @option-changed="onOptionChange"
+      :value="value"
       :width="width"
       :showDropDownButton="true"
       drop-down-button-template="iconDropdown"
@@ -89,6 +90,9 @@ export default {
     optionValue: {
       type: String,
       default: '',
+    },
+    value: {
+      type: Object,
     },
 
     /**Tabindex của popup */

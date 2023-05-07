@@ -116,6 +116,7 @@
               </div>
             </el-tooltip>
             <RoomBookingSetting
+              v-if="isShowPopup"
               :isShowPopup="isShowPopup"
               @onClickClosePopup="isShowPopup = false"
               @valueFilterRoom="valueFilterRoom"
@@ -240,6 +241,8 @@
         :dataRoom="lstRoom"
         :view="currentView"
         :dataDate="currentDate"
+        @onShowLoading="showLoading(true)"
+        @onLoadData="loadDataBooking()"
       ></ColumnBookingForWeekTemplate>
     </div>
 
@@ -250,6 +253,7 @@
       @onShowLoading="showLoading(true)"
       :roomID="roomID"
       :bookingID="bookingID"
+      :dateBooking="dateBooking"
       :popupMode="popupMode"
       @onLoadData="loadDataBooking()"
     />
@@ -319,9 +323,10 @@ export default {
       roomID: '',
       bookingID: '',
       popupMode: 0,
+      dateBooking: new Date(),
       filterOption: {
         RoomID: null,
-        BuildingID: null,
+        BuildingID: 'tatca',
         EquipmentIDs: null,
         UserID: null,
         CapacityMin: null,
@@ -460,13 +465,8 @@ export default {
      */
     onAppointmentClick(e) {
       e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
-      if (e.appointmentData?.BookingRoomID) {
-        this.bookingID = e.appointmentData.BookingRoomID
-        this.popupMode = Enum.PopupMode.EditMode
-      } else {
-        this.roomID = e.appointmentData.RoomID
-        this.popupMode = Enum.PopupMode.AddMode
-      }
+      this.bookingID = e.appointmentData.BookingRoomID
+      this.popupMode = Enum.PopupMode.EditMode
       // Lấy thời gian hiện tại
       this.isShowForm = true
       // var now = new Date()
@@ -474,12 +474,15 @@ export default {
       //   new Date(e.appointmentData.startDate) >= now ? true : false
     },
     onCellClick(e) {
+      debugger
+
+      this.dateBooking = e.cellData.startDate
       this.roomID = e.cellData.groups.RoomID
       this.popupMode = Enum.PopupMode.AddMode
       this.isShowForm = true
-      // // Lấy thời gian hiện tại
-      // var now = new Date()
-      // this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
+      // Lấy thời gian hiện tại
+      var now = new Date()
+      this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
     },
     /**
      * Sự kiện lấy dữ liệu đặt phòng
