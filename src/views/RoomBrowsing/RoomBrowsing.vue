@@ -65,10 +65,11 @@
   <RoomBookingPopup
     v-if="dataComponent.isShowForm"
     @onCloseForm="dataComponent.isShowForm = false"
-    @onShowLoading="showLoading(false)"
+    @onShowLoading="showLoading(true)"
     :bookingID="dataComponent.bookingID"
     :popupMode="dataComponent.popupMode"
     :isAdmin="dataComponent.isAdmin"
+    @onLoadData="getData"
   />
   <!-- Loading -->
   <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>

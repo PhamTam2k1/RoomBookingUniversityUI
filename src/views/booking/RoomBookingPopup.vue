@@ -164,7 +164,7 @@
             v-if="popupMode == Enum.PopupMode.PendingMode && isAdmin"
           >
             <BaseButton
-              @click="onClickAcceptRefuse"
+              @click="RejectRequest()"
               lableButton="Từ chối"
               classButton="misa-button-normal w-120 misa-btn-danger"
             ></BaseButton>
@@ -172,7 +172,7 @@
               :tabindex="8"
               lableButton="Phê duyệt"
               classButton="w-120 misa-button-primary "
-              @click="beforeSaveData()"
+              @click="ApproveRequest()"
             ></BaseButton>
           </div>
           <div class="is-not-admin" v-else>
@@ -212,6 +212,12 @@
     ></BaseButton>
   </PopupNotice>
   <!--End Popup Notice Error -->
+  <ConfirmRefuseProcess
+    @refuseClick="(reson) => refuseClick(reson)"
+    @onClickClosePopup="popupModeRefuse = -1"
+    :popupMode="popupModeRefuse"
+    v-if="popupModeRefuse == Enum.PopupMode.RefuseMode"
+  />
 </template>
 
 <script>
@@ -229,6 +235,7 @@ import { v4 as uuidv4 } from 'uuid'
 import ObjectFunction from '@/commons/CommonFuction'
 import BaseDate from '@/components/base/BaseDate.vue'
 import moment from 'moment'
+import ConfirmRefuseProcess from '@/views/RoomBrowsing/ConfirmRefuseProcess.vue'
 export default {
   name: ' ',
   components: {
@@ -239,6 +246,7 @@ export default {
     BaseSelectTagBox,
     PopupNotice,
     BaseDate,
+    ConfirmRefuseProcess,
   },
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   props: {
@@ -295,6 +303,7 @@ export default {
       isAdminApproveRoom: false,
       lableButtonBooking: '',
       titlePopupBooking: '',
+      popupModeRefuse: -1,
     }
   },
 
@@ -577,6 +586,73 @@ export default {
     onEndDateChanged(item) {
       this.bookingRoomData.EndDate = item.value
     },
+    /**
+     * Thực hiện phê duyệt
+     */
+    async ApproveRequest() {
+      try {
+        const res = await BookingRoomApi.approveRequest({
+          bookingRoomID: this.bookingID,
+          option: Enum.OptionRequest.Approve,
+        })
+
+        if (res && res.data) {
+          this.$emit('onShowLoading')
+          this.$emit('onCloseForm')
+          this.$emit('onLoadData')
+          ObjectFunction.toastMessage(
+            'Phê duyệt thành công',
+            Resource.Messenger.Success,
+          )
+        } else {
+          this.$emit('onCloseForm')
+          ObjectFunction.toastMessage(
+            'Phê duyệt thất bại',
+            Resource.Messenger.Error,
+          )
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    /**
+     * Hiển thị popup từ chối phê duyệt
+     */
+    RejectRequest() {
+      this.popupModeRefuse = Enum.PopupMode.RefuseMode
+    },
+    /**
+     * Từ chối duyệt
+     */
+    refuseClick(reson) {
+      try {
+        BookingRoomApi.approveRequest({
+          bookingRoomID: this.bookingID,
+          refusalReason: reson,
+          option: Enum.OptionRequest.Reject,
+        }).then((res) => {
+          if (res && res.data) {
+            this.$emit('onShowLoading')
+            this.$emit('onCloseForm')
+            this.$emit('onLoadData')
+            this.popupModeRefuse = -1
+            ObjectFunction.toastMessage(
+              'Từ chối thành công',
+              Resource.Messenger.Success,
+            )
+          } else {
+            this.$emit('onCloseForm')
+            this.popupModeRefuse = -1
+            ObjectFunction.toastMessage(
+              'Từ chối thất bạ',
+              Resource.Messenger.Success,
+            )
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
   async created() {
     try {
@@ -587,6 +663,7 @@ export default {
       console.error(error)
     }
   },
+
   mounted() {
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.bookingRoomData.RoomID = this.roomID
