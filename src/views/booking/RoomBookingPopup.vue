@@ -2,7 +2,7 @@
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
       class="misa-dialog"
-      titlePopup="Đặt phòng"
+      :titlePopup="titlePopupBooking"
       classPopup="popup-dictionary-room-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
@@ -158,12 +158,33 @@
         </div>
       </template>
       <template #buttonPopup>
-        <BaseButton
-          :tabindex="8"
-          lableButton="Đặt phòng"
-          classButton="misa-button-normal w-86 misa-button-primary "
-          @click="beforeSaveData()"
-        ></BaseButton>
+        <div class="t-button-footer">
+          <div
+            class="t--is-admin flex"
+            v-if="popupMode == Enum.PopupMode.PendingMode && isAdmin"
+          >
+            <BaseButton
+              @click="onClickAcceptRefuse"
+              lableButton="Từ chối"
+              classButton="misa-button-normal w-120 misa-btn-danger"
+            ></BaseButton>
+            <BaseButton
+              :tabindex="8"
+              lableButton="Phê duyệt"
+              classButton="w-120 misa-button-primary "
+              @click="beforeSaveData()"
+            ></BaseButton>
+          </div>
+          <div class="is-not-admin" v-else>
+            <BaseButton
+              :tabindex="8"
+              lableButton="Đặt phòng"
+              classButton="w-120 misa-button-primary "
+              @click="beforeSaveData()"
+            ></BaseButton>
+          </div>
+        </div>
+
         <BaseButton
           @keyup="handleKeyup"
           classButton="w-0"
@@ -236,6 +257,10 @@ export default {
     dateBooking: {
       type: Date,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -267,6 +292,7 @@ export default {
       isDisable: false,
       isUserBooking: true,
       lstTime: [],
+      isAdminApproveRoom: false,
     }
   },
 
@@ -337,7 +363,6 @@ export default {
      * PTTAM
      */
     onClickClosePopup() {
-      debugger
       this.popupNoticeMode = -1
       if (this.validateErrorList.length > 0) {
         this.$refs.popupDictionary
@@ -390,6 +415,7 @@ export default {
       try {
         if (!this.bookingRoomData[fieldName] && fieldName != 'Description') {
           let field = ''
+
           if (fieldName == 'RoomID') {
             field = 'Phòng'
           } else if (fieldName == 'TimeSlots') {
@@ -399,8 +425,18 @@ export default {
           } else if (fieldName == 'Quantity') {
             field = 'Số lượng người tham gia'
           }
+
           this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
           this.validateErrorList.push(fieldName)
+        } else {
+          if (fieldName == 'Quantity') {
+            let quantity = this.bookingRoomData[fieldName] - 0
+            if (quantity > this.roomChoose.Capacity) {
+              this.Error[fieldName] =
+                'Số lượng người tham gia không được lớn hơn sức chứa của phòng'
+              this.validateErrorList.push(fieldName)
+            }
+          }
         }
       } catch (error) {
         console.log(error)
@@ -419,7 +455,6 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
-      debugger
       if (this.popupMode == Enum.PopupMode.AddMode) {
         try {
           this.bookingRoomData.StartDate = moment(
@@ -431,14 +466,14 @@ export default {
           BookingRoomApi.insert(this.bookingRoomData).then((res) => {
             if (res) {
               if (res.data.IsSucess) {
+                this.$emit('onCloseForm')
+                this.$emit('onShowLoading') // hiển thị loading
+
+                this.$emit('onLoadData')
                 ObjectFunction.toastMessage(
                   'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
                   Resource.Messenger.Success,
                 )
-
-                this.$emit('onCloseForm')
-                this.$emit('onShowLoading') // hiển thị loading
-                this.$emit('onLoadData')
               } else {
                 let data = res.data.Data
                 let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
@@ -497,8 +532,8 @@ export default {
      * Lấy đối tượng user theo khóa chính
      * PTTAM 3/05/2023
      */
-    getBookingRoomByID() {
-      BookingRoomApi.getByID(this.bookingID).then((res) => {
+    async getBookingRoomByID() {
+      await BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
           let data = res.data
           this.bookingRoomData = {
@@ -553,7 +588,10 @@ export default {
   mounted() {
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.bookingRoomData.RoomID = this.roomID
-    } else if (this.popupMode == Enum.PopupMode.EditMode) {
+    } else if (
+      this.popupMode == Enum.PopupMode.EditMode ||
+      this.popupMode == Enum.PopupMode.PendingMode
+    ) {
       this.getBookingRoomByID()
     }
   },
@@ -564,6 +602,11 @@ export default {
       dataTime: (state) => state.dictionary.dataTime,
       dataRoom: (state) => state.dictionary.dataRoom,
     }),
+    titlePopupBooking() {
+      return this.popupMode == Enum.PopupMode.AddMode
+        ? 'Đặt phòng'
+        : 'Chi tiết đặt phòng'
+    },
   },
 }
 </script>

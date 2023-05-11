@@ -77,6 +77,7 @@
                       <template v-slot:content>
                         <AppointmentTooltipTemplate
                           :templateTooltipModel="booking"
+                          :dataRoom="dataRoom"
                         />
                       </template>
                       {{ booking.TimeSlotName }} - {{ booking.Subject }}
@@ -150,6 +151,7 @@
                   <template v-slot:content>
                     <AppointmentTooltipTemplate
                       :templateTooltipModel="booking"
+                      :dataRoom="dataRoom"
                     />
                   </template>
                   {{ booking.TimeSlotName }} - {{ booking.Subject }}
@@ -503,7 +505,11 @@ export default {
       }
     },
   },
-
+  updated() {
+    this.dataSource = this.data
+    this.rooms = this.dataRoom
+    this.loadDataBooking()
+  },
   mounted() {
     this.dataSource = this.data
     this.rooms = this.dataRoom

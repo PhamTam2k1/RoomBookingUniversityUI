@@ -18,6 +18,12 @@
 .mgt-8 {
   margin-top: 8px;
 }
+.mgt-10 {
+  margin-top: 10px;
+}
+.mgt-14 {
+  margin-top: 14px;
+}
 .mgb-8 {
   margin-bottom: 8px;
 }
