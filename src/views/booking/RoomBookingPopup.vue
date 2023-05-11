@@ -178,7 +178,7 @@
           <div class="is-not-admin" v-else>
             <BaseButton
               :tabindex="8"
-              lableButton="Đặt phòng"
+              :lableButton="lableButtonBooking"
               classButton="w-120 misa-button-primary "
               @click="beforeSaveData()"
             ></BaseButton>
@@ -293,6 +293,8 @@ export default {
       isUserBooking: true,
       lstTime: [],
       isAdminApproveRoom: false,
+      lableButtonBooking: '',
+      titlePopupBooking: '',
     }
   },
 
@@ -588,11 +590,15 @@ export default {
   mounted() {
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.bookingRoomData.RoomID = this.roomID
+      this.titlePopupBooking = 'Đặt phòng'
+      this.lableButtonBooking = 'Đặt phòng'
     } else if (
       this.popupMode == Enum.PopupMode.EditMode ||
       this.popupMode == Enum.PopupMode.PendingMode
     ) {
       this.getBookingRoomByID()
+      this.titlePopupBooking = 'Chi tiết đặt phòng'
+      this.lableButtonBooking = 'Cập nhật'
     }
   },
   computed: {
@@ -602,11 +608,6 @@ export default {
       dataTime: (state) => state.dictionary.dataTime,
       dataRoom: (state) => state.dictionary.dataRoom,
     }),
-    titlePopupBooking() {
-      return this.popupMode == Enum.PopupMode.AddMode
-        ? 'Đặt phòng'
-        : 'Chi tiết đặt phòng'
-    },
   },
 }
 </script>
