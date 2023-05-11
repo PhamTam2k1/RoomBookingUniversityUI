@@ -35,6 +35,19 @@
   background-position: -128px -312px;
   transform: scale(1);
 }
+.icon-pending{
+  background-position: -77px -37px;
+  filter: invert(51%) sepia(217%) saturate(154%) hue-rotate(1397deg)
+    brightness(85%) contrast(525%);
+
+}
+.icon-arrow-left{
+  background-position: -77px -18px;
+  filter: invert(51%) sepia(217%) saturate(154%) hue-rotate(1397deg)
+    brightness(85%) contrast(525%);
+    transform: rotate(180deg);
+
+}
 .misa-icon-8 {
   width: 8px;
   height: 8px;

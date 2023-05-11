@@ -1,5 +1,6 @@
 <template>
   <el-popover
+    v-if="hidePopup || isShowPopup"
     :visible="isShowPopup"
     placement="bottom"
     trigger="click"
@@ -119,6 +120,7 @@ export default {
         EquipmentIDs: null,
       },
       Equipment: [],
+      hidePopup: true,
     }
   },
   methods: {
@@ -135,6 +137,7 @@ export default {
       this.valueFilter.EquipmentIDs = null
       this.valueFilter.CapacityMin = null
       this.valueFilter.CapacityMax = null
+      this.hidePopup = false
       this.$emit('valueFilterRoom', this.valueFilter)
       this.onClickClosePopup()
     },

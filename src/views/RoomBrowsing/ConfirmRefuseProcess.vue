@@ -30,7 +30,7 @@
       <base-button
         @click="onClickAcceptRefuse"
         lableButton="Từ chối"
-        classButton="misa-button-normal w-80 misa-btn-danger"
+        classButton="misa-button-normal w-120 misa-btn-danger"
       ></base-button>
     </template>
   </base-popup>

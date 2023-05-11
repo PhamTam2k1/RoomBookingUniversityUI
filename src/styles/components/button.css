@@ -14,7 +14,9 @@
   color: var(--button-primary-color);
   color: #fff !important;
 }
-
+.misa-button-primary:hover{
+  background-color:#068ac7 !important;
+}
 .misa-button-normal {
   background-color: #fff;
   border: 1px solid #e2e8f0;

@@ -2,7 +2,7 @@
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
       class="misa-dialog"
-      titlePopup="Đặt phòng"
+      :titlePopup="titlePopupBooking"
       classPopup="popup-dictionary-room-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
@@ -158,12 +158,33 @@
         </div>
       </template>
       <template #buttonPopup>
-        <BaseButton
-          :tabindex="8"
-          lableButton="Đặt phòng"
-          classButton="misa-button-normal w-86 misa-button-primary "
-          @click="beforeSaveData()"
-        ></BaseButton>
+        <div class="t-button-footer">
+          <div
+            class="t--is-admin flex"
+            v-if="popupMode == Enum.PopupMode.PendingMode && isAdmin"
+          >
+            <BaseButton
+              @click="RejectRequest()"
+              lableButton="Từ chối"
+              classButton="misa-button-normal w-120 misa-btn-danger"
+            ></BaseButton>
+            <BaseButton
+              :tabindex="8"
+              lableButton="Phê duyệt"
+              classButton="w-120 misa-button-primary "
+              @click="ApproveRequest()"
+            ></BaseButton>
+          </div>
+          <div class="is-not-admin" v-else>
+            <BaseButton
+              :tabindex="8"
+              :lableButton="lableButtonBooking"
+              classButton="w-120 misa-button-primary "
+              @click="beforeSaveData()"
+            ></BaseButton>
+          </div>
+        </div>
+
         <BaseButton
           @keyup="handleKeyup"
           classButton="w-0"
@@ -191,6 +212,12 @@
     ></BaseButton>
   </PopupNotice>
   <!--End Popup Notice Error -->
+  <ConfirmRefuseProcess
+    @refuseClick="(reson) => refuseClick(reson)"
+    @onClickClosePopup="popupModeRefuse = -1"
+    :popupMode="popupModeRefuse"
+    v-if="popupModeRefuse == Enum.PopupMode.RefuseMode"
+  />
 </template>
 
 <script>
@@ -208,6 +235,7 @@ import { v4 as uuidv4 } from 'uuid'
 import ObjectFunction from '@/commons/CommonFuction'
 import BaseDate from '@/components/base/BaseDate.vue'
 import moment from 'moment'
+import ConfirmRefuseProcess from '@/views/RoomBrowsing/ConfirmRefuseProcess.vue'
 export default {
   name: ' ',
   components: {
@@ -218,6 +246,7 @@ export default {
     BaseSelectTagBox,
     PopupNotice,
     BaseDate,
+    ConfirmRefuseProcess,
   },
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   props: {
@@ -235,6 +264,10 @@ export default {
     },
     dateBooking: {
       type: Date,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -267,6 +300,10 @@ export default {
       isDisable: false,
       isUserBooking: true,
       lstTime: [],
+      isAdminApproveRoom: false,
+      lableButtonBooking: '',
+      titlePopupBooking: '',
+      popupModeRefuse: -1,
     }
   },
 
@@ -337,7 +374,6 @@ export default {
      * PTTAM
      */
     onClickClosePopup() {
-      debugger
       this.popupNoticeMode = -1
       if (this.validateErrorList.length > 0) {
         this.$refs.popupDictionary
@@ -390,6 +426,7 @@ export default {
       try {
         if (!this.bookingRoomData[fieldName] && fieldName != 'Description') {
           let field = ''
+
           if (fieldName == 'RoomID') {
             field = 'Phòng'
           } else if (fieldName == 'TimeSlots') {
@@ -399,8 +436,18 @@ export default {
           } else if (fieldName == 'Quantity') {
             field = 'Số lượng người tham gia'
           }
+
           this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
           this.validateErrorList.push(fieldName)
+        } else {
+          if (fieldName == 'Quantity') {
+            let quantity = this.bookingRoomData[fieldName] - 0
+            if (quantity > this.roomChoose.Capacity) {
+              this.Error[fieldName] =
+                'Số lượng người tham gia không được lớn hơn sức chứa của phòng'
+              this.validateErrorList.push(fieldName)
+            }
+          }
         }
       } catch (error) {
         console.log(error)
@@ -419,7 +466,6 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
-      debugger
       if (this.popupMode == Enum.PopupMode.AddMode) {
         try {
           this.bookingRoomData.StartDate = moment(
@@ -431,14 +477,14 @@ export default {
           BookingRoomApi.insert(this.bookingRoomData).then((res) => {
             if (res) {
               if (res.data.IsSucess) {
+                this.$emit('onCloseForm')
+                this.$emit('onShowLoading') // hiển thị loading
+
+                this.$emit('onLoadData')
                 ObjectFunction.toastMessage(
                   'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
                   Resource.Messenger.Success,
                 )
-
-                this.$emit('onCloseForm')
-                this.$emit('onShowLoading') // hiển thị loading
-                this.$emit('onLoadData')
               } else {
                 let data = res.data.Data
                 let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
@@ -497,8 +543,8 @@ export default {
      * Lấy đối tượng user theo khóa chính
      * PTTAM 3/05/2023
      */
-    getBookingRoomByID() {
-      BookingRoomApi.getByID(this.bookingID).then((res) => {
+    async getBookingRoomByID() {
+      await BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
           let data = res.data
           this.bookingRoomData = {
@@ -540,6 +586,73 @@ export default {
     onEndDateChanged(item) {
       this.bookingRoomData.EndDate = item.value
     },
+    /**
+     * Thực hiện phê duyệt
+     */
+    async ApproveRequest() {
+      try {
+        const res = await BookingRoomApi.approveRequest({
+          bookingRoomID: this.bookingID,
+          option: Enum.OptionRequest.Approve,
+        })
+
+        if (res && res.data) {
+          this.$emit('onShowLoading')
+          this.$emit('onCloseForm')
+          this.$emit('onLoadData')
+          ObjectFunction.toastMessage(
+            'Phê duyệt thành công',
+            Resource.Messenger.Success,
+          )
+        } else {
+          this.$emit('onCloseForm')
+          ObjectFunction.toastMessage(
+            'Phê duyệt thất bại',
+            Resource.Messenger.Error,
+          )
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    /**
+     * Hiển thị popup từ chối phê duyệt
+     */
+    RejectRequest() {
+      this.popupModeRefuse = Enum.PopupMode.RefuseMode
+    },
+    /**
+     * Từ chối duyệt
+     */
+    refuseClick(reson) {
+      try {
+        BookingRoomApi.approveRequest({
+          bookingRoomID: this.bookingID,
+          refusalReason: reson,
+          option: Enum.OptionRequest.Reject,
+        }).then((res) => {
+          if (res && res.data) {
+            this.$emit('onShowLoading')
+            this.$emit('onCloseForm')
+            this.$emit('onLoadData')
+            this.popupModeRefuse = -1
+            ObjectFunction.toastMessage(
+              'Từ chối thành công',
+              Resource.Messenger.Success,
+            )
+          } else {
+            this.$emit('onCloseForm')
+            this.popupModeRefuse = -1
+            ObjectFunction.toastMessage(
+              'Từ chối thất bạ',
+              Resource.Messenger.Success,
+            )
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
   async created() {
     try {
@@ -550,11 +663,19 @@ export default {
       console.error(error)
     }
   },
+
   mounted() {
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.bookingRoomData.RoomID = this.roomID
-    } else if (this.popupMode == Enum.PopupMode.EditMode) {
+      this.titlePopupBooking = 'Đặt phòng'
+      this.lableButtonBooking = 'Đặt phòng'
+    } else if (
+      this.popupMode == Enum.PopupMode.EditMode ||
+      this.popupMode == Enum.PopupMode.PendingMode
+    ) {
       this.getBookingRoomByID()
+      this.titlePopupBooking = 'Chi tiết đặt phòng'
+      this.lableButtonBooking = 'Cập nhật'
     }
   },
   computed: {

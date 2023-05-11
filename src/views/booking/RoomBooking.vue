@@ -157,7 +157,7 @@
         :end-day-hour="endDayHour"
         :cell-duration="cellDuration"
         :first-day-of-week="firstDayOfWeek"
-        :show-all-day-panel="showAllDayPanel"
+        :show-all-day-panel="false"
         :height="height"
         :scrolling-mode="scrollingMode"
         :time-cell-template="timeCellTemplate"
@@ -229,7 +229,10 @@
         <template #AppointmentTemplateSlot="{ data }">
           <el-tooltip placement="top" effect="light">
             <template v-slot:content>
-              <AppointmentTooltipTemplate :template-tooltip-model="data" />
+              <AppointmentTooltipTemplate
+                :template-tooltip-model="data"
+                :dataRoom="dataRoom"
+              />
             </template>
             <AppointmentTemplate :template-model="data" />
           </el-tooltip>
@@ -254,15 +257,18 @@
     <RoomBookingPopup
       v-if="isShowForm"
       @onCloseForm="isShowForm = false"
-      @onShowLoading="showLoading(false)"
+      @onShowLoading="showLoading(true)"
       :roomID="roomID"
       :bookingID="bookingID"
       :dateBooking="dateBooking"
       :popupMode="popupMode"
+      @onLoadData="loadDataBooking()"
     />
     <ImportRoom
       v-if="isShowImportScheduler"
-      @onClickClosePopup="isShowImportScheduler = false"
+      @onCloseForm="isShowImportScheduler = false"
+      @onShowLoading="showLoading(true)"
+      @onLoadData="loadDataBooking()"
     ></ImportRoom>
     <!-- End popup detail -->
     <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
@@ -288,6 +294,7 @@ import HeaderTooltip from './template/HeaderTooltip.vue'
 import RoomBookingSetting from './RoomBookingSetting.vue'
 import ImportRoom from '../importroom/ImportRoom.vue'
 import Resource from '@/commons/Resource'
+
 export default {
   name: 'App',
   components: {
@@ -336,6 +343,7 @@ export default {
         CapacityMin: null,
         CapacityMax: null,
       },
+      shouldRenderScheduler: true,
       scheduler: null,
       rangeCapacity: [],
       /** Biến show loading: true- show, false - hide*/
@@ -383,6 +391,7 @@ export default {
         return `<div class="time-cell">${hours}:${minutes}</div>`
       }
     },
+
     dateCellTemplate() {
       return ({ date }) => {
         const daysOfWeek = [
@@ -416,6 +425,10 @@ export default {
     },
   },
   methods: {
+    demo() {
+      this.loadDataBooking()
+      console.log('a')
+    },
     // Gọi hàm load data từ store
     ...mapActions({
       loadDataBuildings: 'dictionary/loadDataBuildings',
@@ -429,7 +442,11 @@ export default {
       this.isTypeDay = name == 'day' ? true : false
       this.showView = this.lstRoom.length > 1 ? false : true
       if (option && name) {
+        this.showLoading(true)
         this.currentView = name
+        setTimeout(() => {
+          this.showLoading(false)
+        }, 1200) // hide loading after 2 seconds (adjust as needed)
       }
     },
     resetPosition() {
@@ -520,12 +537,11 @@ export default {
           } else {
             this.showView = false
           }
-
-          this.handleDataSource()
         })
       } catch (error) {
         console.log(error)
       }
+      this.handleDataSource()
     },
     // cập nhật lại ngày khi chọn lại
     onDateBoxChanged(item) {
@@ -545,6 +561,9 @@ export default {
           RoomName: element.RoomName,
           Capacity: element.Capacity,
           ListEquipmentName: element.ListEquipmentName,
+          AvartarAdmin: element.AvartarAdmin,
+          AdminEmail: element.AdminEmail,
+          AdminName: element.AdminName,
         })
       })
       for (let i = 0; i < this.dataSource?.length; i++) {
@@ -619,6 +638,7 @@ export default {
       this.loadDataBooking()
     },
   },
+
   async created() {
     this.showLoading(true)
     this.loadDataBooking()
@@ -626,6 +646,7 @@ export default {
     await this.loadDataRooms()
   },
   mounted() {
+    this.loadDataBooking()
     this.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true

@@ -37,21 +37,21 @@
           </div>
         </div>
       </div>
-      <div v-if="dataField == 'Approve' && isAdmin">
-        <div class="display-none">
-          <div class="flex">
-            <div class="misa-icon-style" title="Phê duyệt">
-              <div
-                @click="onClickShowPopupApprove(data.data[id])"
-                class="icon-sibar icon-approve misa-icon-24"
-              ></div>
-            </div>
-            <div class="misa-icon-style" title="Từ chối">
-              <div
-                @click="onClickShowPopupReject(data.data[id])"
-                class="icon-sibar icon-reject misa-icon-24"
-              ></div>
-            </div>
+    </div>
+    <div v-if="dataField == 'Approve' && isAdmin">
+      <div class="display-none">
+        <div class="flex">
+          <div class="misa-icon-style" title="Phê duyệt">
+            <div
+              @click="onClickShowPopupApprove(data.data[id])"
+              class="icon-sibar icon-approve misa-icon-24"
+            ></div>
+          </div>
+          <div class="misa-icon-style" title="Từ chối">
+            <div
+              @click="onClickShowPopupReject(data.data[id])"
+              class="icon-sibar icon-reject misa-icon-24"
+            ></div>
           </div>
         </div>
       </div>

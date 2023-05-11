@@ -195,11 +195,11 @@
                           class="wrap-icon misa-icon ic-status-record ic-invalid"
                         ></div>
                         <div class="invalid-record record-text">
-                          <span class="total-invalid">0</span>
+                          <span class="total-invalid">{{ successCount }}</span>
                           <span>&nbsp;</span> bản ghi hợp lệ
                         </div>
                       </div>
-                      <div class="wrap-record mg-bt-20">
+                      <!-- <div class="wrap-record mg-bt-20">
                         <div
                           class="wrap-icon misa-icon ic-status-record ic-has-data"
                         ></div>
@@ -207,13 +207,13 @@
                           <span class="total-exits">0</span>
                           <span>&nbsp;</span> bản ghi đã có dữ liệu
                         </div>
-                      </div>
+                      </div> -->
                       <div class="wrap-record">
                         <div
                           class="wrap-icon misa-icon ic-status-record ic-valid"
                         ></div>
                         <div class="valid-record record-text">
-                          <span class="total-valid">0</span>
+                          <span class="total-valid">{{ errorCount }}</span>
                           <span>&nbsp;</span> bản ghi không hợp lệ
                         </div>
                       </div>
@@ -360,6 +360,8 @@ import notify from 'devextreme/ui/notify'
 import { DxButton } from 'devextreme-vue/button'
 import axios from 'axios'
 import BasePopup from '@/components/base/BasePopup.vue'
+import ObjectFunction from '@/commons/CommonFuction'
+import Resource from '@/commons/Resource'
 import {
   DxDataGrid,
   DxScrolling,
@@ -394,6 +396,7 @@ export default {
       errorCount: 0,
       successCount: 0,
       sumaryData: 0,
+      isSuccess: true,
     }
   },
 
@@ -403,7 +406,7 @@ export default {
      */
     async nextStep() {
       if (this.fileUpload) {
-        if (this.step < 3) {
+        if (this.step < 5) {
           this.step++
         }
         switch (this.step) {
@@ -424,9 +427,24 @@ export default {
             this.sumaryData = response.data.Count
             if (response.data.IsSuccess) {
               this.successCount = this.sumaryData
+            } else {
+              this.isSuccess = false
             }
             break
-          case 3:
+          case 4:
+            if (this.isSuccess) {
+              this.$emit('onCloseForm')
+              this.$emit('onShowLoading') // hiển thị loading
+
+              this.$emit('onLoadData')
+              ObjectFunction.toastMessage(
+                'Nhập khẩu thành công',
+                Resource.Messenger.Success,
+              )
+            } else {
+              this.$emit('onCloseForm')
+            }
+
             break
           default:
             break
