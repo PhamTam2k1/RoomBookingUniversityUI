@@ -68,6 +68,7 @@
                       backgroundColor: getBookingStatusColor(
                         timeSlot.dateTime,
                         room.RoomID,
+                        booking.BookingRoomID,
                       ),
                     }"
                   ></div>
@@ -143,6 +144,7 @@
                   backgroundColor: getBookingStatusColor(
                     booking.dateTime,
                     booking.RoomID,
+                    booking.BookingRoomID,
                   ),
                 }"
               ></div>
@@ -311,9 +313,12 @@ export default {
       let color = booking ? booking.color : null
       return color
     },
-    getBookingStatusColor(value, RoomID) {
+    getBookingStatusColor(value, RoomID, BookingRoomID) {
       const booking = this.bookingRooms.find(
-        (item) => item.dateTime === value && item.RoomID === RoomID,
+        (item) =>
+          item.dateTime === value &&
+          item.RoomID === RoomID &&
+          item.BookingRoomID === BookingRoomID,
       )
       let status = booking ? booking.StatusBooking : 0
       let corlor = ''

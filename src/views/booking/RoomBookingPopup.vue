@@ -616,6 +616,7 @@ export default {
                 }
                 me.$emit('onShowLoading') // hiển thị loading
               } else {
+                me.showLoading(false)
                 let data = res.data.Data
                 let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
                 message += data
