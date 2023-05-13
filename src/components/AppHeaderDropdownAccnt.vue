@@ -1,7 +1,16 @@
 <template>
   <CDropdown variant="nav-item">
     <CDropdownToggle placement="bottom-end" class="py-0" :caret="false">
-      <CAvatar :src="avatar" size="md" @click.prevent />
+      <div class="misa-full-name-avatar-table flex" @click.prevent>
+        <div
+          class="misa-cell-avatar-color"
+          :style="{
+            backgroundColor: user.AvartarColor,
+          }"
+        >
+          {{ ObjectFunction.splitFullName(user.FullName) }}
+        </div>
+      </div>
     </CDropdownToggle>
     <CDropdownMenu class="pt-0">
       <CDropdownHeader component="h6" class="bg-light fw-semibold py-2">
@@ -30,12 +39,15 @@
 <script>
 import avatar from '@/assets/images/avatars/8.jpg'
 import { mapState, mapActions } from 'vuex'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
   name: 'AppHeaderDropdownAccnt',
   setup() {
     return {
       avatar: avatar,
       itemsCount: 42,
+      user: JSON.parse(localStorage.getItem('user')),
+      ObjectFunction: ObjectFunction,
     }
   },
   computed: {
@@ -58,3 +70,31 @@ export default {
   },
 }
 </script>
+<style scoped>
+.misa-cell-avatar-color {
+  text-transform: uppercase;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  padding-top: 6px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: bolder;
+  margin-right: 8px;
+  text-align: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.misa-full-name-avatar-table.flex {
+  align-items: center;
+}
+
+.misa-cell-active-color {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: 5px;
+}
+</style>
