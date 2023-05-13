@@ -1,18 +1,14 @@
 <template>
   <div>
-    <h1>{{ title }}</h1>
-    <ul>
-      <li v-for="(item, index) in myData" :key="index">
-        {{ item.title }} - {{ item.message }}
-      </li>
-    </ul>
+    <transition name="fade">
+      <div class="message">{{ dataConvert }}</div>
+    </transition>
   </div>
 </template>
 
 <script>
 import { initializeApp } from 'firebase/app'
 import { getDatabase, ref, get, child } from 'firebase/database'
-
 const firebaseConfig = {
   apiKey: 'AIzaSyC79t9n29m5Ayy0gg0lvqAFPEleapma-hQ',
   authDomain: 'room-90f68.firebaseapp.com',
@@ -31,9 +27,10 @@ export default {
   data() {
     return {
       title: 'My Component',
-      myData: [],
+      dataConvert: [],
     }
   },
+  components: {},
   async created() {
     const notificationsRef = ref(db, 'notifications')
     const childRef = child(
@@ -46,13 +43,10 @@ export default {
       if (snapshot.exists()) {
         debugger
         var data = snapshot.val()
-        const dataConvert = []
         for (const key in data) {
           const notification = data[key]
-          dataConvert.push(notification)
+          this.dataConvert.push(notification)
         }
-
-        console.log(dataConvert)
       } else {
         console.log('Không tìm thấy đối tượng con ')
       }
@@ -60,3 +54,18 @@ export default {
   },
 }
 </script>
+<style>
+.message {
+  background-color: #4caf50; /* màu xanh lá */
+  color: white;
+  padding: 16px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
