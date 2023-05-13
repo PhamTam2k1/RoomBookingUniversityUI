@@ -3,7 +3,7 @@
     <BasePopup
       class="misa-dialog"
       :titlePopup="titlePopupBooking"
-      classPopup="popup-dictionary-room-detail"
+      classPopup="popup-room-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
     >
@@ -11,14 +11,14 @@
         <div class="flex">
           <el-tooltip content="Sửa" placement="bottom">
             <div
-              v-if="popupMode == Enum.PopupMode.EditMode || isDisable == true"
+              v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
               class="misa-icon misa-icon-pencil misa-icon-24"
               @click="onClickUpdate"
             ></div>
           </el-tooltip>
           <el-tooltip content="Xóa" placement="bottom">
             <div
-              v-if="popupMode == Enum.PopupMode.EditMode"
+              v-if="popupMode == Enum.PopupMode.EditMode || isDisable == true"
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
               @click="onClickDelete"
             ></div>
@@ -32,129 +32,187 @@
         </div>
       </template>
       <template #contentPopup>
-        <div class="t-row">
-          <base-input
-            :focus="true"
-            lable="Tiêu đề"
-            classInput="misa-input"
-            class="misa-input-secondary mgb-8"
-            :required="true"
-            :tabindex="1"
-            v-model="bookingRoomData.Subject"
-            @handleBlurInput="validate('Subject')"
-            @handleKeyupInput="removeError('Subject')"
-            :error="Error['Subject']"
-            :isDisable="isDisable || !isUserBooking"
-          ></base-input>
-        </div>
-        <div class="t-row">
-          <BaseDropdownbox
-            lable="Chọn địa điểm"
-            :required="true"
-            classDropdownbox="drop-down-utc "
-            :dataSource="dataRoom"
-            optionName="RoomName"
-            optionValue="RoomID"
-            v-model:value="bookingRoomData.RoomID"
-            :isSearch="true"
-            :height="34"
-            :tabindex="2"
-            placeholder="Chọn phòng"
-            @onValueChange="onValueChangeRoom"
-            @handleBlurInput="validate('RoomID')"
-            @handleKeyupInput="removeError('RoomID')"
-            :error="Error['RoomID']"
-            :isDisable="isDisable || !isUserBooking"
-          ></BaseDropdownbox>
-        </div>
-        <div v-if="this.bookingRoomData.RoomID" class="t-row t-row-infor">
-          <div class="t-infor-item flex mgb-10">
-            <div class="t-lable-infor">Sức chứa:</div>
-            <div class="t-content mgl-16">{{ this.roomChoose.Capacity }}</div>
-          </div>
+        <div class="t-content-popup flex">
+          <div class="t-left-content">
+            <div class="t-row">
+              <base-input
+                :focus="true"
+                lable="Tiêu đề"
+                classInput="misa-input"
+                class="misa-input-secondary mgb-8"
+                :required="true"
+                :tabindex="1"
+                v-model="bookingRoomData.Subject"
+                @handleBlurInput="validate('Subject')"
+                @handleKeyupInput="removeError('Subject')"
+                :error="Error['Subject']"
+                :isDisable="isDisable || !isUserBooking"
+              ></base-input>
+            </div>
+            <div class="t-row">
+              <BaseDropdownbox
+                lable="Chọn địa điểm"
+                :required="true"
+                classDropdownbox="drop-down-utc "
+                :dataSource="dataRoom"
+                optionName="RoomName"
+                optionValue="RoomID"
+                v-model:value="bookingRoomData.RoomID"
+                :isSearch="true"
+                :height="34"
+                :tabindex="2"
+                placeholder="Chọn phòng"
+                @onValueChange="onValueChangeRoom"
+                @handleBlurInput="validate('RoomID')"
+                @handleKeyupInput="removeError('RoomID')"
+                :error="Error['RoomID']"
+                :isDisable="isDisable || !isUserBooking"
+              ></BaseDropdownbox>
+            </div>
+            <div v-if="this.bookingRoomData.RoomID" class="t-row t-row-infor">
+              <div class="t-infor-item flex mgb-10">
+                <div class="t-lable-infor">Sức chứa:</div>
+                <div class="t-content mgl-16">
+                  {{ this.roomChoose.Capacity }}
+                </div>
+              </div>
 
-          <div class="t-infor-item flex">
-            <div class="t-lable-info">Thiết bị:</div>
-            <div class="t-content mgl-16">
-              {{ this.roomChoose.ListEquipmentName }}
+              <div class="t-infor-item flex">
+                <div class="t-lable-info">Thiết bị:</div>
+                <div class="t-content mgl-16">
+                  {{ this.roomChoose.ListEquipmentName }}
+                </div>
+              </div>
+            </div>
+            <div class="t-row flex">
+              <div class="t-lable-date">Ngày bắt đầu</div>
+              <BaseDate
+                width="165"
+                class="mt-16"
+                :labelMode="'hidden'"
+                :stylingMode="'outlined'"
+                @onValueChanged="onStartDateChanged"
+                lable=""
+                :tabindex="3"
+                :value="bookingRoomData.StartDate"
+              ></BaseDate>
+            </div>
+            <div class="t-row flex">
+              <div class="t-lable-date">Ngày kết thúc</div>
+              <BaseDate
+                width="165"
+                class="mt-16"
+                :labelMode="'hidden'"
+                :stylingMode="'outlined'"
+                @onValueChanged="onEndDateChanged"
+                lable=""
+                :tabindex="4"
+                :value="bookingRoomData.EndDate"
+              ></BaseDate>
+            </div>
+
+            <div class="t-row">
+              <BaseSelectTagBox
+                lable="Chọn ca học"
+                :dataSource="dataTime"
+                :height="34"
+                :tabindex="5"
+                classDropdownbox="drop-down-utc"
+                optionName="TimeSlotName"
+                optionValue="TimeSlotID"
+                placeholder="Chọn 1 hoặc nhiều ca học"
+                @onOptionChange="onValueChangeTimeSlot"
+                :value="lstTime"
+                @handleBlurInput="validate('TimeSlots')"
+                @handleKeyupInput="removeError('TimeSlots')"
+                :error="Error['TimeSlots']"
+                :isDisable="isDisable || !isUserBooking"
+              >
+              </BaseSelectTagBox>
+            </div>
+
+            <div class="t-row flex" style="height: 120px">
+              <div class="t-lable-texarea">Lý do đặt</div>
+              <div class="content-reson">
+                <textarea
+                  id="reson"
+                  :disabled="isDisable || !isUserBooking"
+                  v-model="bookingRoomData.Description"
+                  rows="4"
+                  tabindex="6"
+                  placeholder="Lý do"
+                >
+                </textarea>
+              </div>
+            </div>
+            <div class="t-row">
+              <base-input
+                lable="Số người tham gia"
+                classInput="misa-input"
+                class="misa-input-secondary mgb-8"
+                :required="true"
+                :tabindex="7"
+                v-model="bookingRoomData.Quantity"
+                @handleBlurInput="validate('Quantity')"
+                @handleKeyupInput="removeError('Quantity')"
+                :error="Error['Quantity']"
+                type="Number"
+                :isDisable="isDisable || !isUserBooking"
+              ></base-input>
             </div>
           </div>
-        </div>
-        <div class="t-row flex">
-          <div class="t-lable-date">Ngày bắt đầu</div>
-          <BaseDate
-            width="165"
-            class="mt-16"
-            :labelMode="'hidden'"
-            :stylingMode="'outlined'"
-            @onValueChanged="onStartDateChanged"
-            lable=""
-            :tabindex="3"
-            :value="bookingRoomData.StartDate"
-          ></BaseDate>
-        </div>
-        <div class="t-row flex">
-          <div class="t-lable-date">Ngày kết thúc</div>
-          <BaseDate
-            width="165"
-            class="mt-16"
-            :labelMode="'hidden'"
-            :stylingMode="'outlined'"
-            @onValueChanged="onEndDateChanged"
-            lable=""
-            :tabindex="4"
-            :value="bookingRoomData.EndDate"
-          ></BaseDate>
-        </div>
-
-        <div class="t-row">
-          <BaseSelectTagBox
-            lable="Chọn ca học"
-            :dataSource="dataTime"
-            :height="34"
-            :tabindex="5"
-            classDropdownbox="drop-down-utc"
-            optionName="TimeSlotName"
-            optionValue="TimeSlotID"
-            placeholder="Chọn 1 hoặc nhiều ca học"
-            @onOptionChange="onValueChangeTimeSlot"
-            :value="lstTime"
-            @handleBlurInput="validate('TimeSlots')"
-            @handleKeyupInput="removeError('TimeSlots')"
-            :error="Error['TimeSlots']"
-            :isDisable="isDisable || !isUserBooking"
-          >
-          </BaseSelectTagBox>
-        </div>
-
-        <div class="t-row flex" style="height: 120px">
-          <div class="t-lable-texarea">Lý do đặt</div>
-          <div class="content-reson">
-            <textarea
-              id="reson"
-              :disabled="isDisable || !isUserBooking"
-              v-model="bookingRoomData.Description"
-              rows="4"
-              tabindex="6"
-              placeholder="Lý do"
-            >
-            </textarea>
+          <div class="t-right-content mgl-16">
+            <div class="t-contact mgb-8 flex">
+              <div class="icon-sibar t-infomation-room misa-icon-24"></div>
+              <div class="t-lable-contact">Thông tin liên quan</div>
+            </div>
+            <div class="t-admin">
+              <div class="t-title-tooltip font-italic mgb-8">
+                Người phê duyệt
+              </div>
+              <div class="misa-full-name-avatar-table flex">
+                <div
+                  class="misa-cell-avatar-color"
+                  :style="{
+                    backgroundColor: roomChoose.AvartarAdmin,
+                  }"
+                >
+                  {{ ObjectFunction.splitFullName(roomChoose.AdminName) }}
+                </div>
+                <div class="t-content">
+                  <div class="misa-cell-FullName font-weight">
+                    {{ roomChoose.AdminName }}
+                  </div>
+                  <div class="">
+                    {{ roomChoose.AdminEmail }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="t-admin">
+              <div class="t-title-tooltip font-italic mgb-8">
+                Phụ trách phòng
+              </div>
+              <div class="misa-full-name-avatar-table flex">
+                <div
+                  class="misa-cell-avatar-color"
+                  :style="{
+                    backgroundColor: roomChoose.AvartarSupporter,
+                  }"
+                >
+                  {{ ObjectFunction.splitFullName(roomChoose.SupporterName) }}
+                </div>
+                <div class="t-content">
+                  <div class="misa-cell-FullName font-weight">
+                    {{ roomChoose.SupporterName }}
+                  </div>
+                  <div class="">
+                    {{ roomChoose.SupporterEmail }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="t-row">
-          <base-input
-            lable="Số người tham gia"
-            classInput="misa-input"
-            class="misa-input-secondary mgb-8"
-            :required="true"
-            :tabindex="7"
-            v-model="bookingRoomData.Quantity"
-            @handleBlurInput="validate('Quantity')"
-            @handleKeyupInput="removeError('Quantity')"
-            :error="Error['Quantity']"
-            type="Number"
-            :isDisable="isDisable || !isUserBooking"
-          ></base-input>
         </div>
       </template>
       <template #buttonPopup>
@@ -265,10 +323,6 @@ export default {
     dateBooking: {
       type: Date,
     },
-    isAdmin: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   data() {
@@ -278,7 +332,6 @@ export default {
       Capacity: 0,
       showIcon: false,
       message: '',
-      Enum: Enum,
       roomChoose: {},
       /**Mảng chứa lỗi */
       validateErrorList: [],
@@ -286,6 +339,7 @@ export default {
       popupNoticeMode: -1,
       titlePopup: '',
       Error: {},
+      ObjectFunction: ObjectFunction,
       bookingRoomData: {
         BookingRoomID: uuidv4(),
         UserID: JSON.parse(localStorage.getItem('user')).UserID,
@@ -304,6 +358,7 @@ export default {
       lableButtonBooking: '',
       titlePopupBooking: '',
       popupModeRefuse: -1,
+      isAdmin: false,
     }
   },
 
@@ -466,25 +521,34 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
-      if (this.popupMode == Enum.PopupMode.AddMode) {
+      debugger
+      let me = this
+      if (me.popupMode == Enum.PopupMode.AddMode) {
         try {
-          this.bookingRoomData.StartDate = moment(
+          me.bookingRoomData.StartDate = moment(
             this.bookingRoomData.StartDate,
           ).format('YYYY/MM/DD')
-          this.bookingRoomData.EndDate = moment(
-            this.bookingRoomData.EndDate,
+          me.bookingRoomData.EndDate = moment(
+            me.bookingRoomData.EndDate,
           ).format('YYYY/MM/DD')
-          BookingRoomApi.insert(this.bookingRoomData).then((res) => {
+          BookingRoomApi.insert(me.bookingRoomData).then((res) => {
             if (res) {
               if (res.data.IsSucess) {
-                this.$emit('onCloseForm')
-                this.$emit('onShowLoading') // hiển thị loading
+                me.$emit('onCloseForm')
 
-                this.$emit('onLoadData')
-                ObjectFunction.toastMessage(
-                  'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
-                  Resource.Messenger.Success,
-                )
+                me.$emit('onLoadData')
+                if (me.isAdmin) {
+                  ObjectFunction.toastMessage(
+                    'Đặt phòng thành công.',
+                    Resource.Messenger.Success,
+                  )
+                } else {
+                  ObjectFunction.toastMessage(
+                    'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
+                    Resource.Messenger.Success,
+                  )
+                }
+                me.$emit('onShowLoading') // hiển thị loading
               } else {
                 let data = res.data.Data
                 let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
@@ -544,10 +608,11 @@ export default {
      * PTTAM 3/05/2023
      */
     async getBookingRoomByID() {
+      let me = this
       await BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
           let data = res.data
-          this.bookingRoomData = {
+          me.bookingRoomData = {
             BookingRoomID: data.BookingRoomID,
             UserID: data.UserID,
             RoomID: data.RoomID,
@@ -559,16 +624,17 @@ export default {
             EndDate: data.EndDate,
             Quantity: data.Quantity,
           }
-          this.lstTime = this.bookingRoomData.TimeSlots.split(',').map((id) =>
+          me.lstTime = me.bookingRoomData.TimeSlots.split(',').map((id) =>
             id.trim(),
           )
           // console.log(this.lstTime)
           // this.lstTime1 = this.lstTime
-          this.isDisable =
-            this.bookingRoomData.StatusBooking == 1 ? false : true
-
-          this.isUserBooking =
-            this.bookingRoomData.UserID ==
+          me.isDisable = me.bookingRoomData.StatusBooking == 1 ? false : true
+          me.roomChoose = me.dataRoom.find((x) => x.RoomID == data.RoomID)
+          me.bookingRoomData.AdminID = me.roomChoose.AdminID
+          me.bookingRoomData.AdminEmail = me.roomChoose.AdminEmail
+          me.isUserBooking =
+            me.bookingRoomData.UserID ==
             JSON.parse(localStorage.getItem('user')).UserID
               ? true
               : false
@@ -665,10 +731,18 @@ export default {
   },
 
   mounted() {
+    debugger
+    this.isAdmin =
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+        ? true
+        : false
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.bookingRoomData.RoomID = this.roomID
       this.titlePopupBooking = 'Đặt phòng'
       this.lableButtonBooking = 'Đặt phòng'
+      this.roomChoose = this.dataRoom.find((x) => x.RoomID == this.roomID)
+      this.bookingRoomData.AdminID = this.roomChoose.AdminID
+      this.bookingRoomData.AdminEmail = this.roomChoose.AdminEmail
     } else if (
       this.popupMode == Enum.PopupMode.EditMode ||
       this.popupMode == Enum.PopupMode.PendingMode
@@ -685,6 +759,10 @@ export default {
       dataTime: (state) => state.dictionary.dataTime,
       dataRoom: (state) => state.dictionary.dataRoom,
     }),
+    // Đăng ký đối tượng Enum trong phạm vi của component
+    Enum() {
+      return Enum
+    },
   },
 }
 </script>
@@ -729,5 +807,58 @@ export default {
 #reson:focus {
   outline: none;
   border-color: #ccc;
+}
+.t-left-content {
+  width: 65%;
+}
+.misa-cell-avatar-color {
+  text-transform: uppercase;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  padding-top: 6px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: bolder;
+  margin-right: 8px;
+  text-align: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.misa-full-name-avatar-table.flex {
+  align-items: center;
+}
+
+.misa-cell-active-color {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: 5px;
+}
+.t-right-content {
+  border-left: 1px solid rgba(221, 221, 221, 0.6);
+  padding: 0px 20px 20px 20px;
+  margin: 10px 0px 10px 0px;
+}
+.t-left-content {
+  margin-right: 20px;
+}
+.t-lable-contact {
+  font-weight: 600;
+}
+.icon-sibar.misa-icon-24.t-infomation-room {
+  margin-top: 4px;
+}
+.font-weight {
+  font-weight: 600;
+}
+.font-italic {
+  font-style: italic;
+}
+.t-admin {
+  padding-left: 28px;
+  margin-bottom: 20px;
 }
 </style>

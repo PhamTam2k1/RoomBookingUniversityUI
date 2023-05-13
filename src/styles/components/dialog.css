@@ -110,7 +110,7 @@
   letter-spacing: 0.576px;
   color: rgb(33, 33, 33);
 }
-
+.popup-room-detail  .misa-dialog-footer .misa-button,
 .misa-popup-delete .misa-dialog-footer .misa-button,
 .misa-dialog-popup .misa-dialog-footer .misa-button,
 .popup-dictionary-detail .misa-dialog-footer .misa-button,
@@ -207,6 +207,14 @@
   height: 80vh;
   margin-top: 20px;
 }
+.misa-dialog .popup-room-detail .misa-dialog-body{
+  width: 70vw;
+  min-height: 65vh;
+  max-height: 65vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  margin-bottom: 20px;
+}
 .misa-dialog .popup-dictionary-room-detail .misa-dialog-body {
   width: 50vw;
   min-height: 65vh;
@@ -226,6 +234,9 @@
 .popup-dictionary-detail .misa-dialog-header,
 .popup-dictionary-user-detail .misa-dialog-header {
   padding: 24px 24px 20px 24px !important;
+}
+.popup-room-detail .misa-dialog-header {
+  padding: 14px 24px !important;
 }
 .popup-dictionary-room-detail .misa-dialog-header {
   padding: 14px 24px !important;

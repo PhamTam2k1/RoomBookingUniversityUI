@@ -65,4 +65,30 @@ export default {
 .font-weight {
   font-weight: 700;
 }
+.misa-cell-avatar-color {
+  text-transform: uppercase;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  padding-top: 6px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: bolder;
+  margin-right: 8px;
+  text-align: center;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.misa-full-name-avatar-table.flex {
+  align-items: center;
+}
+
+.misa-cell-active-color {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-top: 5px;
+}
 </style>

@@ -12,11 +12,12 @@
     "
   >
     <CSidebarBrand>
-      <CIcon
-        custom-class-name="sidebar-brand-full"
-        :icon="logoNegative"
-        :height="35"
+      <img
+        class="img-logo"
+        src="../assets/logoUniversity.png"
+        alt="mô tả ảnh"
       />
+      Đặt lịch phòng học
       <CIcon
         custom-class-name="sidebar-brand-narrow"
         :icon="sygnet"
@@ -31,7 +32,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { AppSidebarNav } from './AppSidebarNav'
-import { logoNegative } from '@/assets/brand/logo-negative'
+import { logoNegative } from '../assets/logoUniversity.png'
 import { sygnet } from '@/assets/brand/sygnet'
 export default {
   name: 'AppSidebar',
@@ -49,3 +50,10 @@ export default {
   },
 }
 </script>
+<style scoped>
+.img-logo {
+  height: 40px;
+  left: 20px;
+  position: absolute;
+}
+</style>

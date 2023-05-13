@@ -54,9 +54,16 @@
   min-width: 8px;
   min-height: 8px;
 }
+.t-people-contact{
+  background-position: 200px 200px;
+}
 .t-infomation {
   background-position: -1232px -312px;
   transform: scale(2);
+}
+.t-infomation-room {
+  background-position: -1232px -312px;
+  transform: scale(1);
 }
 .t-icon-import-excel {
   background-position: -1265px -90px;
