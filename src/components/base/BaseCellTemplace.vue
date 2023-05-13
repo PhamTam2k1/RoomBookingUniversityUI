@@ -74,6 +74,13 @@
         </div>
       </div>
     </div>
+    <div v-if="dataField == 'detail'">
+      <div class="display-none">
+        <div class="flex detail">
+          <div @click="onClickShowPopupEdit(data.data[id])">Chi tiết</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -144,7 +151,7 @@ export default {
       this.$emit('onClickShowPopupReject', id)
     },
   },
-  created() {
+  mounted() {
     this.dataField = this.data.column.dataField
   },
 }
@@ -171,5 +178,13 @@ tr.dx-row.dx-data-row.dx-column-lines:hover .display-none {
 
 .refuse {
   color: red !important;
+}
+.detail {
+  color: rgb(10, 143, 143);
+  font-style: italic;
+}
+.detail:hover {
+  color: rgb(5, 80, 80);
+  text-decoration: underline;
 }
 </style>

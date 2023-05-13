@@ -166,7 +166,7 @@ export default {
       this.$emit('onClickClosePopup')
     },
   },
-  async created() {
+  async mounted() {
     await this.loadDataEquipments()
   },
 }

@@ -639,13 +639,12 @@ export default {
     },
   },
 
-  async created() {
+  async created() {},
+  async mounted() {
     this.showLoading(true)
     this.loadDataBooking()
     await this.loadDataBuildings()
     await this.loadDataRooms()
-  },
-  mounted() {
     this.loadDataBooking()
     this.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin

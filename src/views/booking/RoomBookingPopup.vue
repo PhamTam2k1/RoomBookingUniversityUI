@@ -212,6 +212,32 @@
                 </div>
               </div>
             </div>
+            <div
+              v-if="
+                popupMode == Enum.PopupMode.HistoryMode &&
+                bookingRoomData.RefusalReason != ''
+              "
+            >
+              <div class="t">
+                <div class="flex">
+                  <div class="icon-sibar t-information-red misa-icon-24"></div>
+                  <div class="t-lable mgb-8 font-weight">Lý do từ chối</div>
+                </div>
+
+                <div class="content t-admin">
+                  {{ bookingRoomData.RefusalReason }}
+                  <!-- <textarea
+                    id="reson"
+                    :disabled="isDisable || !isUserBooking"
+                    v-model="bookingRoomData.RefusalReason"
+                    rows="4"
+                    tabindex="6"
+                    style="width: 100%"
+                  > -->
+                  <!-- </textarea> -->
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </template>
@@ -366,9 +392,9 @@ export default {
     // Gọi hàm load data từ store
     // PTTAM
     ...mapActions({
+      loadDataRooms: 'dictionary/loadDataRooms',
       loadDataBuildings: 'dictionary/loadDataBuildings',
       loadDataTimes: 'dictionary/loadDataTimes',
-      loadDataRooms: 'dictionary/loadDataRooms',
     }),
     /**
      * Sự kiện thay đổi phòng
@@ -623,6 +649,7 @@ export default {
             StartDate: data.StartDate,
             EndDate: data.EndDate,
             Quantity: data.Quantity,
+            RefusalReason: data.RefusalReason,
           }
           me.lstTime = me.bookingRoomData.TimeSlots.split(',').map((id) =>
             id.trim(),
@@ -720,7 +747,7 @@ export default {
       }
     },
   },
-  async created() {
+  async mounted() {
     try {
       await this.loadDataBuildings()
       await this.loadDataTimes()
@@ -728,10 +755,6 @@ export default {
     } catch (error) {
       console.error(error)
     }
-  },
-
-  mounted() {
-    debugger
     this.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true
@@ -745,7 +768,8 @@ export default {
       this.bookingRoomData.AdminEmail = this.roomChoose.AdminEmail
     } else if (
       this.popupMode == Enum.PopupMode.EditMode ||
-      this.popupMode == Enum.PopupMode.PendingMode
+      this.popupMode == Enum.PopupMode.PendingMode ||
+      this.popupMode == Enum.PopupMode.HistoryMode
     ) {
       this.getBookingRoomByID()
       this.titlePopupBooking = 'Chi tiết đặt phòng'
@@ -755,9 +779,9 @@ export default {
   computed: {
     // Gán data
     ...mapState({
+      dataRoom: (state) => state.dictionary.dataRoom,
       dataBuilding: (state) => state.dictionary.dataBuilding,
       dataTime: (state) => state.dictionary.dataTime,
-      dataRoom: (state) => state.dictionary.dataRoom,
     }),
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
@@ -839,7 +863,7 @@ export default {
 }
 .t-right-content {
   border-left: 1px solid rgba(221, 221, 221, 0.6);
-  padding: 0px 20px 20px 20px;
+  padding: 0px 0px 20px 20px;
   margin: 10px 0px 10px 0px;
 }
 .t-left-content {
@@ -848,7 +872,8 @@ export default {
 .t-lable-contact {
   font-weight: 600;
 }
-.icon-sibar.misa-icon-24.t-infomation-room {
+.icon-sibar.misa-icon-24.t-infomation-room,
+.icon-sibar.misa-icon-24.t-information-red {
   margin-top: 4px;
 }
 .font-weight {

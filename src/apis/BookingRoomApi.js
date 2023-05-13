@@ -45,6 +45,20 @@ class BookingRoomAPI {
     )
   }
   /**
+   * Mô tả : gọi Api paging history
+   * @param {Object} param
+   * - pageIndex - trang hiện tại
+   * - pageSize - sô bản ghi / trang
+   * - keyword - từ khóa tìm kiếm
+   * @Createdby: PTTAM
+   */
+  async getPagingHistory(param) {
+    return await BaseAPIConfig.post(
+      `${this.controller}/pagingHistoryBooking`,
+      param,
+    )
+  }
+  /**
    * Mô tả: Thực hiện insert
    * @param: đối tượng
    */
@@ -72,6 +86,16 @@ class BookingRoomAPI {
    */
   getByID(id) {
     return BaseAPIConfig.get(`${this.controller}/getById/${id}`)
+  }
+  /**
+   * Lấy đối tượng theo khóa chính
+   * @param {*} id
+   * @returns
+   */
+  cancelBookingRequest(id) {
+    return BaseAPIConfig.get(
+      `${this.controller}/cancelBookingRequestNomal/${id}`,
+    )
   }
   /**
    * Update lịch đặt
