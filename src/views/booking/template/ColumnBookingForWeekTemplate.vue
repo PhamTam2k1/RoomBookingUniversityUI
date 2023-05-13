@@ -47,7 +47,11 @@
               >
                 <div
                   @click="
-                    onClickCell(booking.dateTime, booking.RoomID),
+                    onClickCell(
+                      booking.dateTime,
+                      booking.RoomID,
+                      booking.BookingRoomID,
+                    ),
                       (isShowForm = true)
                   "
                   v-for="(booking, index) in getSubject(
@@ -67,22 +71,25 @@
                       ),
                     }"
                   ></div>
-                  <p
-                    v-if="index <= 2"
-                    class="titleSubject"
-                    v-hover
-                    @mousemove="handleMouseMove($event, booking)"
-                  >
-                    {{ booking.TimeSlotName }} - {{ booking.Subject }}
+
+                  <p v-if="index <= 2" class="titleSubject">
+                    <el-tooltip placement="top" effect="light">
+                      <template v-slot:content>
+                        <AppointmentTooltipTemplate
+                          :templateTooltipModel="booking"
+                          :dataRoom="dataRoom"
+                        />
+                      </template>
+                      {{ booking.TimeSlotName }} - {{ booking.Subject }}
+                    </el-tooltip>
                   </p>
                   <p
                     v-if="index > 2"
                     class="Seedetail"
                     @click.stop="showPopUp(timeSlot.dateTime, room.RoomID)"
                   >
-                    Xem thêm({{
-                      getSubject(timeSlot.dateTime, room.RoomID).length - 3
-                    }})
+                    Xem thêm +
+                    {{ getSubject(timeSlot.dateTime, room.RoomID).length - 3 }}
                   </p>
                 </div>
               </div>
@@ -91,19 +98,17 @@
         </tr>
       </tbody>
     </table>
-    <div
-      class="tooltipTable"
-      :style="{ left: left + 'px', top: top + 'px' }"
-      v-if="isShowTooltip"
-      @click="isShowForm = true"
-    >
-      <AppointmentTooltipTemplate
-        :scheduler="scheduler"
-        :templateTooltipModel="bookingHover"
-        :classArrow="classArrow"
-      ></AppointmentTooltipTemplate>
-    </div>
-    <RoomBookingPopup v-if="isShowForm" @onCloseForm="isShowForm = false" />
+
+    <RoomBookingPopup
+      v-if="isShowForm"
+      @onCloseForm="isShowForm = false"
+      @onShowLoading="showLoading"
+      :roomID="roomID"
+      :bookingID="bookingID"
+      :dateBooking="dateBooking"
+      :popupMode="popupMode"
+      @onLoadData="onLoadDataBooking"
+    />
     <BasePopup
       v-if="popupNoticeMode"
       class="misa-dialog"
@@ -141,18 +146,22 @@
                   ),
                 }"
               ></div>
-              <p
-                class="titleSubject"
-                v-hover
-                @mousemove="handleMouseMove($event, booking, true)"
-              >
-                {{ booking.Subject }}
+              <p class="titleSubject">
+                <el-tooltip placement="top" effect="light">
+                  <template v-slot:content>
+                    <AppointmentTooltipTemplate
+                      :templateTooltipModel="booking"
+                      :dataRoom="dataRoom"
+                    />
+                  </template>
+                  {{ booking.TimeSlotName }} - {{ booking.Subject }}
+                </el-tooltip>
               </p>
             </div>
           </div>
         </div>
       </template>
-      <template #buttonPopup>
+      <!-- <template #buttonPopup>
         <BaseButton
           :tabindex="3"
           lableButton="Lưu"
@@ -164,7 +173,7 @@
           classButton="w-0"
           :tabindex="4"
         ></BaseButton>
-      </template>
+      </template> -->
     </BasePopup>
   </div>
 </template>
@@ -224,11 +233,24 @@ export default {
       bookingRooms: [],
       rooms: [],
       timeSlots: [],
+      roomID: '',
+      bookingID: '',
+      popupMode: 0,
+      dateBooking: new Date(),
     }
   },
   methods: {
     showToolTip() {
       this.isShowTooltip = false
+    },
+    /**
+     * Gửi sự kiện loading
+     */
+    showLoading() {
+      this.$emit('onShowLoading')
+    },
+    onLoadDataBooking() {
+      this.$emit('onLoadData')
     },
     getSubject(dateTime, RoomID) {
       const booking = this.bookingRooms.filter(
@@ -323,10 +345,17 @@ export default {
       // )
       // this.rooms = uniqueRooms
     },
-    onClickCell(TimeSlotID, RoomID) {
+    onClickCell(TimeSlotID, RoomID, BookingRoomID) {
       this.isShowTooltip = false
       this.popupNoticeMode = false
-      console.log('Clicked on timeSlot:', TimeSlotID, 'in room:', RoomID)
+      this.dateBooking = moment(TimeSlotID, 'DD/MM/YYYY').toDate()
+      if (BookingRoomID) {
+        this.bookingID = BookingRoomID
+        this.popupMode = Enum.PopupMode.EditMode
+      } else {
+        this.roomID = RoomID
+        this.popupMode = Enum.PopupMode.AddMode
+      }
     },
     handleDataSource() {
       for (let i = 0; i < this.dataSource?.length; i++) {
@@ -476,7 +505,11 @@ export default {
       }
     },
   },
-
+  updated() {
+    this.dataSource = this.data
+    this.rooms = this.dataRoom
+    this.loadDataBooking()
+  },
   mounted() {
     this.dataSource = this.data
     this.rooms = this.dataRoom
@@ -659,26 +692,30 @@ export default {
 }
 
 .misa-active-status-table {
-  height: 114px;
   width: 100%;
   align-items: center;
-  justify-content: center;
   display: grid;
+  font-size: 14px;
   padding: 10px;
 }
 
 .misa-cell-active-group {
   display: flex;
   color: black;
+  height: 25px;
 }
 
 .Seedetail {
   position: absolute;
   right: 10px;
-  bottom: -15px;
-  font-size: 10px;
+  bottom: 3px;
+  font-size: 12.5px;
+  color: #3d75de;
 }
-
+.Seedetail:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 .isActive {
   color: #3d75de;
 }
@@ -691,9 +728,14 @@ thead {
 .rowColor {
   background-color: #fff;
 }
-
+.rowColor:hover {
+  background-color: rgba(221, 221, 221, 0.6);
+}
 .rowColor.isActive {
   background-color: #fffcf2 !important;
+}
+.rowColor.isActive:hover {
+  background-color: rgba(206, 238, 249, 0.6) !important;
 }
 
 .rowColor.isDisable {
@@ -709,8 +751,11 @@ thead {
   overflow: auto;
 }
 
-.schedule-cell .misa-active-status-table:hover {
-  background-color: #6691e2;
+/* .schedule-cell .misa-active-status-table:hover {
+  background-color: rgba(221, 221, 221, 0.6);
+} */
+.misa-cell-active-group:hover {
+  color: black;
 }
 .tooltipTable {
   position: absolute;
@@ -723,7 +768,7 @@ thead {
   padding: 20px;
 }
 .titleSubject {
-  width: 100%;
+  height: 100%;
   white-space: nowrap;
   height: 10px;
 }

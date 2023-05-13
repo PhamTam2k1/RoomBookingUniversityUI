@@ -5,7 +5,7 @@
         :title="data.value"
         v-if="
           dataField != 'FullName' &&
-          (dataField != 'RoomStatus') & (dataField != '')
+          (dataField != 'StatusBooking') & (dataField != '')
         "
         class="wrap-text"
       >
@@ -22,36 +22,36 @@
           <div class="misa-cell-FullName">{{ data.value }}</div>
         </div>
       </div>
-      <div v-if="dataField == 'RoomStatus'">
+      <div v-if="dataField == 'StatusBooking'">
         <div class="misa-active-status-table flex">
           <div
             class="misa-cell-active-color"
-            :style="{ backgroundColor: data.data.RoomStatusColor }"
+            :style="{ backgroundColor: data.data.BookingStatusColor }"
           ></div>
 
           <div
             class="misa-cell-active-text"
-            :style="{ color: data.data.RoomStatusColor }"
+            :style="{ color: data.data.BookingStatusColor }"
           >
-            {{ data.data.RoomStatusName }}
+            {{ data.data.BookingStatusName }}
           </div>
         </div>
       </div>
-      <div v-if="dataField == 'Approve' && isAdmin">
-        <div class="display-none">
-          <div class="flex">
-            <div class="misa-icon-style" title="Phê duyệt">
-              <div
-                @click="onClickShowPopupApprove(data.data[id])"
-                class="icon-sibar icon-approve misa-icon-24"
-              ></div>
-            </div>
-            <div class="misa-icon-style" title="Từ chối">
-              <div
-                @click="onClickShowPopupReject(data.data[id])"
-                class="icon-sibar icon-reject misa-icon-24"
-              ></div>
-            </div>
+    </div>
+    <div v-if="dataField == 'Approve' && isAdmin">
+      <div class="display-none">
+        <div class="flex">
+          <div class="misa-icon-style" title="Phê duyệt">
+            <div
+              @click="onClickShowPopupApprove(data.data[id])"
+              class="icon-sibar icon-approve misa-icon-24"
+            ></div>
+          </div>
+          <div class="misa-icon-style" title="Từ chối">
+            <div
+              @click="onClickShowPopupReject(data.data[id])"
+              class="icon-sibar icon-reject misa-icon-24"
+            ></div>
           </div>
         </div>
       </div>

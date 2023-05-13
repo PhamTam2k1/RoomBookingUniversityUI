@@ -316,7 +316,10 @@ export default {
   mounted() {
     this.showLoading(true)
     this.getData()
-    this.isAdmin = this.roleOption == Enum.RoleOption.Admin ? true : false
+    this.isAdmin =
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+        ? true
+        : false
   },
 }
 </script>
@@ -324,7 +327,6 @@ export default {
 <style lang="scss" scoped>
 #body-room-dictionary {
   flex: 1;
-  padding: 20px 0px;
   background-color: #efefef;
   height: calc(100% - 75px);
 }

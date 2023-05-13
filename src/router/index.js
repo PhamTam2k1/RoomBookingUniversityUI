@@ -41,7 +41,8 @@ const routes = [
       {
         path: '/booking/booking-history',
         name: 'Lịch sử đặt phòng',
-        component: () => import('@/views/RoomBrowsing/RoomBrowsing.vue'),
+        component: () =>
+          import('@/views/booking-room-history/BookingRoomHistory.vue'),
         meta: { requiresAuth: true },
       },
       {

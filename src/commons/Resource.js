@@ -125,6 +125,17 @@ const Resource = Object.freeze({
       Value: 100,
     },
   ],
+  /**Mảng chứa số bản ghi/trang */
+  SchedulerConnection: [
+    {
+      Text: 'Tất cả lịch đặt',
+      Value: Enum.SchedulerConnection.ALL,
+    },
+    {
+      Text: 'Lịch đặt của tôi',
+      Value: Enum.SchedulerConnection.Me,
+    },
+  ],
   /**Mảng chứa Header của table */
   HeaderTableAdding: [
     {
@@ -159,20 +170,20 @@ const Resource = Object.freeze({
   ],
 
   /**Mảng chứa trạng thái của người dùng */
-  BookingStatus: [
-    {
-      StatusName: 'Tất cả',
-      StatusValue: Enum.BookingStatus.ALL,
-    },
-    {
-      StatusName: 'Còn trống',
-      StatusValue: Enum.BookingStatus.IsEmpty,
-    },
-    {
-      StatusName: 'Đang sử dụng',
-      StatusValue: Enum.BookingStatus.IsUsed,
-    },
-  ],
+  // BookingStatus: [
+  //   {
+  //     StatusName: 'Tất cả',
+  //     StatusValue: Enum.BookingStatus.ALL,
+  //   },
+  //   {
+  //     StatusName: 'Còn trống',
+  //     StatusValue: Enum.BookingStatus.IsEmpty,
+  //   },
+  //   {
+  //     StatusName: 'Đang sử dụng',
+  //     StatusValue: Enum.BookingStatus.IsUsed,
+  //   },
+  // ],
 
   /**Mảng chứa trạng thái của người dùng */
   BookingStatusColor: {
@@ -184,6 +195,17 @@ const Resource = Object.freeze({
     Reject: '#000',
     //Hủy
     Cancel: '',
+  },
+  /**Mảng chứa trạng thái của người dùng */
+  BookingStatus: {
+    // Chờ duyệt
+    Await: 'Chờ duyệt',
+    // Đồng ý
+    Approve: 'Đồng ý',
+    // Từ chối
+    Reject: 'Từ chối',
+    //Hủy
+    Cancel: 'Hủy yêu cầu',
   },
   PassWordDefault: '12345678@Utc',
 })

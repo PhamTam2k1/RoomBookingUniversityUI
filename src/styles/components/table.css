@@ -321,9 +321,8 @@ tr.dx-row.dx-column-lines.dx-header-row {
 .dx-gridbase-container > .dx-datagrid-rowsview.dx-scrollable {
   z-index: 1;
 }
-#table-room {
-  height: 100%;
-}
+#table-room,
+#table-equipment,
 #table-user {
   height: 100%;
 }

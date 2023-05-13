@@ -31,10 +31,9 @@
           <base-input
             lable="Tên phòng"
             classInput="misa-input"
-            :focus="focus"
             class="misa-input-secondary mgb-8"
             :required="true"
-            :maxlength="20"
+            :maxlength="255"
             :tabindex="1"
           ></base-input>
         </div>
@@ -42,10 +41,9 @@
           <base-input
             lable="Sức chứa"
             classInput="misa-input"
-            :focus="focus"
             class="misa-input-secondary mgb-8"
             :required="true"
-            :maxlength="20"
+            type="Number"
             :tabindex="1"
           ></base-input>
         </div>
@@ -125,17 +123,9 @@
       </template>
     </BasePopup>
   </div>
-
-  <DxToast
-    v-model:visible="toastVisible"
-    v-model:message="message"
-    v-model:type="type"
-  />
 </template>
-
 <script>
 import BuildingApi from '@/apis/BuildingApi'
-import { DxToast } from 'devextreme-vue/toast'
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
@@ -143,7 +133,6 @@ import BasePopup from '@/components/base/BasePopup.vue'
 export default {
   name: ' ',
   components: {
-    DxToast,
     BaseDropdownbox,
     BaseInput,
     BaseButton,
@@ -195,7 +184,6 @@ export default {
       RoomName: '',
       Capacity: 0,
       showIcon: false,
-      toastVisible: false,
       message: '',
       equipment: [
         { EquipmentID: 1, EquipmentName: 'điều hòa' },
@@ -240,11 +228,9 @@ export default {
         try {
           BuildingApi.updated(this.roomData.BuildingID, data).then((res) => {
             if (res && res.IsSuccess) {
-              this.toastVisible = true
               this.message = 'Cập nhật thành công'
               this.$emit('closePopup', false)
             } else {
-              this.toastVisible = true
               this.message = 'Cập nhật thất bại'
             }
           })
@@ -255,11 +241,9 @@ export default {
         try {
           BuildingApi.insert(data).then((res) => {
             if (res && res.IsSuccess) {
-              this.toastVisible = true
               this.message = 'Lưu thành công'
               this.$emit('closePopup', false)
             } else {
-              this.toastVisible = true
               this.message = 'Lưu thất bại'
             }
           })

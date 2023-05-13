@@ -16,16 +16,23 @@ const Enum = Object.freeze({
 
   /**Trạng thái của vai trò khi sửa */
   BookingStatus: {
+    // Chờ duyệt
+    Pending: 1,
+    // Đồng ý
+    Approve: 2,
+    // Từ chối
+    Reject: 3,
+    //Hủy
+    Cancel: 4,
+  },
+  /**Trạng thái lọc lịch họp */
+  SchedulerConnection: {
     /**tất cả */
-    ALL: 3,
+    ALL: 1,
 
     /**Còn trống */
-    IsEmpty: 1,
-
-    /**Đang sử dụng */
-    IsUsed: 2,
+    Me: 2,
   },
-
   /**Vai trò người dùng */
   RoleOption: {
     /**Người dùng */
@@ -63,6 +70,10 @@ const Enum = Object.freeze({
     ApproveMode: 4,
     /**Trạng thái từ chôi */
     RefuseMode: 5,
+    /**
+     * Chờ phê duyệt
+     */
+    PendingMode: 6,
   },
 })
 export default Enum

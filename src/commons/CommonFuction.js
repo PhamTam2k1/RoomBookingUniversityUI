@@ -55,7 +55,7 @@ const CommonFunction = Object.freeze({
     ElMessage({
       message: message,
       type: type,
-      duration: 1500,
+      duration: 3000,
     })
   },
   // value.replace(/[A-Za-z-]+/g, '')

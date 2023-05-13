@@ -349,14 +349,16 @@ export default {
   mounted() {
     this.showLoading(true)
     this.getData()
-    this.isAdmin = this.roleOption == Enum.RoleOption.Admin ? true : false
+    this.isAdmin =
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+        ? true
+        : false
   },
 }
 </script>
 
 <style lang="scss" scoped>
 #body-equipment-dictionary {
-  padding: 20px 20px;
   background-color: #efefef;
   height: calc(100% - 75px);
   flex: 1;

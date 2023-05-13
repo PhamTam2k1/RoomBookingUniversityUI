@@ -11,9 +11,9 @@
       <div class="content-popup-notice">
         <div class="t-content-body flex">
           <div class="t-dialog-icon">
-            <div class="misa-icon-navbar misa-icon-24" :class="classIcon"></div>
+            <div class="icon-sibar misa-icon-24" :class="classIcon"></div>
           </div>
-          <div class="t-dialog-text">{{ contentPopup }}</div>
+          <div class="t-dialog-text" v-html="contentPopup"></div>
         </div>
       </div>
     </template>
@@ -70,5 +70,8 @@ export default {
 <style scoped>
 .t-dialog-icon {
   margin-right: 15px;
+}
+.icon-sibar.misa-icon-24.t-infomation {
+  margin-top: 14px;
 }
 </style>

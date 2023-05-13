@@ -1,9 +1,7 @@
 .el-message {
-  --el-message-width: 200px !important;
-  --el-message-padding: none !important;
   font-weight: normal !important;
   padding: 10px;
-  width: 221px;
+  width: fit-content;
   height: 40px;
   padding: 0;
   position: fixed;

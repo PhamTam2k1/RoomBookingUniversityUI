@@ -30,6 +30,9 @@ export default {
 .min-vh-100 {
   min-height: 100vh !important;
   max-height: 100vh;
+  font-family: Notosans;
+  /* font-family: Notosans;
+  font-size: 16px; */
   /* overflow: hidden; */
 }
 </style>

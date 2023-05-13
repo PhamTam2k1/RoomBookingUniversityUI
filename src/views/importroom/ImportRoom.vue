@@ -1,266 +1,325 @@
 <template>
-  <div class="import-container">
-    <div class="popup-content">
-      <div class="step-container" id="pnStep">
-        <div class="step-area">
-          <div class="step-item" :class="{ active: step == 1 }" data-step="1">
-            <div class="prc-icon">
-              <div class="step-number">1</div>
-            </div>
-          </div>
-          <div class="line-space"></div>
-          <div class="step-item" :class="{ active: step == 2 }" data-step="2">
-            <div class="prc-icon">
-              <div class="step-number">2</div>
-            </div>
-          </div>
-          <div class="line-space"></div>
-          <div class="step-item" :class="{ active: step == 3 }" data-step="3">
-            <div class="prc-icon">
-              <div class="step-number">3</div>
-            </div>
-          </div>
+  <base-popup
+    class="misa-dialog"
+    titlePopup="Nhập khẩu lịch học"
+    classPopup="popup-import-scheduler"
+    @onClickClosePopup="onClickClosePopup"
+  >
+    <template #iconPopup>
+      <el-tooltip content="Đóng" placement="top">
+        <div class="misa-icon-popup" @click="onClickClosePopup">
+          <div class="misa-icon1 misa-icon-close misa-icon-24"></div>
         </div>
-        <div class="step-info">
-          <div class="step-info-item" data-step="1" v-show="step == 1">
-            <div class="title">Bước 1: Chọn tệp nguồn</div>
-            <div class="detail">
-              Đưa dữ liệu cần nhập khẩu vào tệp mẫu và tải tệp dữ liệu lên
-              chương trình
-            </div>
-          </div>
-          <div class="step-info-item" data-step="2" v-show="step == 2">
-            <div class="title">Bước 2: Kiểm tra dữ liệu</div>
-            <div class="detail">
-              Kiểm tra dữ liệu tệp nhập khẩu tải lên chương trình
-            </div>
-          </div>
-          <div class="step-info-item" data-step="3" v-show="step == 3">
-            <div class="title">Bước 3: Kết quả nhập khẩu</div>
-            <div class="detail">Kết quả nhập khẩu dữ liệu lên chương trình</div>
-          </div>
-        </div>
-      </div>
-      <div class="content-container" id="pnContent">
-        <div class="content-state p-absolute-0">
-          <div class="step-content step-one" data-step="1" v-show="step == 1">
-            <div class="choose-container p-absolute-0">
-              <div class="choose-state">
-                <div class="state-left">
-                  <div class="wrap-title">
-                    <div class="title-large">Tải tệp mẫu</div>
-                  </div>
-                  <div class="suggest-container">
-                    <div class="content">
-                      <div class="ic-download-template"></div>
-                      <div style="text-align: center; font-style: italic">
-                        Bạn chưa có tệp mẫu, vui lòng tải
-                      </div>
-                      <div
-                        class="text-download"
-                        id="btnDownTempFile"
-                        title="Bấm vào đây để tải tệp"
-                      >
-                        NhapKhau.xlsx
-                      </div>
-                    </div>
-                  </div>
+      </el-tooltip>
+    </template>
+    <template #contentPopup>
+      <div class="import-container">
+        <div class="popup-content">
+          <div class="step-container" id="pnStep">
+            <div class="step-area">
+              <div
+                class="step-item"
+                :class="{ active: step == 1 }"
+                data-step="1"
+              >
+                <div class="prc-icon">
+                  <div class="step-number">1</div>
                 </div>
-                <div class="state-right">
-                  <div class="wrap-title">
-                    <div class="title-large">Đính kèm tệp</div>
-                    <div class="suggest-file">
-                      <div class="size">Dung lượng tối đa 2MB</div>
-                    </div>
-                  </div>
-                  <div class="container-import" id="areaImportFile">
-                    <div class="drop-file p-absolute-0">
-                      <div class="bg-icon"></div>
-                      <div
-                        class="text-file"
-                        id="ctnImportFile"
-                        v-show="!fileUpload"
-                      >
-                        <span class="up-file text-link">
-                          Tải lên tệp
-                          <input
-                            type="file"
-                            class="txt-file-import p-absolute-0"
-                            id="txtFileImport"
-                            title="Chọn file đính kèm"
-                            @change="uploadFileImport"
-                          />
-                        </span>
-                        hoặc kéo thả tệp dữ liệu cần nhập khẩu vào đây
+              </div>
+              <div class="line-space"></div>
+              <div
+                class="step-item"
+                :class="{ active: step == 2 }"
+                data-step="2"
+              >
+                <div class="prc-icon">
+                  <div class="step-number">2</div>
+                </div>
+              </div>
+              <div class="line-space"></div>
+              <div
+                class="step-item"
+                :class="{ active: step == 3 }"
+                data-step="3"
+              >
+                <div class="prc-icon">
+                  <div class="step-number">3</div>
+                </div>
+              </div>
+            </div>
+            <div class="step-info">
+              <div class="step-info-item" data-step="1" v-show="step == 1">
+                <div class="title">Bước 1: Chọn tệp nguồn</div>
+                <div class="detail">
+                  Đưa dữ liệu cần nhập khẩu vào tệp mẫu và tải tệp dữ liệu lên
+                  chương trình
+                </div>
+              </div>
+              <div class="step-info-item" data-step="2" v-show="step == 2">
+                <div class="title">Bước 2: Kiểm tra dữ liệu</div>
+                <div class="detail">
+                  Kiểm tra dữ liệu tệp nhập khẩu tải lên chương trình
+                </div>
+              </div>
+              <div class="step-info-item" data-step="3" v-show="step == 3">
+                <div class="title">Bước 3: Kết quả nhập khẩu</div>
+                <div class="detail">
+                  Kết quả nhập khẩu dữ liệu lên chương trình
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="content-container" id="pnContent">
+            <div class="content-state p-absolute-0">
+              <div
+                class="step-content step-one"
+                data-step="1"
+                v-show="step == 1"
+              >
+                <div class="choose-container p-absolute-0">
+                  <div class="choose-state">
+                    <div class="state-left">
+                      <div class="wrap-title">
+                        <div class="title-large">Tải tệp mẫu</div>
                       </div>
-                    </div>
-                    <div class="import-file p-absolute-0" v-show="fileUpload">
-                      <div class="file-item">
-                        <div class="text-link-style">
-                          {{ fileUpload?.name }}
-                        </div>
-                        <div
-                          class="delete-file"
-                          @click="deleteFileUpload"
-                        ></div>
-                      </div>
-                    </div>
-                    <div class="wrap-notify noti-success" v-show="showSucces">
-                      <div
-                        class="toastr-notify toastr-success d-flex justify-content-sm-between"
-                      >
-                        <div class="left-toastr d-flex align-items-center">
+                      <div class="suggest-container">
+                        <div class="content">
+                          <div class="ic-download-template"></div>
+                          <div style="text-align: center; font-style: italic">
+                            Bạn chưa có tệp mẫu, vui lòng tải
+                          </div>
                           <div
-                            class="icon-toastr misa-icon ic-success-toastr"
-                          ></div>
-                          <div class="">Tải lên thành công</div>
+                            class="text-download"
+                            id="btnDownTempFile"
+                            title="Bấm vào đây để tải tệp"
+                          >
+                            NhapKhau.xlsx
+                          </div>
                         </div>
-                        <div
-                          class="icon-close-toastr align-self-center misa-icon ic-close-toastr"
-                          @click="this.showSucces = null"
-                        ></div>
                       </div>
                     </div>
-                    <div class="wrap-notify noti-error" v-show="showError">
-                      <div
-                        class="toastr-notify toastr-error d-flex justify-content-sm-between"
-                      >
-                        <div class="left-toastr d-flex align-items-center">
+                    <div class="state-right">
+                      <div class="wrap-title">
+                        <div class="title-large">Đính kèm tệp</div>
+                        <div class="suggest-file">
+                          <div class="size">Dung lượng tối đa 2MB</div>
+                        </div>
+                      </div>
+                      <div class="container-import" id="areaImportFile">
+                        <div class="drop-file p-absolute-0">
+                          <div class="bg-icon"></div>
                           <div
-                            class="icon-toastr misa-icon ic-error-toastr"
-                          ></div>
-                          <div class="align-self-center">
-                            Tải tệp mẫu không đúng định dạng
+                            class="text-file"
+                            id="ctnImportFile"
+                            v-show="!fileUpload"
+                          >
+                            <span class="up-file text-link">
+                              Tải lên tệp
+                              <input
+                                type="file"
+                                class="txt-file-import p-absolute-0"
+                                id="txtFileImport"
+                                title="Chọn file đính kèm"
+                                @change="uploadFileImport"
+                              />
+                            </span>
+                            hoặc kéo thả tệp dữ liệu cần nhập khẩu vào đây
                           </div>
                         </div>
                         <div
-                          class="icon-close-toastr align-self-center misa-icon ic-close-toastr"
-                          @click="this.showError = null"
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="step-content step-two" data-step="2" v-show="step == 2">
-            <div class="checking-container p-absolute-0">
-              <div class="wrap-container p-absolute-0">
-                <div class="fixed-column-left">
-                  <div class="wrap-record mg-bt-20">
-                    <div
-                      class="wrap-icon misa-icon ic-status-record ic-invalid"
-                    ></div>
-                    <div class="invalid-record record-text">
-                      <span class="total-invalid">0</span>
-                      <span>&nbsp;</span> bản ghi hợp lệ
-                    </div>
-                  </div>
-                  <div class="wrap-record mg-bt-20">
-                    <div
-                      class="wrap-icon misa-icon ic-status-record ic-has-data"
-                    ></div>
-                    <div class="hasdata-record record-text">
-                      <span class="total-exits">0</span>
-                      <span>&nbsp;</span> bản ghi đã có dữ liệu
-                    </div>
-                  </div>
-                  <div class="wrap-record">
-                    <div
-                      class="wrap-icon misa-icon ic-status-record ic-valid"
-                    ></div>
-                    <div class="valid-record record-text">
-                      <span class="total-valid">0</span>
-                      <span>&nbsp;</span> bản ghi không hợp lệ
-                    </div>
-                  </div>
-                  <div class="download-file">
-                    <div class="d-flex justify-content-end">
-                      <div
-                        class="d-flex download-link text-link"
-                        id="btnDownFileChecking"
-                      >
+                          class="import-file p-absolute-0"
+                          v-show="fileUpload"
+                        >
+                          <div class="file-item">
+                            <div class="text-link-style">
+                              {{ fileUpload?.name }}
+                            </div>
+                            <div
+                              class="delete-file"
+                              @click="deleteFileUpload"
+                            ></div>
+                          </div>
+                        </div>
                         <div
-                          class="ic-download misa-icon"
-                          style="margin-right: 8px"
-                        ></div>
-                        <span>Tải tệp kiểm tra </span>
+                          class="wrap-notify noti-success"
+                          v-show="showSucces"
+                        >
+                          <div
+                            class="toastr-notify toastr-success d-flex justify-content-sm-between"
+                          >
+                            <div class="left-toastr d-flex align-items-center">
+                              <div
+                                class="icon-toastr misa-icon ic-success-toastr"
+                              ></div>
+                              <div class="">Tải lên thành công</div>
+                            </div>
+                            <div
+                              class="icon-close-toastr align-self-center misa-icon ic-close-toastr"
+                              @click="this.showSucces = null"
+                            ></div>
+                          </div>
+                        </div>
+                        <div class="wrap-notify noti-error" v-show="showError">
+                          <div
+                            class="toastr-notify toastr-error d-flex justify-content-sm-between"
+                          >
+                            <div class="left-toastr d-flex align-items-center">
+                              <div
+                                class="icon-toastr misa-icon ic-error-toastr"
+                              ></div>
+                              <div class="align-self-center">
+                                Tải tệp mẫu không đúng định dạng
+                              </div>
+                            </div>
+                            <div
+                              class="icon-close-toastr align-self-center misa-icon ic-close-toastr"
+                              @click="this.showError = null"
+                            ></div>
+                          </div>
+                        </div>
                       </div>
-                      <span>&nbsp;</span>
-                      <span>để xem chi tiết lỗi</span>
                     </div>
                   </div>
                 </div>
-                <div class="fixed-column-right">
-                  <div class="total-record">
-                    <span>
-                      <span class="text-bold" id="totalErrorData">{{errorCount }}</span> bản
-                      ghi lỗi </span
-                    >/
-                    <span
-                      >Tổng số:
-                      <span class="text-bold" id="totalCompareData">{{sumaryData }}</span>
-                      bản ghi
-                    </span>
-                  </div>
-                  <div class="grid-list grid-list-container">
-                    <DxDataGrid
-                      id="gridContainer"
-                      :data-source="dataSource"
-                      key-expr="Error"
-                      :show-borders="true"
-                      noDataText="Không có dữ liệu"
-                    >
-                      <DxColumn data-field="Error" caption="TÌNH TRẠNG" />
-                      <DxColumn data-field="DescriptionError" caption="CHI TIẾT LỖI" />
-                      <DxScrolling mode="infinite"/>
-                      <DxPaging :enabled="false" />
-                    </DxDataGrid>
-                  </div>
-                </div>
               </div>
-            </div>
-          </div>
-          <div class="step-content step-three" data-step="3" v-show="step == 3">
-            <div class="result-container p-absolute-0">
-              <div class="wrap-image">
-                <img src="../../assets/images/not-released.png" />
-              </div>
-              <div class="record-container">
-                <div>
-                  <div class="wrap-record" style="margin-bottom: 20px">
-                    <div
-                      class="wrap-icon misa-icon ic-status-record ic-invalid"
-                    ></div>
-                    <div class="invalid-record record-text">
-                      <span class="valid-total">{{successCount}}/{{sumaryData }}</span>
-                      <span>&nbsp;</span> bản ghi nhập thành công
-                    </div>
-                  </div>
-                  <div class="wrap-record">
-                    <div
-                      class="wrap-icon misa-icon ic-status-record ic-valid"
-                    ></div>
-                    <div class="valid-record record-text">
-                      <span class="not-valid-total">{{errorCount}}/{{sumaryData }}</span>
-                      <span>&nbsp;</span> bản ghi nhập không thành công
-                    </div>
-                  </div>
-                  <div class="download-file">
-                    <div class="d-flex justify-content-end">
-                      <div
-                        class="d-flex download-link text-link"
-                        id="btnDownFileResult"
-                      >
+              <div
+                class="step-content step-two"
+                data-step="2"
+                v-show="step == 2"
+              >
+                <div class="checking-container p-absolute-0">
+                  <div class="wrap-container p-absolute-0">
+                    <div class="fixed-column-left">
+                      <div class="wrap-record mg-bt-20">
                         <div
-                          class="ic-download misa-icon"
-                          style="margin-right: 8px"
+                          class="wrap-icon misa-icon ic-status-record ic-invalid"
                         ></div>
-                        <span>Tải tệp kiểm tra </span>
+                        <div class="invalid-record record-text">
+                          <span class="total-invalid">{{ successCount }}</span>
+                          <span>&nbsp;</span> bản ghi hợp lệ
+                        </div>
                       </div>
-                      <span>&nbsp;</span>
-                      <span> để xem chi tiết lỗi</span>
+                      <!-- <div class="wrap-record mg-bt-20">
+                        <div
+                          class="wrap-icon misa-icon ic-status-record ic-has-data"
+                        ></div>
+                        <div class="hasdata-record record-text">
+                          <span class="total-exits">0</span>
+                          <span>&nbsp;</span> bản ghi đã có dữ liệu
+                        </div>
+                      </div> -->
+                      <div class="wrap-record">
+                        <div
+                          class="wrap-icon misa-icon ic-status-record ic-valid"
+                        ></div>
+                        <div class="valid-record record-text">
+                          <span class="total-valid">{{ errorCount }}</span>
+                          <span>&nbsp;</span> bản ghi không hợp lệ
+                        </div>
+                      </div>
+                      <div class="download-file">
+                        <div class="d-flex justify-content-end">
+                          <div
+                            class="d-flex download-link text-link"
+                            id="btnDownFileChecking"
+                          >
+                            <div
+                              class="ic-download misa-icon"
+                              style="margin-right: 8px"
+                            ></div>
+                            <span>Tải tệp kiểm tra </span>
+                          </div>
+                          <span>&nbsp;</span>
+                          <span>để xem chi tiết lỗi</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="fixed-column-right">
+                      <div class="total-record">
+                        <span>
+                          <span class="text-bold" id="totalErrorData">{{
+                            errorCount
+                          }}</span>
+                          bản ghi lỗi </span
+                        >/
+                        <span
+                          >Tổng số:
+                          <span class="text-bold" id="totalCompareData">{{
+                            sumaryData
+                          }}</span>
+                          bản ghi
+                        </span>
+                      </div>
+                      <div class="grid-list grid-list-container">
+                        <DxDataGrid
+                          id="gridContainer"
+                          :data-source="dataSource"
+                          key-expr="Error"
+                          :show-borders="true"
+                          noDataText="Không có dữ liệu"
+                        >
+                          <DxColumn data-field="Error" caption="TÌNH TRẠNG" />
+                          <DxColumn
+                            data-field="DescriptionError"
+                            caption="CHI TIẾT LỖI"
+                          />
+                          <DxScrolling mode="infinite" />
+                          <DxPaging :enabled="false" />
+                        </DxDataGrid>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="step-content step-three"
+                data-step="3"
+                v-show="step == 3"
+              >
+                <div class="result-container p-absolute-0">
+                  <div class="wrap-image">
+                    <img src="../../assets/images/not-released.png" />
+                  </div>
+                  <div class="record-container">
+                    <div>
+                      <div class="wrap-record" style="margin-bottom: 20px">
+                        <div
+                          class="wrap-icon misa-icon ic-status-record ic-invalid"
+                        ></div>
+                        <div class="invalid-record record-text">
+                          <span class="valid-total"
+                            >{{ successCount }}/{{ sumaryData }}</span
+                          >
+                          <span>&nbsp;</span> bản ghi nhập thành công
+                        </div>
+                      </div>
+                      <div class="wrap-record">
+                        <div
+                          class="wrap-icon misa-icon ic-status-record ic-valid"
+                        ></div>
+                        <div class="valid-record record-text">
+                          <span class="not-valid-total"
+                            >{{ errorCount }}/{{ sumaryData }}</span
+                          >
+                          <span>&nbsp;</span> bản ghi nhập không thành công
+                        </div>
+                      </div>
+                      <div class="download-file">
+                        <div class="d-flex justify-content-end">
+                          <div
+                            class="d-flex download-link text-link"
+                            id="btnDownFileResult"
+                          >
+                            <div
+                              class="ic-download misa-icon"
+                              style="margin-right: 8px"
+                            ></div>
+                            <span>Tải tệp kiểm tra </span>
+                          </div>
+                          <span>&nbsp;</span>
+                          <span> để xem chi tiết lỗi</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -268,40 +327,47 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="popup-footer d-flex justify-content-between">
-      <div class="footer-left">
-        <DxButton
-          text="Quay lại"
-          v-show="step != 1"
-          style="width: 90px"
-          @click="backStep"
-        />
+        <div class="popup-footer d-flex justify-content-between">
+          <div class="footer-left">
+            <DxButton
+              text="Quay lại"
+              v-show="step != 1"
+              style="width: 90px"
+              @click="backStep"
+            />
+          </div>
+          <div class="footer-right">
+            <DxButton
+              text="Tiếp tục"
+              style="
+                width: 90px;
+                color: #fff !important;
+                background-color: #00ad56;
+              "
+              @click="nextStep"
+            />
+          </div>
+        </div>
       </div>
-      <div class="footer-right">
-        <DxButton
-          text="Tiếp tục"
-          style="width: 90px; color: #fff !important; background-color: #00ad56"
-          @click="nextStep"
-        />
-      </div>
-    </div>
-  </div>
+    </template>
+  </base-popup>
 </template>
 <script>
 /* eslint-disable */
-import { DxPopup, DxPosition, DxToolbarItem } from "devextreme-vue/popup";
-import notify from "devextreme/ui/notify";
-import { DxButton } from "devextreme-vue/button";
-import axios from "axios";
+import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup'
+import notify from 'devextreme/ui/notify'
+import { DxButton } from 'devextreme-vue/button'
+import axios from 'axios'
+import BasePopup from '@/components/base/BasePopup.vue'
+import ObjectFunction from '@/commons/CommonFuction'
+import Resource from '@/commons/Resource'
 import {
   DxDataGrid,
   DxScrolling,
   DxColumn,
   DxPaging,
-} from "devextreme-vue/data-grid";
+} from 'devextreme-vue/data-grid'
 export default {
   components: {
     DxPopup,
@@ -312,8 +378,14 @@ export default {
     DxScrolling,
     DxColumn,
     DxPaging,
+    BasePopup,
   },
-
+  props: {
+    isShowPopupImport: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       dataSource: [],
@@ -321,10 +393,11 @@ export default {
       fileUpload: null,
       showSucces: null,
       showError: null,
-      errorCount:0,
-      successCount:0,
-      sumaryData:0
-    };
+      errorCount: 0,
+      successCount: 0,
+      sumaryData: 0,
+      isSuccess: true,
+    }
   },
 
   methods: {
@@ -333,43 +406,58 @@ export default {
      */
     async nextStep() {
       if (this.fileUpload) {
-        if (this.step < 3) {
-          this.step++;
+        if (this.step < 5) {
+          this.step++
         }
         switch (this.step) {
           case 2:
-            const formData = new FormData();
-            formData.append("file", this.fileUpload);
+            const formData = new FormData()
+            formData.append('file', this.fileUpload)
             const response = await axios.post(
-              "http://localhost:51585/api/v1/BookingRooms/excel",
+              'http://localhost:51585/api/v1/BookingRooms/excel',
               formData,
               {
                 headers: {
-                  "Content-Type": "multipart/form-data",
+                  'Content-Type': 'multipart/form-data',
                 },
-              }
-            );
-            this.dataSource=response.data.Data;
-            this.errorCount=this.dataSource.length;
-            this.sumaryData=response.data.Count;
-            if(response.data.IsSuccess){
-              this.successCount=  this.sumaryData;
+              },
+            )
+            this.dataSource = response.data.Data
+            this.errorCount = this.dataSource.length
+            this.sumaryData = response.data.Count
+            if (response.data.IsSuccess) {
+              this.successCount = this.sumaryData
+            } else {
+              this.isSuccess = false
             }
-            break;
-          case 3:
-            break;
+            break
+          case 4:
+            if (this.isSuccess) {
+              this.$emit('onCloseForm')
+              this.$emit('onShowLoading') // hiển thị loading
+
+              this.$emit('onLoadData')
+              ObjectFunction.toastMessage(
+                'Nhập khẩu thành công',
+                Resource.Messenger.Success,
+              )
+            } else {
+              this.$emit('onCloseForm')
+            }
+
+            break
           default:
-            break;
+            break
         }
       } else {
         notify(
           {
             message: `Chưa tải lên file nhập khẩu!`,
-            width: 450,
+            width: 270,
           },
-          "error",
-          2000
-        );
+          'error',
+          2000,
+        )
       }
     },
     /**
@@ -377,62 +465,68 @@ export default {
      */
     backStep() {
       if (this.step > 1) {
-        this.step--;
+        this.step--
       }
     },
     /**
      * Xử lý khi upload File
      */
     uploadFileImport(e) {
-      let file = e.target.files;
+      let file = e.target.files
       if (file) {
-        this.fileName = file[0].name;
-        this.validateFile(file[0]);
+        this.fileName = file[0].name
+        this.validateFile(file[0])
       }
     },
     /**
      * Validate file
      */
     validateFile(file) {
-      const allowedTypes = ["xlsx", "xls"];
-      const maxSize = 2 * 1024 * 1024; // 2MB
+      const allowedTypes = ['xlsx', 'xls']
+      const maxSize = 2 * 1024 * 1024 // 2MB
       if (!allowedTypes.includes(this.getFileExtension(file.name))) {
-        this.showError = true;
-        this.showSucces = false;
+        this.showError = true
+        this.showSucces = false
       } else if (file.size > maxSize) {
         notify(
           {
             message: `Kích thước file vượt quá 2MB`,
-            width: 450,
+            width: 270,
           },
-          "error",
-          2000
-        );
-        this.showError = true;
-        this.showSucces = false;
-        return false;
+          'error',
+          2000,
+        )
+        this.showError = true
+        this.showSucces = false
+        return false
       } else {
-        this.fileUpload = file;
-        this.showSucces = true;
-        this.showError = false;
+        this.fileUpload = file
+        this.showSucces = true
+        this.showError = false
       }
     },
     /**
      * Xóa file đã upload
      */
     deleteFileUpload() {
-      this.showSucces = null;
-      this.showError = null;
-      this.fileUpload = null;
+      this.showSucces = null
+      this.showError = null
+      this.fileUpload = null
     },
     /**
      * Get file Extension
      */
     getFileExtension(filename) {
-      return filename.split(".").pop();
+      return filename.split('.').pop()
+    },
+    /**
+     * Đóng Popup
+     */
+    onClickClosePopup() {
+      this.$emit('onClickClosePopup')
     },
   },
-};
+}
 </script>
 <style lang="scss" scoped>
 /*Style nhập khẩu*/
@@ -487,9 +581,9 @@ export default {
 }
 .import-container {
   width: 100%;
-  height: calc(100% - 75px);
+  height: 100%;
   margin: 0 auto;
-  box-shadow: rgba(0, 0, 0, 0.4) -1px 3px 10px;
+  // box-shadow: rgba(0, 0, 0, 0.4) -1px 3px 10px;
   padding: 0 !important;
   background-color: #fff !important;
 }
@@ -498,8 +592,10 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: calc(100% - 65px);
+
+  width: 80vw;
+  height: 78vh;
+
   padding: 16px 20px 20px;
   overflow: auto;
   .step-container {
@@ -630,7 +726,7 @@ export default {
           height: 100%;
           flex-direction: column;
           .ic-download-template {
-            background: url("../../assets../../assets/images/Icon_BusmasBBN.svg")
+            background: url('../../assets../../assets/images/Icon_BusmasBBN.svg')
               center no-repeat;
             width: 48px;
             height: 48px;
@@ -743,7 +839,7 @@ export default {
           text-align: center;
         }
         .bg-icon {
-          background: url("../../assets../../assets/images/Icon_BusmasBBN.svg")
+          background: url('../../assets../../assets/images/Icon_BusmasBBN.svg')
             center no-repeat;
           width: 48px;
           height: 48px;
@@ -766,7 +862,7 @@ export default {
             width: 30px;
             min-width: 30px;
             height: 32px;
-            background: url("../../assets/images/misa-bm_icon_sprites.svg")
+            background: url('../../assets/images/misa-bm_icon_sprites.svg')
               center no-repeat;
             background-position: -76px -243px;
           }
@@ -774,7 +870,7 @@ export default {
             width: 19px;
             min-width: 19px;
             height: 20px;
-            background: url("../../assets/images/misa-bm_icon_sprites.svg")
+            background: url('../../assets/images/misa-bm_icon_sprites.svg')
               center no-repeat;
             background-position: -291px -74px;
             cursor: pointer;
@@ -827,7 +923,7 @@ export default {
         }
       }
       .ic-search {
-        background: url("../../assets../../assets/images/misa-bm_icon_sprites.svg")
+        background: url('../../assets../../assets/images/misa-bm_icon_sprites.svg')
           center no-repeat;
         background-position: -28px -4px;
         position: absolute;
@@ -898,7 +994,7 @@ export default {
     .ic-download {
       width: 20px;
       height: 20px;
-      background: url("../../assets../../assets/images/Icon_BusmasBBN.svg")
+      background: url('../../assets../../assets/images/Icon_BusmasBBN.svg')
         center no-repeat !important;
       background-position: -49px -363px !important;
     }
@@ -926,10 +1022,10 @@ export default {
       th.requeried {
         .th-inner {
           &:after {
-            content: "";
+            content: '';
             width: 14px;
             height: 19px;
-            background: url("../../assets../../assets/images/misa-bm_icon_sprites.svg")
+            background: url('../../assets../../assets/images/misa-bm_icon_sprites.svg')
               center no-repeat;
             background-position: -317px -99px;
             display: block;
@@ -958,10 +1054,10 @@ export default {
 .popup-footer {
   position: relative;
   height: 65px;
-  background-color: #f5f5f5;
-  padding: 15px 20px;
+  padding: 18px 0px;
   display: flex;
   justify-content: space-between;
+  z-index: 100;
 }
 .text-valid {
   color: #33b369;
@@ -977,4 +1073,3 @@ export default {
 }
 // @import url(../../styles/components/import.scss);
 </style>
-

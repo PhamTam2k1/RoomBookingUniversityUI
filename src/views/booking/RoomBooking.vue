@@ -32,60 +32,33 @@
         </div>
       </div>
       <div class="toolbar-filter flex">
-        <!-- <div class="t-row">
+        <div class="t-location-building flex mgl-8p">
+          <div class="misa-icon-style mgl-16 mgt-5">
+            <div class="icon-booking t-icon-location misa-icon-24"></div>
+          </div>
           <BaseDropdownbox
-            classDropdownbox="drop-down-utc mgl-16"
-            :dataSource="dataBuilding"
+            classDropdownbox="drop-down-bulding"
+            :dataSource="dataBuildingWithAll"
             optionName="BuildingName"
             optionValue="BuildingID"
-            :isSearch="true"
             :height="34"
             :width="120"
             placeholder="Chọn vị trí"
             @onValueChange="onValueChangeBuilding"
           ></BaseDropdownbox>
         </div>
-        <div class="t-row">
+        <div class="t-row" v-if="filterOption.BuildingID != 'tatca'">
           <BaseDropdownbox
             classDropdownbox="drop-down-utc mgl-16"
-            :dataSource="dataRoom"
+            :dataSource="dataRoomWithAll"
             optionName="RoomName"
             optionValue="RoomID"
             :isSearch="true"
             :height="34"
             :width="150"
-            placeholder="Chọn phòng"
             @onValueChange="onValueChangeRoom"
+            :value="'tatca'"
           ></BaseDropdownbox>
-        </div> -->
-
-        <div class="t-row">
-          <BaseSelectTagBox
-            :dataSource="dataEquipment"
-            :height="34"
-            :width="250"
-            classDropdownbox="drop-down-utc mgl-16"
-            optionName="EquipmentName"
-            optionValue="EquipmentID"
-            placeholder="Chọn thiết bị"
-            @onOptionChange="onOptionChangeEquipment"
-          >
-          </BaseSelectTagBox>
-        </div>
-        <div class="t-row">
-          <DxRangeSelector
-            id="range-selector"
-            :data-source="rooms"
-            v-model:value="rangeCapacity"
-            data-source-field="Capacity"
-          >
-            <DxScale :tick-interval="1" :minor-tick-interval="1">
-              <DxLabel>
-                <DxFormat type="decimal" />
-              </DxLabel>
-            </DxScale>
-            <DxBehavior call-value-changed="onMoving" />
-          </DxRangeSelector>
         </div>
       </div>
       <div
@@ -93,43 +66,81 @@
         class="dx-buttongroup_custom dx-buttongroup dx-widget"
         tabindex="0"
       >
-        <div class="dx-buttongroup-wrapper dx-widget dx-collection">
-          <div
-            @click="setView(1, 'day')"
-            :class="{ 'dx-item-selected': currentView == 'day' }"
-            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-first-item dx-shape-standard"
-            role="button"
-            aria-label="Ngày"
-            aria-selected="true"
-          >
-            <div class="dx-button-content">
-              <span class="dx-button-text">Ngày</span>
+        <div class="flex">
+          <BaseDropdownbox
+            classDropdownbox="drop-down-filter"
+            :dataSource="schedulerConnection"
+            :height="34"
+            :width="160"
+            optionName="Text"
+            optionValue="Value"
+            :value="schedulerConnection[0].Value"
+            @onValueChange="onValueChangeShedulerConnection"
+          ></BaseDropdownbox>
+          <div class="dx-buttongroup-wrapper dx-widget dx-collection mgl-8p">
+            <div
+              @click="setView(1, 'day')"
+              :class="{ 'dx-item-selected': currentView == 'day' }"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-first-item dx-shape-standard"
+              role="button"
+              aria-label="Ngày"
+              aria-selected="true"
+            >
+              <div class="dx-button-content">
+                <span class="dx-button-text">Ngày</span>
+              </div>
+            </div>
+            <div
+              @click="setView(2, 'week')"
+              :class="{ 'dx-item-selected': currentView == 'week' }"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard"
+              role="button"
+              aria-label="Tuần"
+              aria-selected="false"
+            >
+              <div class="dx-button-content">
+                <span class="dx-button-text">Tuần</span>
+              </div>
+            </div>
+            <div
+              @click="setView(3, 'month')"
+              :class="{ 'dx-item-selected': currentView == 'month' }"
+              class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-last-item dx-shape-standard"
+              role="button"
+              aria-label="Tháng"
+              aria-selected="false"
+            >
+              <div class="dx-button-content">
+                <span class="dx-button-text">Tháng</span>
+              </div>
             </div>
           </div>
-          <div
-            @click="setView(2, 'week')"
-            :class="{ 'dx-item-selected': currentView == 'week' }"
-            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-shape-standard"
-            role="button"
-            aria-label="Tuần"
-            aria-selected="false"
-          >
-            <div class="dx-button-content">
-              <span class="dx-button-text">Tuần</span>
-            </div>
+          <div class="t-popup-setting">
+            <el-tooltip content="Bộ lọc" placement="top">
+              <div
+                class="misa-icon-style mgl-16 mgt-5"
+                @click="isShowPopup = !isShowPopup"
+                ref="buttonSetting"
+              >
+                <div class="misa-icon-navbar t-icon-option misa-icon-24"></div>
+              </div>
+            </el-tooltip>
+            <RoomBookingSetting
+              :isShowPopup="isShowPopup"
+              @onClickClosePopup="isShowPopup = false"
+              @valueFilterRoom="valueFilterRoom"
+            ></RoomBookingSetting>
           </div>
-          <div
-            @click="setView(3, 'month')"
-            :class="{ 'dx-item-selected': currentView == 'month' }"
-            class="dx-widget dx-button dx-button-mode-contained dx-button-normal dx-button-has-text dx-item dx-buttongroup-item dx-item-content dx-buttongroup-item-content dx-buttongroup-last-item dx-shape-standard"
-            role="button"
-            aria-label="Tháng"
-            aria-selected="false"
-          >
-            <div class="dx-button-content">
-              <span class="dx-button-text">Tháng</span>
+          <el-tooltip content="Nhập khẩu lịch học" placement="top">
+            <div
+              v-if="isAdmin"
+              class="misa-icon-style mgl-16 mgtr-7"
+              @click="isShowImportScheduler = !isShowImportScheduler"
+              ref="buttonSetting"
+            >
+              <div class="icon-sibar t-icon-import-excel misa-icon-24"></div>
             </div>
-          </div>
+          </el-tooltip>
         </div>
       </div>
     </div>
@@ -146,7 +157,7 @@
         :end-day-hour="endDayHour"
         :cell-duration="cellDuration"
         :first-day-of-week="firstDayOfWeek"
-        :show-all-day-panel="showAllDayPanel"
+        :show-all-day-panel="false"
         :height="height"
         :scrolling-mode="scrollingMode"
         :time-cell-template="timeCellTemplate"
@@ -157,7 +168,7 @@
         :on-cell-click="onCellClick"
         :on-appointment-click="onAppointmentClick"
         resource-cell-template="resourceCellTemplate"
-        groups="RoomID"
+        :groups="['RoomID']"
       >
         <DxView
           class="day"
@@ -199,6 +210,7 @@
             scrollByThumb: true,
             bounceEnabled: false,
           }"
+          :max-appointments-per-cell="5"
         />
         <DxResource
           :data-source="rooms"
@@ -218,14 +230,11 @@
           <el-tooltip placement="top" effect="light">
             <template v-slot:content>
               <AppointmentTooltipTemplate
-                :scheduler="scheduler"
                 :template-tooltip-model="data"
+                :dataRoom="dataRoom"
               />
             </template>
-            <AppointmentTemplate
-              :scheduler="scheduler"
-              :template-model="data"
-            />
+            <AppointmentTemplate :template-model="data" />
           </el-tooltip>
           <!-- <AppointmentTemplate :scheduler="scheduler" :template-model="data" /> -->
         </template>
@@ -239,6 +248,8 @@
         :dataRoom="lstRoom"
         :view="currentView"
         :dataDate="currentDate"
+        @onShowLoading="showLoading(true)"
+        @onLoadData="loadDataBooking()"
       ></ColumnBookingForWeekTemplate>
     </div>
 
@@ -249,9 +260,16 @@
       @onShowLoading="showLoading(true)"
       :roomID="roomID"
       :bookingID="bookingID"
+      :dateBooking="dateBooking"
       :popupMode="popupMode"
       @onLoadData="loadDataBooking()"
     />
+    <ImportRoom
+      v-if="isShowImportScheduler"
+      @onCloseForm="isShowImportScheduler = false"
+      @onShowLoading="showLoading(true)"
+      @onLoadData="loadDataBooking()"
+    ></ImportRoom>
     <!-- End popup detail -->
     <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
   </div>
@@ -267,19 +285,16 @@ import BookingRoomApi from '@/apis/BookingRoomApi'
 import RoomBookingPopup from './RoomBookingPopup.vue'
 import BaseDate from '@/components/base/BaseDate.vue'
 import ColumnBookingForWeekTemplate from '@/views/booking/template/ColumnBookingForWeekTemplate.vue'
-// import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import { mapActions, mapState } from 'vuex'
-import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
 import Enum from '@/commons/Enum'
 import NoData from './template/NoData.vue'
 import BaseLoading from '@/components/base/BaseLoading.vue'
 import HeaderTooltip from './template/HeaderTooltip.vue'
-import {
-  DxRangeSelector,
-  DxScale,
-  DxFormat,
-  DxBehavior,
-} from 'devextreme-vue/range-selector'
+import RoomBookingSetting from './RoomBookingSetting.vue'
+import ImportRoom from '../importroom/ImportRoom.vue'
+import Resource from '@/commons/Resource'
+
 export default {
   name: 'App',
   components: {
@@ -291,15 +306,12 @@ export default {
     ColumnBookingForWeekTemplate,
     DxResource,
     DxView,
-    // BaseDropdownbox,
-    BaseSelectTagBox,
+    BaseDropdownbox,
     NoData,
     BaseLoading,
     HeaderTooltip,
-    DxRangeSelector,
-    DxScale,
-    DxFormat,
-    DxBehavior,
+    RoomBookingSetting,
+    ImportRoom,
   },
   data() {
     return {
@@ -322,26 +334,56 @@ export default {
       roomID: '',
       bookingID: '',
       popupMode: 0,
+      dateBooking: new Date(),
       filterOption: {
         RoomID: null,
-        BuildingID: null,
+        BuildingID: 'tatca',
         EquipmentIDs: null,
         UserID: null,
         CapacityMin: null,
         CapacityMax: null,
       },
+      shouldRenderScheduler: true,
+      scheduler: null,
       rangeCapacity: [],
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
+      /**Biến show popup lọc theo điều kiện */
+      isShowPopup: false,
+      /**Biến show popup import  */
+      isShowImportScheduler: false,
+      isAdmin: false,
+      schedulerConnection: Resource.SchedulerConnection,
     }
   },
   computed: {
     // Gán data
     ...mapState({
+      roleOption: (state) => state.auth.roleOption,
       dataBuilding: (state) => state.dictionary.dataBuilding,
-      dataEquipment: (state) => state.dictionary.dataEquipment,
       dataRoom: (state) => state.dictionary.dataRoom,
     }),
+    dataBuildingWithAll() {
+      const dataBuilding = this.dataBuilding
+      return (
+        dataBuilding?.unshift({
+          BuildingName: 'Tất cả',
+          BuildingID: 'tatca',
+        }) && dataBuilding
+      )
+    },
+    dataRoomWithAll() {
+      const dataRoom = this.dataRoom
+      let roomsFilter = dataRoom?.filter(
+        (room) => room.BuildingID === this.filterOption.BuildingID,
+      )
+      return (
+        roomsFilter?.unshift({
+          RoomName: 'Tất cả',
+          RoomID: 'tatca',
+        }) && roomsFilter
+      )
+    },
     timeCellTemplate() {
       return ({ date }) => {
         const hours = date.getHours().toString().padStart(2, '0')
@@ -349,6 +391,7 @@ export default {
         return `<div class="time-cell">${hours}:${minutes}</div>`
       }
     },
+
     dateCellTemplate() {
       return ({ date }) => {
         const daysOfWeek = [
@@ -382,25 +425,38 @@ export default {
     },
   },
   methods: {
+    demo() {
+      this.loadDataBooking()
+      console.log('a')
+    },
     // Gọi hàm load data từ store
     ...mapActions({
       loadDataBuildings: 'dictionary/loadDataBuildings',
-      loadDataEquipments: 'dictionary/loadDataEquipments',
       loadDataRooms: 'dictionary/loadDataRooms',
     }),
     onContentReady(e) {
       this.scheduler = e.component
-      this.showLoading(false)
     },
     // set view khi click chuyển đổi
     setView(option, name) {
       this.isTypeDay = name == 'day' ? true : false
       this.showView = this.lstRoom.length > 1 ? false : true
       if (option && name) {
+        this.showLoading(true)
         this.currentView = name
+        setTimeout(() => {
+          this.showLoading(false)
+        }, 1200) // hide loading after 2 seconds (adjust as needed)
       }
     },
-
+    resetPosition() {
+      // Reset popup position after it is closed
+      this.position = {
+        my: 'right top',
+        at: 'right bottom',
+        offset: '0 5',
+      }
+    },
     /**
      * Mô tả : Hàm show/hide loading
      * @param {Boolean} isShow true: hiển thị loading, false: ẩn loading
@@ -429,15 +485,9 @@ export default {
      * 24.04.2023 PTTAM
      */
     onAppointmentClick(e) {
-      debugger
       e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
-      if (e.appointmentData?.BookingRoomID) {
-        this.bookingID = e.appointmentData.BookingRoomID
-        this.popupMode = Enum.PopupMode.EditMode
-      } else {
-        this.roomID = e.appointmentData.RoomID
-        this.popupMode = Enum.PopupMode.AddMode
-      }
+      this.bookingID = e.appointmentData.BookingRoomID
+      this.popupMode = Enum.PopupMode.EditMode
       // Lấy thời gian hiện tại
       this.isShowForm = true
       // var now = new Date()
@@ -445,12 +495,13 @@ export default {
       //   new Date(e.appointmentData.startDate) >= now ? true : false
     },
     onCellClick(e) {
+      this.dateBooking = e.cellData.startDate
       this.roomID = e.cellData.groups.RoomID
       this.popupMode = Enum.PopupMode.AddMode
       this.isShowForm = true
-      // // Lấy thời gian hiện tại
-      // var now = new Date()
-      // this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
+      // Lấy thời gian hiện tại
+      var now = new Date()
+      this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
     },
     /**
      * Sự kiện lấy dữ liệu đặt phòng
@@ -460,11 +511,15 @@ export default {
     async loadDataBooking() {
       try {
         await BookingRoomApi.getPaging({
-          roomID: this.filterOption.RoomID ? this.filterOption.RoomID : null,
+          roomID:
+            this.filterOption.RoomID != 'tatca'
+              ? this.filterOption.RoomID
+              : null,
           userID: this.filterOption.UserID ? this.filterOption.UserID : null,
-          buildingID: this.filterOption.BuildingID
-            ? this.filterOption.BuildingID
-            : null,
+          buildingID:
+            this.filterOption.BuildingID != 'tatca'
+              ? this.filterOption.BuildingID
+              : null,
           equipmentIDs: this.filterOption.EquipmentIDs
             ? this.filterOption.EquipmentIDs
             : null,
@@ -482,16 +537,14 @@ export default {
           } else {
             this.showView = false
           }
-
-          this.handleDataSource()
         })
       } catch (error) {
         console.log(error)
       }
+      this.handleDataSource()
     },
     // cập nhật lại ngày khi chọn lại
     onDateBoxChanged(item) {
-      this.showLoading(true)
       this.currentDate = item.value
     },
     /**
@@ -499,6 +552,7 @@ export default {
      * PTTAM 23.04.2023
      */
     handleDataSource() {
+      this.showLoading(false)
       this.rooms = []
       this.lstRoom.forEach((element) => {
         this.rooms.push({
@@ -507,6 +561,9 @@ export default {
           RoomName: element.RoomName,
           Capacity: element.Capacity,
           ListEquipmentName: element.ListEquipmentName,
+          AvartarAdmin: element.AvartarAdmin,
+          AdminEmail: element.AdminEmail,
+          AdminName: element.AdminName,
         })
       })
       for (let i = 0; i < this.dataSource?.length; i++) {
@@ -533,14 +590,29 @@ export default {
         item.startDate = dateStartStringWithTimezone
         item.endDate = dateEndStringWithTimezone
       }
-      this.showLoading(false)
     },
     /**
      * Sự kiện thay đổi phòng
      * @param {*} value
      */
     onValueChangeRoom(value) {
-      this.filterOption.RoomID = value
+      this.filterOption.RoomID = value ? value : null
+      this.showLoading(true)
+      this.loadDataBooking()
+    },
+    /**
+     * Sự kiện thay đổi phòng
+     * @param {*} value
+     */
+    onValueChangeShedulerConnection(value) {
+      if (value == Enum.SchedulerConnection.ALL) {
+        this.filterOption.UserID = null
+      } else {
+        this.filterOption.UserID = JSON.parse(
+          localStorage.getItem('user'),
+        ).UserID
+      }
+
       this.showLoading(true)
       this.loadDataBooking()
     },
@@ -548,36 +620,37 @@ export default {
      * Sự kiện thay đổi tòa nhà
      */
     onValueChangeBuilding(value) {
-      this.filterOption.BuildingID = value
+      this.filterOption.BuildingID = value ? value : null
       this.showLoading(true)
+      if (this.filterOption.BuildingID != null) {
+        this.filterOption.RoomID = null
+      }
       this.loadDataBooking()
     },
     /**
-     * Sự kiện thay đổi lọc thiết bị trong phòng học
-     * @param {*} values
+     * Sự kiện lọc theo bộ lọc
      */
-    onOptionChangeEquipment(values) {
-      if (values) {
-        let ids = ''
-
-        values?.forEach((element) => {
-          console.log(element)
-
-          ids += element.EquipmentID.trim() + ','
-        })
-        ids = ids.slice(0, -1)
-        this.filterOption.EquipmentIDs = ids
-        this.showLoading(true)
-        this.loadDataBooking(this.handleDataSource)
-      }
+    valueFilterRoom(data) {
+      this.filterOption.CapacityMin = data.CapacityMin - 0
+      this.filterOption.CapacityMax = data.CapacityMax - 0
+      this.filterOption.EquipmentIDs = data.EquipmentIDs
+      this.showLoading(true)
+      this.loadDataBooking()
     },
   },
+
   async created() {
     this.showLoading(true)
     this.loadDataBooking()
     await this.loadDataBuildings()
-    await this.loadDataEquipments()
     await this.loadDataRooms()
+  },
+  mounted() {
+    this.loadDataBooking()
+    this.isAdmin =
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+        ? true
+        : false
   },
 }
 </script>
@@ -599,9 +672,15 @@ export default {
 
 .dx-buttongroup_custom {
   position: absolute;
-  right: 30px;
+  right: 10px;
 }
-
+.mgt-5 {
+  margin-top: 5px;
+}
+.mgtr-7 {
+  margin-top: 7px;
+  margin-right: 8px;
+}
 .dx-scheduler-header {
   display: none !important;
 }
@@ -622,7 +701,24 @@ th.dx-scheduler-group-header {
 tr.dx-scheduler-group-row {
   border-bottom: 1px solid rgba(221, 221, 221, 0.6) !important;
 }
-#range-selector {
-  height: 35px;
+.my-popper-class {
+  margin-top: 171px;
+  margin-left: 20px;
+  right: 29px;
+  top: 20px !important;
+  left: unset !important;
+  z-index: 1000 !important;
+  padding: 0 !important;
+  border-radius: 6px;
+}
+.my-popper-class span.el-popper__arrow {
+  display: none;
+}
+.t-popup-setting {
+  position: relative;
+}
+.t-location-building {
+  border: 1px solid rgba(221, 221, 221, 0.6);
+  background: #fff;
 }
 </style>
