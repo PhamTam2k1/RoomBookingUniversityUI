@@ -32,9 +32,11 @@
     "devextreme": "^22.2.5",
     "devextreme-vue": "^22.2.5",
     "element-plus": "^2.3.3",
+    "firebase": "^9.21.0",
     "moment": "^2.29.4",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
+    "vuefire": "^3.1.0",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0"
   },
