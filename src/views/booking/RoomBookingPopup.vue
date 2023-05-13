@@ -20,7 +20,7 @@
             <div
               v-if="popupMode == Enum.PopupMode.EditMode || isDisable == true"
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
-              @click="onClickDelete"
+              @click="onClickShowCacel"
             ></div>
           </el-tooltip>
           <el-tooltip content="Đóng" placement="bottom">
@@ -224,7 +224,7 @@
                   <div class="t-lable mgb-8 font-weight">Lý do từ chối</div>
                 </div>
 
-                <div class="content t-admin">
+                <div class="content t-admin" style="color: red">
                   {{ bookingRoomData.RefusalReason }}
                   <!-- <textarea
                     id="reson"
@@ -284,7 +284,10 @@
     :contentPopup="contentPopup"
     :classIcon="classIconPopup"
     @onClickClosePopup="onClickClosePopup"
-    v-if="this.popupNoticeMode == Enum.PopupMode.NotifyMode"
+    v-if="
+      popupNoticeMode == Enum.PopupMode.NotifyMode ||
+      popupNoticeMode == Enum.PopupMode.DeleteMode
+    "
   >
     <BaseButton
       :tabindex="1"
@@ -294,6 +297,13 @@
       lableButton="Đóng"
       classButton="misa-button-normal w-80 misa-btn-nomarl"
     ></BaseButton>
+    <BaseButton
+      v-if="popupNoticeMode == Enum.PopupMode.DeleteMode"
+      :tabindex="1"
+      @click="onClickCancelBooking"
+      lableButton="Hủy đặt"
+      classButton="misa-button-normal w-120 misa-btn-danger"
+    ></BaseButton>
   </PopupNotice>
   <!--End Popup Notice Error -->
   <ConfirmRefuseProcess
@@ -302,6 +312,7 @@
     :popupMode="popupModeRefuse"
     v-if="popupModeRefuse == Enum.PopupMode.RefuseMode"
   />
+  <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
 </template>
 
 <script>
@@ -320,6 +331,7 @@ import ObjectFunction from '@/commons/CommonFuction'
 import BaseDate from '@/components/base/BaseDate.vue'
 import moment from 'moment'
 import ConfirmRefuseProcess from '@/views/RoomBrowsing/ConfirmRefuseProcess.vue'
+import BaseLoading from '@/components/base/BaseLoading.vue'
 export default {
   name: ' ',
   components: {
@@ -331,6 +343,7 @@ export default {
     PopupNotice,
     BaseDate,
     ConfirmRefuseProcess,
+    BaseLoading,
   },
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   props: {
@@ -385,6 +398,8 @@ export default {
       titlePopupBooking: '',
       popupModeRefuse: -1,
       isAdmin: false,
+      /** Biến show loading: true- show, false - hide*/
+      isShowLoading: false,
     }
   },
 
@@ -404,6 +419,14 @@ export default {
     onValueChangeRoom(value) {
       this.bookingRoomData.RoomID = value
       this.roomChoose = this.dataRoom.find((x) => x.RoomID == value)
+    },
+    /**
+     * Mô tả : Hàm show/hide loading
+     * @param {Boolean} isShow true: hiển thị loading, false: ẩn loading
+     * @Createdby: PTTAM
+     */
+    showLoading(isShow) {
+      this.isShowLoading = isShow
     },
     /**
      * Sự kiện thay đổi ca học
@@ -481,6 +504,7 @@ export default {
      * @Createdby: PTTAM
      */
     beforeSaveData() {
+      this.showLoading(true)
       this.validateErrorList = [] // Gán lại array = []
       // Lấy danh sách các trường (fields) của object bookingRoomData
       const fields = Object.keys(this.bookingRoomData)
@@ -494,10 +518,26 @@ export default {
         // Thêm mới user
         this.saveData()
       } else {
+        this.showLoading(false)
         // Ngược lại
-        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput, '') // Hiển thị popup
+        this.showPopup(
+          'misa-icon-notice',
+          Resource.ErrForm.ErrorInput,
+          'Dữ liệu không hợp lệ',
+        ) // Hiển thị popup
         this.popupNoticeMode = Enum.PopupMode.NotifyMode
       }
+    },
+    /**
+     * Thực hiện mở popup hủy đặt phòng
+     */
+    onClickShowCacel() {
+      this.showPopup(
+        't-question-nocation',
+        'Bạn có muốn hủy lịch đặt phòng này không?',
+        'Hủy đặt phòng',
+      ) // Hiển thị popup
+      this.popupNoticeMode = Enum.PopupMode.DeleteMode
     },
     /**
      * Validate
@@ -635,6 +675,7 @@ export default {
      */
     async getBookingRoomByID() {
       let me = this
+      me.showLoading(true)
       await BookingRoomApi.getByID(this.bookingID).then((res) => {
         if (res) {
           let data = res.data
@@ -665,6 +706,7 @@ export default {
             JSON.parse(localStorage.getItem('user')).UserID
               ? true
               : false
+          me.showLoading(false)
         }
       })
     },
@@ -737,7 +779,36 @@ export default {
             this.$emit('onCloseForm')
             this.popupModeRefuse = -1
             ObjectFunction.toastMessage(
-              'Từ chối thất bạ',
+              'Từ chối thất bại',
+              Resource.Messenger.Success,
+            )
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    /**
+     * Hủy lịch đặt phòng
+     */
+    onClickCancelBooking() {
+      try {
+        debugger
+        BookingRoomApi.cancelBookingRequest(this.bookingID).then((res) => {
+          if (res && res.data.IsSusses) {
+            this.$emit('onShowLoading')
+            this.$emit('onCloseForm')
+            this.$emit('onLoadData')
+            this.popupNoticeMode = -1
+            ObjectFunction.toastMessage(
+              'Hủy đặt phòng thành công',
+              Resource.Messenger.Success,
+            )
+          } else {
+            this.$emit('onCloseForm')
+            this.popupNoticeMode = -1
+            ObjectFunction.toastMessage(
+              'Hủy đặt phòng thất bại',
               Resource.Messenger.Success,
             )
           }
@@ -872,10 +943,12 @@ export default {
 .t-lable-contact {
   font-weight: 600;
 }
+
 .icon-sibar.misa-icon-24.t-infomation-room,
 .icon-sibar.misa-icon-24.t-information-red {
   margin-top: 4px;
 }
+
 .font-weight {
   font-weight: 600;
 }

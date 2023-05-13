@@ -74,4 +74,7 @@ export default {
 .icon-sibar.misa-icon-24.t-infomation {
   margin-top: 14px;
 }
+.icon-sibar.misa-icon-24.t-question-nocation {
+  margin-top: 8px;
+}
 </style>

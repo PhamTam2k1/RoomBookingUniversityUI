@@ -93,7 +93,7 @@ class BookingRoomAPI {
    * @returns
    */
   cancelBookingRequest(id) {
-    return BaseAPIConfig.get(
+    return BaseAPIConfig.put(
       `${this.controller}/cancelBookingRequestNomal/${id}`,
     )
   }
