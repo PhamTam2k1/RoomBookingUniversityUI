@@ -177,7 +177,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .dropdown-menu.dropdown-menu-end {
   min-width: 315px;
   max-height: 500px;

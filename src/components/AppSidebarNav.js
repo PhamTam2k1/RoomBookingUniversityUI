@@ -58,6 +58,34 @@ const AppSidebarNav = defineComponent({
     })
 
     const renderItem = (item) => {
+      if (
+        item.name == 'Danh mục' &&
+        localStorage.getItem('roleOption') - 0 === 1
+      ) {
+        return null
+      }
+      if (
+        (item.name == 'Danh mục' || item.name == 'Phòng học') &&
+        localStorage.getItem('roleOption') - 0 === 3
+      ) {
+        return null
+      }
+
+      if (
+        item.to == '/dictionary' &&
+        localStorage.getItem('roleOption') - 0 === 1
+      ) {
+        return null // Return null to hide the item
+      }
+      if (
+        (item.to === '/booking/booking-history' ||
+          item.to === '/dashboard' ||
+          item.to == '/booking/booking-room' ||
+          item.to == '/dictionary') &&
+        localStorage.getItem('roleOption') - 0 === 3
+      ) {
+        return null // Return null to hide the item
+      }
       if (item.items) {
         return h(
           CNavGroup,
