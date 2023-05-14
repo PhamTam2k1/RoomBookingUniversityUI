@@ -254,7 +254,11 @@
         <div class="t-button-footer">
           <div
             class="t--is-admin flex"
-            v-if="popupMode == Enum.PopupMode.PendingMode && isAdmin"
+            v-if="
+              popupMode == Enum.PopupMode.PendingMode &&
+              isAdmin &&
+              popupMode != Enum.PopupMode.HistoryMode
+            "
           >
             <BaseButton
               @click="RejectRequest()"

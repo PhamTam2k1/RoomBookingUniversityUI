@@ -134,7 +134,11 @@
           <div class="misa-active-status-table flex">
             <div
               @click="
-                onClickCell(booking.dateTime, booking.RoomID),
+                onClickCell(
+                  booking.dateTime,
+                  booking.RoomID,
+                  booking.BookingRoomID,
+                ),
                   $event.stopPropagation(),
                   (isShowForm = true)
               "

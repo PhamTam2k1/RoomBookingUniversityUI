@@ -157,7 +157,7 @@ export default {
         dataField: 'TimeSlotName',
         caption: 'Ca đặt',
         visible: true,
-        width: 40,
+        width: 200,
       },
       {
         dataField: 'Discription',
@@ -169,7 +169,7 @@ export default {
         dataField: 'DateRequest',
         caption: 'Ngày yêu cầu',
         visible: true,
-        width: 120,
+        width: 130,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
@@ -199,7 +199,7 @@ export default {
         dataField: 'StatusBooking',
         caption: 'Trạng thái',
         visible: true,
-        width: 200,
+        width: 100,
       },
       {
         dataField: 'detail',

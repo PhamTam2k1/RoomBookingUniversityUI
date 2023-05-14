@@ -125,27 +125,21 @@ export default {
       },
       {
         dataField: 'RoomName',
-        caption: 'Tên phòng',
+        caption: 'Địa điểm',
         visible: true,
         width: 180,
-      },
-      {
-        dataField: 'BuildingName',
-        caption: 'Tên tòa nhà',
-        visible: true,
-        width: 120,
       },
       {
         dataField: 'TimeSlotName',
         caption: 'Ca đặt',
         visible: true,
-        width: 40,
+        width: 150,
       },
       {
         dataField: 'DateRequest',
         caption: 'Ngày yêu cầu',
         visible: true,
-        width: 120,
+        width: 130,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
@@ -176,12 +170,12 @@ export default {
         dataField: 'StatusBooking',
         caption: 'Trạng thái',
         visible: true,
-        width: 130,
+        width: 100,
       },
       {
         dataField: 'RefusalReason',
         caption: 'Lý do',
-        width: 300,
+        width: 200,
         visible: true,
       },
       {
