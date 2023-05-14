@@ -232,7 +232,6 @@ export default {
           pageSize: dataComponent.pageSize,
           keyword: dataComponent.keyword,
           userID: dataComponent.userID,
-          roleOption: localStorage.getItem('roleOption') - 0,
         }).then((res) => {
           dataComponent.dataSource = res.data.Data || []
           dataComponent.pageIndex = res.data.CurrentPage
@@ -302,10 +301,7 @@ export default {
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true
         : false
-    this.dataComponent.userID =
-      this.dataComponent.isAdmin == true
-        ? null
-        : JSON.parse(localStorage.getItem('user')).UserID
+    this.dataComponent.userID = JSON.parse(localStorage.getItem('user')).UserID
 
     this.getData()
   },

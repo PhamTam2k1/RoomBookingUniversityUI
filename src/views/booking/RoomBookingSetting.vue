@@ -147,14 +147,15 @@ export default {
      */
     onOptionChangeEquipment(values) {
       if (values) {
-        let ids = ''
+        let ids = '['
 
         values?.forEach((element) => {
           console.log(element)
 
-          ids += element.EquipmentID.trim() + ','
+          // ids += '"' + element.EquipmentID.trim() + '",'
+          ids += `"${element.EquipmentID.trim()}",`
         })
-        ids = ids.slice(0, -1)
+        ids = ids.slice(0, -1) + ']'
         this.valueFilter.EquipmentIDs = ids
       }
     },

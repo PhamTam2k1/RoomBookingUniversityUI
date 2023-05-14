@@ -6,19 +6,28 @@
       classPopup="popup-room-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
+      :lableButton="
+        isUserBooking && popupMode != Enum.PopupMode.HistoryMode
+          ? 'Hủy'
+          : 'Đóng'
+      "
     >
       <template #iconPopup>
         <div class="flex">
           <el-tooltip content="Sửa" placement="bottom">
             <div
-              v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
+              v-if="
+                popupMode == Enum.PopupMode.EditMode &&
+                isUserBooking &&
+                bookingRoomData.StatusBooking == 2
+              "
               class="misa-icon misa-icon-pencil misa-icon-24"
               @click="onClickUpdate"
             ></div>
           </el-tooltip>
           <el-tooltip content="Xóa" placement="bottom">
             <div
-              v-if="popupMode == Enum.PopupMode.EditMode || isDisable == true"
+              v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
               @click="onClickShowCacel"
             ></div>
@@ -261,11 +270,19 @@
           </div>
           <div class="is-not-admin" v-else>
             <BaseButton
+              v-if="isUserBooking && popupMode != Enum.PopupMode.HistoryMode"
               :tabindex="8"
               :lableButton="lableButtonBooking"
               classButton="w-120 misa-button-primary "
               @click="beforeSaveData()"
             ></BaseButton>
+            <!-- <BaseButton
+           
+              :tabindex="8"
+              :lableButton="lableButtonBooking"
+              classButton="w-120 misa-button-primary "
+              @click="beforeSaveData()"
+            ></BaseButton> -->
           </div>
         </div>
 

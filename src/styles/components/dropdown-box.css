@@ -227,7 +227,6 @@
 .dx-scheduler-appointment {
   background: #b2ccff !important;
   color: black !important;
-  width: fit-content !important;
 }
 .dx-scheduler-appointment.dx-state-hover.dx-resizable {
   -webkit-box-shadow: none !important;

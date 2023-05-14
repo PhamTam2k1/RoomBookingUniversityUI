@@ -202,8 +202,20 @@ export default {
         width: 200,
       },
       {
+        dataField: 'detail',
+        caption: '',
+        visible:
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+            ? false
+            : true,
+      },
+      {
         dataField: 'Approve',
         caption: '',
+        visible:
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+            ? true
+            : false,
       },
     ]
     /**
