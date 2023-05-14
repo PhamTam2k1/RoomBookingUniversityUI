@@ -11,6 +11,8 @@ import DocsExample from '@/components/DocsExample'
 import 'devextreme/dist/css/dx.light.css'
 import 'element-plus/es/components/date-picker/style/css'
 import { locale } from 'devextreme/localization'
+import VueFire from 'vuefire'
+
 locale('vi')
 
 const app = createApp(App)
@@ -19,6 +21,7 @@ app.use(ElementPlus)
 app.use(router)
 app.use(Vuex)
 app.use(CoreuiVue)
+app.use(VueFire)
 app.provide('icons', icons)
 app.component('CIcon', CIcon)
 app.component('DocsExample', DocsExample)

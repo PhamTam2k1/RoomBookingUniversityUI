@@ -26,7 +26,9 @@
             v-for="room in rooms"
             :key="room.RoomID"
             @click="
-              onClickCell(timeSlot.dateTime, room.RoomID), (isShowForm = true)
+              onClickCell(timeSlot.dateTime, room.RoomID),
+                (isShowForm = true),
+                $event.stopPropagation()
             "
             class="rowColor"
             :class="{
@@ -52,6 +54,7 @@
                       booking.RoomID,
                       booking.BookingRoomID,
                     ),
+                      $event.stopPropagation(),
                       (isShowForm = true)
                   "
                   v-for="(booking, index) in getSubject(
@@ -132,6 +135,7 @@
             <div
               @click="
                 onClickCell(booking.dateTime, booking.RoomID),
+                  $event.stopPropagation(),
                   (isShowForm = true)
               "
               v-for="(booking, index) in generate"
@@ -351,6 +355,7 @@ export default {
       // this.rooms = uniqueRooms
     },
     onClickCell(TimeSlotID, RoomID, BookingRoomID) {
+      debugger
       this.isShowTooltip = false
       this.popupNoticeMode = false
       this.dateBooking = moment(TimeSlotID, 'DD/MM/YYYY').toDate()
@@ -409,6 +414,7 @@ export default {
     },
     // tạo ra template ngày tháng
     dateCellTemplate() {
+      debugger
       const today = new Date(this.dataDate)
       let daysOfWeek = []
       if (this.view && this.view == 'week') {
@@ -425,7 +431,7 @@ export default {
         const daysWithDate = daysOfWeek.map((day) => {
           const date = new Date(today)
           const dayOfWeek = date.getDay()
-          const diff = day.id - dayOfWeek
+          const diff = day.id - dayOfWeek - (dayOfWeek === 0 ? 7 : 0)
           date.setDate(today.getDate() + diff)
           const momentObj = moment(date)
           const formattedString = momentObj.format('DD/MM')
