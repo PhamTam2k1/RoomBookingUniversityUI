@@ -17,7 +17,7 @@
         src="../assets/logoUniversity.png"
         alt="mô tả ảnh"
       />
-      Đặt lịch phòng học
+      <div class="t-nav-title">Đặt phòng học</div>
       <CIcon
         custom-class-name="sidebar-brand-narrow"
         :icon="sygnet"
@@ -55,5 +55,12 @@ export default {
   height: 40px;
   left: 20px;
   position: absolute;
+}
+.t-nav-title {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: Notosans;
+  color: #e6e8d3;
+  margin-left: 30px;
 }
 </style>

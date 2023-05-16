@@ -8,7 +8,7 @@ const routes = [
     path: '/',
     name: 'Trang chủ',
     component: DefaultLayout,
-    redirect: '/dashboard',
+    redirect: '/booking/booking-room',
     children: [
       {
         path: '/dashboard',

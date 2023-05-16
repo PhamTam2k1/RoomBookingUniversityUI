@@ -46,31 +46,31 @@ export default [
         name: 'Phòng học',
         to: '/dictionary/room',
       },
-      {
-        component: 'CNavItem',
-        name: 'Loại phòng học',
-        to: '/dictionary/room-type',
-      },
+      // {
+      //   component: 'CNavItem',
+      //   name: 'Loại phòng học',
+      //   to: '/dictionary/room-type',
+      // },
       {
         component: 'CNavItem',
         name: 'Tòa nhà',
         to: '/dictionary/building',
       },
-      {
-        component: 'CNavItem',
-        name: 'Ca học',
-        to: '/dictionary/timeslot',
-      },
+      // {
+      //   component: 'CNavItem',
+      //   name: 'Ca học',
+      //   to: '/dictionary/timeslot',
+      // },
       {
         component: 'CNavItem',
         name: 'Thiết bị',
         to: '/dictionary/equipment',
       },
-      {
-        component: 'CNavItem',
-        name: 'Loại thiết bị',
-        to: '/dictionary/equipment-type',
-      },
+      // {
+      //   component: 'CNavItem',
+      //   name: 'Loại thiết bị',
+      //   to: '/dictionary/equipment-type',
+      // },
     ],
   },
   {

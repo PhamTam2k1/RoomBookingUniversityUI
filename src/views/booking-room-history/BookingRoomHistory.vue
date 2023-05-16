@@ -170,7 +170,7 @@ export default {
         dataField: 'StatusBooking',
         caption: 'Trạng thái',
         visible: true,
-        width: 100,
+        width: 150,
       },
       {
         dataField: 'RefusalReason',

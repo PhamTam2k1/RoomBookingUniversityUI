@@ -153,6 +153,9 @@ export default {
       }
     },
   },
+  mounted() {
+    console.log(this.dataConvert)
+  },
   async created() {
     debugger
     // lấy thông tin đăng nhập
@@ -197,9 +200,10 @@ export default {
   background-color: #ff0000;
   color: #ffffff;
   border-radius: 50%;
-  height: 12px;
-  width: 12px;
+  height: 14px;
+  width: 15px;
   font-size: 7px;
+  padding-top: 3px;
 }
 .nav-link {
   position: relative;

@@ -199,7 +199,7 @@ export default {
         dataField: 'StatusBooking',
         caption: 'Trạng thái',
         visible: true,
-        width: 100,
+        width: 150,
       },
       {
         dataField: 'detail',
@@ -339,6 +339,7 @@ export default {
      *
      */
     const approveClick = async () => {
+      showLoading(true)
       try {
         const res = await BookingRoomApi.approveRequest({
           bookingRoomID: dataComponent.dataSelect,
@@ -347,7 +348,7 @@ export default {
 
         if (res && res.data) {
           closePopup()
-          showLoading(true)
+          // showLoading(true)
           getData()
           onClickClosePopup()
 
@@ -372,6 +373,7 @@ export default {
      *
      */
     const refuseClick = (reson) => {
+      showLoading(true)
       try {
         BookingRoomApi.approveRequest({
           bookingRoomID: dataComponent.dataSelect,
@@ -380,7 +382,7 @@ export default {
         }).then((res) => {
           if (res && res.data) {
             closePopup()
-            showLoading(true)
+
             getData()
             onClickClosePopup()
             ObjectFunction.toastMessage(

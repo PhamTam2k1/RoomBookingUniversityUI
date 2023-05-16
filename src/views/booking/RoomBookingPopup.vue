@@ -254,13 +254,10 @@
         <div class="t-button-footer">
           <div
             class="t--is-admin flex"
-            v-if="
-              popupMode == Enum.PopupMode.PendingMode &&
-              isAdmin &&
-              popupMode != Enum.PopupMode.HistoryMode
-            "
+            v-if="popupMode == Enum.PopupMode.PendingMode && isAdmin"
           >
             <BaseButton
+              v-if="popupMode == Enum.PopupMode.PendingMode"
               @click="RejectRequest()"
               lableButton="Từ chối"
               classButton="misa-button-normal w-120 misa-btn-danger"
@@ -566,7 +563,11 @@ export default {
      */
     validate(fieldName) {
       try {
-        if (!this.bookingRoomData[fieldName] && fieldName != 'Description') {
+        if (
+          !this.bookingRoomData[fieldName] &&
+          fieldName != 'Description' &&
+          fieldName != 'RefusalReason'
+        ) {
           let field = ''
 
           if (fieldName == 'RoomID') {

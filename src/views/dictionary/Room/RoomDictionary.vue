@@ -132,20 +132,35 @@ export default {
         caption: 'Tên phòng',
       },
       {
-        dataField: 'BuildingName',
-        caption: 'Địa điểm',
-      },
-      {
         dataField: 'Capacity',
         caption: 'Sức chứa',
+        width: 70,
       },
       {
-        dataField: 'UserName',
+        dataField: 'ListEquipmentName',
+        caption: 'Thiết bị',
+      },
+      {
+        dataField: 'SupporterName',
         caption: 'Người phụ trách',
+        width: 200,
       },
       {
-        dataField: 'RoomStatus',
-        caption: 'Trạng thái phòng',
+        dataField: 'AvartarSupporter',
+        caption: '',
+        width: 0,
+        visible: false,
+      },
+      {
+        dataField: 'AdminName',
+        caption: 'Người duyệt phòng',
+        width: 200,
+      },
+      {
+        dataField: 'AvartarAdmin',
+        caption: '',
+        width: 0,
+        visible: false,
       },
       {
         dataField: '',

@@ -58,6 +58,9 @@ const AppSidebarNav = defineComponent({
     })
 
     const renderItem = (item) => {
+      if (item.to === '/dashboard') {
+        return null
+      }
       if (
         item.name == 'Danh mục' &&
         localStorage.getItem('roleOption') - 0 === 1

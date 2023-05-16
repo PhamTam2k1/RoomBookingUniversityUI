@@ -5,6 +5,8 @@
         :title="data.value"
         v-if="
           dataField != 'FullName' &&
+          dataField != 'AdminName' &&
+          dataField != 'SupporterName' &&
           (dataField != 'StatusBooking') & (dataField != '')
         "
         class="wrap-text"
@@ -16,6 +18,28 @@
           <div
             class="misa-cell-avatar-color"
             :style="{ backgroundColor: data.data.AvartarColor }"
+          >
+            {{ CommonFunction.splitFullName(data.value) }}
+          </div>
+          <div class="misa-cell-FullName">{{ data.value }}</div>
+        </div>
+      </div>
+      <div v-if="dataField == 'SupporterName'" :title="data.value">
+        <div class="misa-full-name-avatar-table flex">
+          <div
+            class="misa-cell-avatar-color"
+            :style="{ backgroundColor: data.data.AvartarSupporter }"
+          >
+            {{ CommonFunction.splitFullName(data.value) }}
+          </div>
+          <div class="misa-cell-FullName">{{ data.value }}</div>
+        </div>
+      </div>
+      <div v-if="dataField == 'AdminName'" :title="data.value">
+        <div class="misa-full-name-avatar-table flex">
+          <div
+            class="misa-cell-avatar-color"
+            :style="{ backgroundColor: data.data.AvartarAdmin }"
           >
             {{ CommonFunction.splitFullName(data.value) }}
           </div>
