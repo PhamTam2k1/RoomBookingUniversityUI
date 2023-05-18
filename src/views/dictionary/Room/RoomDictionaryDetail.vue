@@ -5,7 +5,7 @@
       titlePopup="Thêm phòng học"
       classPopup="popup-dictionary-room-detail"
       @onClickClosePopup="onCloseForm"
-      :tabindex="4"
+      :tabindex="9"
     >
       <template #iconPopup>
         <el-tooltip content="Đóng" placement="bottom">
@@ -16,65 +16,193 @@
         </el-tooltip>
       </template>
       <template #contentPopup>
-        <div class="t-row">
-          <base-input
-            lable="Mã phòng"
-            classInput="misa-input"
-            :focus="focus"
-            class="misa-input-secondary mgb-8"
-            :required="true"
-            :maxlength="20"
-            :tabindex="1"
-          ></base-input>
+        <div class="t-row-group flex mgt-16">
+          <div class="t-row-left">
+            <div class="t-lable mgb-8 flex">
+              <div class="t-lable-title">Mã phòng</div>
+              <div class="required">
+                <span class="t-required"> &nbsp;*</span>
+              </div>
+            </div>
+            <base-input
+              classInput="misa-input"
+              :focus="focus"
+              class="misa-input-secondary mgb-8 input-user-code"
+              :required="true"
+              :maxlength="20"
+              :tabindex="1"
+              v-model="room.RoomCode"
+              @handleBlurInput="validate('RoomCode')"
+              @handleKeyupInput="removeError('RoomCode')"
+              :error="Error['RoomCode']"
+            ></base-input>
+          </div>
+          <div class="t-row-right mgl-16">
+            <div class="t-lable mgb-8 flex">
+              <div class="t-lable-title">Tên phòng</div>
+              <div class="required">
+                <span class="t-required"> &nbsp;*</span>
+              </div>
+            </div>
+            <base-input
+              classInput="misa-input"
+              class="misa-input-secondary mgb-8"
+              :required="true"
+              :maxlength="100"
+              :tabindex="2"
+              v-model="room.RoomName"
+              @handleBlurInput="validate('RoomName')"
+              @handleKeyupInput="removeError('RoomName')"
+              :error="Error['RoomName']"
+            ></base-input>
+          </div>
         </div>
-        <div class="t-row">
-          <base-input
-            lable="Tên phòng"
-            classInput="misa-input"
-            class="misa-input-secondary mgb-8"
-            :required="true"
-            :maxlength="255"
-            :tabindex="1"
-          ></base-input>
+        <div class="t-row-group flex mgt-16">
+          <div class="t-row-left">
+            <div class="t-lable mgb-8 flex">
+              <div class="t-lable-title">Sức chứa</div>
+              <div class="required">
+                <span class="t-required"> &nbsp;*</span>
+              </div>
+            </div>
+
+            <base-input
+              classInput="misa-input"
+              class="misa-input-secondary mgb-8 input-user-code"
+              :required="true"
+              :maxlength="20"
+              :tabindex="3"
+              v-model="room.Capacity"
+              @handleBlurInput="validate('Capacity')"
+              @handleKeyupInput="removeError('Capacity')"
+              :error="Error['Capacity']"
+              type="Number"
+            ></base-input>
+          </div>
+          <div class="t-row-right mgl-16">
+            <div class="t-lable mgb-8 flex">
+              <div class="t-lable-title">Địa điểm</div>
+              <div class="required">
+                <span class="t-required"> &nbsp;*</span>
+              </div>
+            </div>
+            <BaseDropdownbox
+              :required="true"
+              classDropdownbox="drop-down-utc "
+              :dataSource="dataBuilding"
+              optionName="BuildingName"
+              optionValue="BuildingID"
+              :isSearch="true"
+              :height="34"
+              :tabindex="4"
+              placeholder="Chọn địa điểm"
+              @onValueChange="onValueChangeBuilding"
+              v-model:value="room.BuildingID"
+              @handleBlurInput="validate('BuildingID')"
+              @handleKeyupInput="removeError('BuildingID')"
+              :error="Error['BuildingID']"
+            ></BaseDropdownbox>
+          </div>
         </div>
-        <div class="t-row">
-          <base-input
-            lable="Sức chứa"
-            classInput="misa-input"
-            class="misa-input-secondary mgb-8"
-            :required="true"
-            type="Number"
-            :tabindex="1"
-          ></base-input>
+        <div class="t-row-group flex mgt-16">
+          <div class="t-row-left">
+            <div class="t-lable mgb-8 flex">
+              <div class="t-lable-title">Người phê duyệt</div>
+              <div class="required">
+                <span class="t-required"> &nbsp;*</span>
+              </div>
+            </div>
+
+            <BaseDropdownbox
+              :required="true"
+              classDropdownbox="drop-down-utc "
+              :dataSource="userAdmin"
+              optionName="FullName"
+              optionValue="UserID"
+              :isSearch="true"
+              :height="34"
+              :tabindex="5"
+              placeholder="Chọn người phê duyệt"
+              @onValueChange="onValueChangeAdminRoom"
+              v-model:value="room.UserID"
+              @handleBlurInput="validate('AdminID')"
+              @handleKeyupInput="removeError('AdminID')"
+              :error="Error['AdminID']"
+            ></BaseDropdownbox>
+          </div>
+          <div class="t-row-right mgl-16">
+            <div class="t-lable mgb-8 flex">
+              <div class="t-lable-title">Phụ trách phòng</div>
+              <div class="required">
+                <span class="t-required"> &nbsp;*</span>
+              </div>
+            </div>
+            <BaseDropdownbox
+              :required="true"
+              classDropdownbox="drop-down-utc "
+              :dataSource="userSupporter"
+              optionName="FullName"
+              optionValue="UserID"
+              :isSearch="true"
+              :height="34"
+              :tabindex="6"
+              placeholder="Chọn người phê duyệt"
+              @onValueChange="onValueChangeSupporterRoom"
+              v-model:value="room.UserID"
+              @handleBlurInput="validate('SupporterID')"
+              @handleKeyupInput="removeError('SupporterID')"
+              :error="Error['SupporterID']"
+            ></BaseDropdownbox>
+          </div>
         </div>
-        <div class="t-row">
+        <div class="t-row-block mgt-16">
+          <div class="t-lable mgb-8 flex">
+            <div class="t-lable-title">Chọn thiết bị</div>
+            <div class="required">
+              <span class="t-required"> &nbsp;*</span>
+            </div>
+          </div>
           <BaseDropdownbox
-            lable="Chọn địa điểm"
             :required="true"
             classDropdownbox="drop-down-utc "
-            :dataSource="dataRoom"
-            optionName="RoomName"
-            optionValue="RoomID"
+            :dataSource="dataRoomType"
+            optionName="RoomTypeName"
+            optionValue="RoomTypeID"
             :isSearch="true"
             :height="34"
-            placeholder="Chọn phòng"
-            @onValueChange="onValueChangeRoom"
+            :tabindex="6"
+            placeholder="Chọn người phê duyệt"
+            @onValueChange="onValueChangeRoomType"
+            v-model:value="room.RoomTypeID"
+            @handleBlurInput="validate('RoomTypeID')"
+            @handleKeyupInput="removeError('RoomTypeID')"
+            :error="Error['RoomTypeID']"
           ></BaseDropdownbox>
         </div>
-        <div class="t-row">
-          <BaseDropdownbox
-            lable="Chọn người phụ trách"
-            classDropdownbox="drop-down-utc "
-            :dataSource="dataRoom"
-            optionName="RoomName"
-            optionValue="RoomID"
-            :isSearch="true"
+        <div class="t-row-block mgt-16">
+          <div class="t-lable mgb-8 flex">
+            <div class="t-lable-title">Chọn thiết bị</div>
+            <div class="required">
+              <span class="t-required"> &nbsp;*</span>
+            </div>
+          </div>
+          <BaseSelectTagBox
+            :dataSource="dataEquipment"
             :height="34"
-            placeholder="Chọn phòng"
-            @onValueChange="onValueChangeRoom"
-          ></BaseDropdownbox>
+            classDropdownbox="drop-down-utc"
+            optionName="EquipmentName"
+            optionValue="EquipmentID"
+            placeholder="Chọn thiết bị"
+            :value="Equipment"
+            :tabindex="7"
+            @onOptionChange="onOptionChangeEquipment"
+            @handleBlurInput="validate('ListEquipmentID')"
+            @handleKeyupInput="removeError('ListEquipmentID')"
+            :error="Error['ListEquipmentID']"
+          >
+          </BaseSelectTagBox>
         </div>
-        <div class="t-row">
+        <!-- <div class="t-row">
           <div class="t-lable-equipment">Chọn thiết bị</div>
           <div class="equipment" v-for="item in items" :key="item">
             <div class="flex">
@@ -106,11 +234,11 @@
               <div class="text">Thêm thiết bị</div>
             </div>
           </div>
-        </div>
+        </div> -->
       </template>
       <template #buttonPopup>
         <BaseButton
-          :tabindex="3"
+          :tabindex="8"
           lableButton="Lưu"
           classButton="misa-button-normal w-86 misa-button-primary "
           @click="beforeSaveData()"
@@ -118,18 +246,52 @@
         <BaseButton
           @keyup="handleKeyup"
           classButton="w-0"
-          :tabindex="4"
+          :tabindex="9"
         ></BaseButton>
       </template>
     </BasePopup>
   </div>
+  <!--Begin Popup Notice Error -->
+  <PopupNotice
+    :titlePopup="titlePopup"
+    :contentPopup="contentPopup"
+    :classIcon="classIconPopup"
+    @onClickClosePopup="onClickClosePopup"
+    v-if="
+      popupNoticeMode == Enum.PopupMode.NotifyMode ||
+      popupNoticeMode == Enum.PopupMode.DeleteMode
+    "
+  >
+    <BaseButton
+      :tabindex="1"
+      :initFocus="true"
+      @keydown.enter="onClickClosePopup"
+      @click="onClickClosePopup"
+      lableButton="Đóng"
+      classButton="misa-button-normal w-80 misa-btn-nomarl"
+    ></BaseButton>
+    <BaseButton
+      v-if="popupNoticeMode == Enum.PopupMode.DeleteMode"
+      :tabindex="1"
+      @click="onClickCancelBooking"
+      lableButton="Hủy đặt"
+      classButton="misa-button-normal w-120 misa-btn-danger"
+    ></BaseButton>
+  </PopupNotice>
 </template>
 <script>
-import BuildingApi from '@/apis/BuildingApi'
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
 import BasePopup from '@/components/base/BasePopup.vue'
+import { mapActions, mapState } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
+import Enum from '@/commons/Enum'
+import BaseSelectTagBox from '@/components/base/BaseSelectTagBox.vue'
+import Resource from '@/commons/Resource'
+import PopupNotice from '@/components/popup/PopupNotice.vue'
+import RoomApi from '@/apis/RoomApi'
+import ObjectFunction from '@/commons/CommonFuction'
 export default {
   name: ' ',
   components: {
@@ -137,6 +299,8 @@ export default {
     BaseInput,
     BaseButton,
     BasePopup,
+    BaseSelectTagBox,
+    PopupNotice,
   },
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
   props: {
@@ -162,8 +326,26 @@ export default {
     isEdit: {
       type: Boolean,
     },
+    /**Trạng thái của popup */
+    popupMode: {
+      type: Number,
+      default: 0,
+    },
   },
-
+  computed: {
+    // Gán data
+    ...mapState({
+      dataBuilding: (state) => state.dictionary.dataBuilding,
+      dataEquipment: (state) => state.dictionary.dataEquipment,
+      dataUser: (state) => state.dictionary.dataUser,
+      dataRole: (state) => state.dictionary.dataRole,
+      dataRoomType: (state) => state.dictionary.dataRoomType,
+    }),
+    // Đăng ký đối tượng Enum trong phạm vi của component
+    Enum() {
+      return Enum
+    },
+  },
   data() {
     return {
       positionOf: '',
@@ -185,20 +367,117 @@ export default {
       Capacity: 0,
       showIcon: false,
       message: '',
-      equipment: [
-        { EquipmentID: 1, EquipmentName: 'điều hòa' },
-        { EquipmentID: 2, EquipmentName: 'quạt' },
-      ],
+      equipment: [],
       items: [1],
+      userAdmin: [],
+      userSupporter: [],
+      listEquipmentID: {},
+      focus: true,
+      Resource: Resource,
+      room: {
+        RoomID: this.roomData.RoomID || uuidv4(),
+        BuildingID: this.roomData.BuildingID || '',
+        RoomCode: this.roomData.RoomCode || '',
+        RoomTypeID: this.roomData.RoomTypeID || '',
+        RoomName: this.roomData.RoomName || '',
+        Capacity: this.roomData.Capacity || '',
+        AdminID: this.roomData.AdminID || '',
+        AdminName: this.roomData.AdminName || '',
+        AdminEmail: this.roomData.AdminEmail || '',
+        SupporterID: this.roomData.SupporterID || '',
+        SupporterName: this.roomData.SupporterName || '',
+        SupporterEmail: this.roomData.SupporterEmail || '',
+        AvartarAdmin: this.roomData.AvartarAdmin || '',
+        AvartarSupporter: this.roomData.AvartarSupporter || '',
+        ListEquipmentID: this.roomData.ListEquipmentID || '',
+        ListEquipmentName: this.roomData.ListEquipmentName || '',
+      },
+      /**Mảng chứa lỗi */
+      validateErrorList: [],
+      /**Trạng thái của popup */
+      popupNoticeMode: -1,
+      Error: {},
     }
   },
 
   methods: {
+    // Gọi hàm load data từ store
+    ...mapActions({
+      loadDataBuildings: 'dictionary/loadDataBuildings',
+      loadDataEquipments: 'dictionary/loadDataEquipments',
+      loadDataUsers: 'dictionary/loadDataUsers',
+      loadDataRoles: 'dictionary/loadDataRoles',
+      loadDataRoomTypes: 'dictionary/loadDataRoomTypes',
+    }),
+    /** Mô tả: Thực hiện đóng popup
+     * CreatedBy: PTTAM
+     */
+    onClickClosePopup() {
+      this.popupNoticeMode = -1
+      if (this.validateErrorList.length > 0) {
+        // Focus vào lỗi đầu tiên
+        // this.$nextTick(() =>
+        //   this.$refs[this.validateErrorList[0]][0].autoFocus()
+        // );
+        this.$refs.popupDictionary
+          .querySelector('.misa-input-required input[tabindex]')
+          .focus()
+      }
+    },
     /** Mô tả: Gửi sự kiện đóng form
      * CreatedBy: PTTAM
      */
     onCloseForm() {
       this.$emit('onCloseForm')
+    },
+    /**
+     * Validate
+     * PTTAM
+     */
+    validate(fieldName) {
+      try {
+        if (
+          !this.room[fieldName] &&
+          fieldName != 'ListEquipmentID' &&
+          fieldName != 'ListEquipmentName' &&
+          fieldName != 'AvartarSupporter' &&
+          fieldName != 'AvartarAdmin' &&
+          fieldName != 'SupporterEmail' &&
+          fieldName != 'SupporterName' &&
+          fieldName != 'AdminEmail' &&
+          fieldName != 'AdminName'
+        ) {
+          let field = ''
+          if (fieldName == 'RoomCode') {
+            field = 'Mã phòng'
+          } else if (fieldName == 'RoomName') {
+            field = 'Tên phòng'
+          } else if (fieldName == 'BuildingID') {
+            field = 'Địa điểm'
+          } else if (fieldName == 'ListEquipmentID') {
+            field = 'Thiết bị'
+          } else if (fieldName == 'Capacity') {
+            field = 'Sức chứa'
+          } else if (fieldName == 'AdminID') {
+            field = 'Người phê duyệt'
+          } else if (fieldName == 'SupporterID') {
+            field = 'Phụ trách phòng'
+          }
+          this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
+          this.validateErrorList.push(fieldName)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    /**
+     * Xóa bỏ lỗi
+     * @param {String} fieldName
+     */
+    removeError(fieldName) {
+      if (this.room[fieldName]) {
+        this.Error[fieldName] = ''
+      }
     },
     /** Mô tả: xử lý sự kiện form
      * @param {event}
@@ -214,20 +493,37 @@ export default {
         //   this.beforeSaveData();
       }
     },
+    /**
+     * Mô tả : sự kiện nhấn vào nút lưu
+     * @Createdby: PTTAM
+     */
+    beforeSaveData() {
+      this.validateErrorList = [] // Gán lại array = []
+      // Lấy danh sách các trường (fields) của object equipment
+      const fields = Object.keys(this.room)
 
+      // Lặp qua danh sách các trường để lấy tên của các trường
+      fields.forEach((field) => {
+        this.validate(field)
+      })
+      // Nếu mảng chứa lỗi không chứa lỗi
+      if (this.validateErrorList.length <= 0) {
+        // Thêm mới user
+        this.saveData()
+      } else {
+        // Ngược lại
+        this.showPopup('misa-icon-notice', Resource.ErrForm.ErrorInput) // Hiển thị popup
+        this.popupNoticeMode = Enum.PopupMode.NotifyMode
+      }
+    },
     /**
      * Lưu dữ liệu
      */
     saveData() {
-      var data = {
-        BuildingCode: this.BuildingCode,
-        BuildingName: this.BuildingName,
-      }
-
-      if (this.isEdit) {
+      if (this.popupMode == Enum.PopupMode.EditMode) {
         try {
-          BuildingApi.updated(this.roomData.BuildingID, data).then((res) => {
-            if (res && res.IsSuccess) {
+          RoomApi.updated(this.roomData.RoomID, this.room).then((res) => {
+            if (res && res.data) {
               this.message = 'Cập nhật thành công'
               this.$emit('closePopup', false)
             } else {
@@ -239,10 +535,15 @@ export default {
         }
       } else {
         try {
-          BuildingApi.insert(data).then((res) => {
-            if (res && res.IsSuccess) {
-              this.message = 'Lưu thành công'
-              this.$emit('closePopup', false)
+          RoomApi.insert(this.room).then((res) => {
+            if (res && res.data) {
+              ObjectFunction.toastMessage(
+                Resource.Messenger.InsertSucces,
+                Resource.Messenger.Success,
+              )
+              this.$emit('onShowLoading')
+              this.$emit('onCloseForm')
+              this.$emit('onLoadData')
             } else {
               this.message = 'Lưu thất bại'
             }
@@ -251,6 +552,16 @@ export default {
           console.log(error)
         }
       }
+    },
+
+    /** Mô tả: Hiển thị popup
+     * @param
+     * CreatedBy: PTTAM
+     */
+    showPopup(iconPopup, contentPopup, titlePopup) {
+      this.classIconPopup = iconPopup
+      this.contentPopup = contentPopup
+      this.titlePopup = titlePopup
     },
     /**
      * Thêm dòng thiết bị
@@ -268,6 +579,75 @@ export default {
         this.showIcon = false
       }
     },
+    /**
+     * Sự kiện thay đổi thiết bị
+     */
+    onOptionChangeEquipment(values) {
+      if (values) {
+        let ids = ''
+        let name = ''
+        values?.forEach((element) => {
+          ids += '' + element.EquipmentID.trim() + ','
+          name += '' + element.EquipmentName.trim() + ','
+        })
+        ids = ids.slice(0, -1)
+        name = name.slice(0, -1)
+        this.room.ListEquipmentID = ids
+        this.room.ListEquipmentName = name
+        console.log(name)
+      }
+    },
+    /**
+     * Sự kiện thay đổi tòa nhà
+     */
+    onValueChangeBuilding(value) {
+      this.room.BuildingID = value
+    },
+    /**
+     * Sự kiện thay đổi tòa nhà
+     */
+    onValueChangeSupporterRoom(value) {
+      debugger
+      let user = this.dataUser.find((x) => x.UserID == value)
+      this.room.SupporterID = value
+      this.room.SupporterName = user.FullName
+      this.room.SupporterEmail = user.Email
+      this.room.AvartarSupporter = user.AvartarColor
+    },
+    /**
+     * Sự kiện thay đổi tòa nhà
+     */
+    onValueChangeAdminRoom(value) {
+      let user = this.dataUser.find((x) => x.UserID == value)
+      this.room.AdminID = value
+      this.room.AdminName = user.FullName
+      this.room.AdminEmail = user.Email
+      this.room.AvartarAdmin = user.AvartarColor
+    },
+    onValueChangeRoomType(value) {
+      this.room.RoomTypeID = value
+    },
+  },
+  async mounted() {
+    try {
+      await this.loadDataBuildings()
+      await this.loadDataEquipments()
+      await this.loadDataUsers()
+      await this.loadDataRoles()
+      await this.loadDataRoomTypes()
+    } catch (error) {
+      console.error(error)
+    }
+    let roleAdmin = this.dataRole.find(
+      (x) => x.RoleValue == Enum.RoleOption.Admin,
+    )
+    let roleSupporter = this.dataRole.find(
+      (x) => x.RoleValue == Enum.RoleOption.Supporter,
+    )
+    this.userAdmin = this.dataUser.filter((x) => x.RoleID == roleAdmin.RoleID)
+    this.userSupporter = this.dataUser.filter(
+      (x) => x.RoleID == roleSupporter.RoleID,
+    )
   },
 }
 </script>
@@ -276,6 +656,17 @@ export default {
 .t-row {
   margin: 10px;
   height: 38px;
+}
+
+.t-row-left {
+  width: 50%;
+}
+.t-row-right {
+  width: 50%;
+}
+.t-row-block {
+  width: 100%;
+  height: 56px;
 }
 .t-lable-equipment {
   margin-bottom: -20px;

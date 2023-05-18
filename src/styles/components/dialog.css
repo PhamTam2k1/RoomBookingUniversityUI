@@ -224,7 +224,7 @@
   margin-bottom: 20px;
 }
 .misa-dialog .popup-dictionary-user-detail .misa-dialog-body {
-  width: 40vw;
+  width: 45vw;
   min-height: 52vh;
   max-height: 52vh;
   overflow-x: hidden;
@@ -291,4 +291,10 @@
 
 ::-webkit-scrollbar-track {
   background: #f1f1f1 !important;
+}
+.popup-dictionary-room-detail .drop-down-utc {
+  width: 100% !important;
+}
+.popup-noction-delete-error .misa-dialog-body{
+  width: 420px;
 }

@@ -35,7 +35,7 @@
           lable="Tên thiết bị"
           classInput="misa-input w-135"
           :focus="focusUser == true"
-          class="misa-input-secondary"
+          class="misa-input-secondary mgb-8"
           :required="true"
           :maxlength="255"
           v-model="equipment.EquipmentName"
@@ -44,6 +44,23 @@
           @handleKeyupInput="removeError('EquipmentName')"
           :error="Error['EquipmentName']"
         ></base-input>
+        <BaseDropdownbox
+          lable="Loại thiết bị"
+          :required="true"
+          classDropdownbox="drop-down-utc "
+          :dataSource="dataEquipmentType"
+          optionName="EquipmentTypeName"
+          optionValue="EquipmentTypeID"
+          :isSearch="true"
+          :height="34"
+          :tabindex="6"
+          placeholder="Chọn loại thiết bị"
+          v-model:value="equipment.EquipmentTypeID"
+          @onValueChange="onValueChangeEquipmentType"
+          @handleBlurInput="validate('EquipmentTypeID')"
+          @handleKeyupInput="removeError('EquipmentTypeID')"
+          :error="Error['EquipmentTypeID']"
+        ></BaseDropdownbox>
       </template>
       <template #buttonPopup>
         <BaseButton
@@ -90,6 +107,8 @@ import Resource from '@/commons/Resource'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
 import { v4 as uuidv4 } from 'uuid'
 import ObjectFunction from '@/commons/CommonFuction'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: ' ',
   emits: ['onCloseForm', 'onLoadData', 'onShowLoading'],
@@ -98,6 +117,7 @@ export default {
     BaseInput,
     BaseButton,
     PopupNotice,
+    BaseDropdownbox,
   },
 
   props: {
@@ -133,6 +153,7 @@ export default {
         EquipmentID: this.equipmentData.EquipmentID || uuidv4(),
         EquipmentCode: this.equipmentData.EquipmentCode || '',
         EquipmentName: this.equipmentData.EquipmentName || '',
+        EquipmentTypeID: this.equipmentData.EquipmentTypeID || '',
       },
       validateErrorList: [],
       message: '',
@@ -140,6 +161,10 @@ export default {
   },
 
   methods: {
+    // Gọi hàm load data từ store
+    ...mapActions({
+      loadDataEquipmentTypes: 'dictionary/loadDataEquipmentTypes',
+    }),
     /** Mô tả: Gửi sự kiện đóng form
      * CreatedBy: PTTAM
      */
@@ -183,6 +208,8 @@ export default {
             field = 'Mã thiết bị'
           } else if (fieldName == 'EquipmentName') {
             field = 'Tên thiết bị'
+          } else if (fieldName == 'EquipmentTypeID') {
+            field = 'Loại thiết bị'
           }
           this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
           this.validateErrorList.push(fieldName)
@@ -246,6 +273,14 @@ export default {
       this.contentPopup = contentPopup
     },
     /**
+     * Sự kiện thay đổi khoa
+     * @param {*} value
+     * PTTAM
+     */
+    onValueChangeEquipmentType(value) {
+      this.equipment.EquipmentTypeID = value
+    },
+    /**
      * Thực hiện lưu form
      */
     saveData() {
@@ -298,6 +333,18 @@ export default {
         }
       }
     },
+  },
+  computed: {
+    ...mapState({
+      dataEquipmentType: (state) => state.dictionary.dataEquipmentType,
+    }),
+  },
+  async mounted() {
+    try {
+      await this.loadDataEquipmentTypes()
+    } catch (error) {
+      console.error(error)
+    }
   },
 }
 </script>

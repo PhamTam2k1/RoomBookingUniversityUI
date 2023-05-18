@@ -4,6 +4,9 @@ import EquipmentApi from '@/apis/EquipmentApi'
 import TimeSlotApi from '@/apis/TimeSlotApi'
 import DepartmentApi from '@/apis/DepartmentApi'
 import RoleApi from '@/apis/RoleApi'
+import EquipmentTypeApi from '@/apis/EquipmentTypeApi'
+import RoomTypeApi from '@/apis/RoomTypeApi'
+import UserApi from '@/apis/UserApi'
 const state = {
   /**
    * Dữ liệu tòa nhà
@@ -34,6 +37,18 @@ const state = {
    * Dữ liệu vai trò
    */
   dataRole: null,
+  /**
+   * Dữ liệu loại phòng
+   */
+  dataEquipmentType: null,
+  /**
+   * Dữ liệu loại thiết bị
+   */
+  dataRoomType: null,
+  /**
+   * Dữ liệu giảng viên
+   */
+  dataUser: null,
 }
 
 const mutations = {
@@ -75,6 +90,24 @@ const mutations = {
    */
   loadDataRoles(state, data) {
     state.dataRole = data
+  },
+  /**
+   * Gán lại dữ liệu loại thiết bị
+   */
+  loadDataEquipmentTypes(state, data) {
+    state.dataEquipmentType = data
+  },
+  /**
+   * Gán lại dữ liệu loại phòng
+   */
+  loadDataRoomTypes(state, data) {
+    state.dataRoomType = data
+  },
+  /**
+   * Gán lại dữ liệu loại phòng
+   */
+  loadDataUsers(state, data) {
+    state.dataUser = data
   },
 }
 
@@ -159,6 +192,45 @@ const actions = {
       },
     )
   },
+  /**
+   * Thực hiện gọi api lấy toàn bộ dữ liệu loại phòng
+   */
+  async loadDataRoomTypes({ commit }) {
+    await RoomTypeApi.getAll().then(
+      (res) => {
+        commit('loadDataRoomTypes', res.data)
+      },
+      (err) => {
+        console.log(err)
+      },
+    )
+  },
+  /**
+   * Thực hiện gọi api lấy toàn bộ dữ liệu loại thiết bị
+   */
+  async loadDataEquipmentTypes({ commit }) {
+    await EquipmentTypeApi.getAll().then(
+      (res) => {
+        commit('loadDataEquipmentTypes', res.data)
+      },
+      (err) => {
+        console.log(err)
+      },
+    )
+  },
+  /**
+   * Thực hiện gọi api lấy toàn bộ dữ liệu loại thiết bị
+   */
+  async loadDataUsers({ commit }) {
+    await UserApi.getAll().then(
+      (res) => {
+        commit('loadDataUsers', res.data)
+      },
+      (err) => {
+        console.log(err)
+      },
+    )
+  },
 }
 
 /**
@@ -171,6 +243,9 @@ const getters = {
   dataTime: (state) => state.dataTime,
   dataDepartment: (state) => state.dataDepartment,
   dataRole: (state) => state.dataRole,
+  dataEquipmentType: (state) => state.dataEquipmentType,
+  dataRoomType: (state) => state.dataRoomType,
+  dataUser: (state) => state.dataUser,
 }
 
 export default {

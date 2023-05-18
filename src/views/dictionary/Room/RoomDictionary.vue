@@ -65,6 +65,44 @@
     @onShowLoading="showLoading(true)"
     :roomData="JSON.parse(JSON.stringify(dataComponent.roomData))"
   />
+  <!-- Begin popup delete -->
+  <DeleteRoomPopup
+    @onClickClosePopup="onClickClosePopup"
+    @onLoadData="getData()"
+    @onShowLoading="showLoading(true)"
+    @onHideLoading="showLoading(false)"
+    :popupMode="dataComponent.popupMode"
+    @showPopupNotice="showPopup"
+    v-if="dataComponent.popupMode == Enum.PopupMode.DeleteMode"
+    :roomData="JSON.parse(JSON.stringify(dataComponent.roomData))"
+  />
+  <!-- End popup delete -->
+  <!--Begin Popup Notice Error -->
+  <PopupNotice
+    titlePopup="Xóa không thành công"
+    :contentPopup="dataComponent.contentPopup"
+    classIcon="t-question-nocation"
+    @onClickClosePopup="onClickClosePopupNotice"
+    v-if="dataComponent.popupNoticeMode == Enum.PopupMode.NotifyMode"
+    class="popup-noction-delete-error"
+  >
+    <BaseButton
+      :tabindex="1"
+      :initFocus="true"
+      @keydown.enter="onClickClosePopupNotice"
+      @click="onClickClosePopupNotice"
+      lableButton="Không"
+      classButton="misa-button-normal w-80"
+    ></BaseButton>
+    <BaseButton
+      :tabindex="1"
+      :initFocus="true"
+      @keydown.enter="onClickClosePopupNotice"
+      @click="onClickClosePopupNotice"
+      lableButton="Xóa"
+      classButton="misa-button-normal w-80 misa-btn-danger"
+    ></BaseButton>
+  </PopupNotice>
 </template>
 <script>
 import BasePaging from '@/components/base/BasePaging.vue'
@@ -78,6 +116,9 @@ import DxTextBox from 'devextreme-vue/text-box'
 import RoomApi from '@/apis/RoomApi'
 // import BaseLoading from '@/components/base/BaseLoading.vue'
 import RoomDictionaryDetail from './RoomDictionaryDetail.vue'
+import DeleteRoomPopup from './DeleteRoomPopup.vue'
+import PopupNotice from '@/components/popup/PopupNotice.vue'
+import BaseButton from '@/components/base/BaseButton.vue'
 export default {
   components: {
     DxTextBox,
@@ -86,6 +127,9 @@ export default {
     BasePaging,
     BaseCellTemplace,
     RoomDictionaryDetail,
+    DeleteRoomPopup,
+    PopupNotice,
+    BaseButton,
   },
   props: {
     weekID: {
@@ -110,6 +154,8 @@ export default {
       roomData: {},
       isEdit: false,
       popupMode: 0,
+      popupNoticeMode: -1,
+      isShowForm: false,
     })
 
     /**
@@ -208,7 +254,12 @@ export default {
       )
       dataComponent.popupMode = Enum.PopupMode.DeleteMode //
     }
-
+    /**
+     * Đóng popup notice
+     */
+    function onClickClosePopupNotice() {
+      dataComponent.popupNoticeMode = -1
+    }
     /** Mô tả: Hàm hiển thị popup sửa vai trò của người dùng
      * @param {Object} user đối tượng người dùng
      * CreatedBy: PTTAM
@@ -221,7 +272,23 @@ export default {
       dataComponent.popupMode = Enum.PopupMode.EditMode // Gán lại trạng thái của popup
       showFormDetail(true)
     }
-
+    /** Mô tả: ẩn popup
+     * CreatedBy: PTTAM
+     * Created Date: 11-09-2022 08:22:11
+     */
+    function onClickClosePopup() {
+      dataComponent.popupMode = -1
+    }
+    /** Mô tả: Hiển thị popup
+     * @param
+     * CreatedBy: PTTAM
+     */
+    function showPopup(RoomName) {
+      dataComponent.contentPopup =
+        RoomName +
+        ' đã có dữ liệu đặt phòng. Bạn có chắc chắn muốn xóa toàn bộ dữ liệu phòng không?'
+      dataComponent.popupNoticeMode = Enum.PopupMode.NotifyMode
+    }
     /**
      * đóng popup phê duyệt
      * @param {
@@ -321,12 +388,19 @@ export default {
       onClickShowPopupEdit,
       showLoading,
       showFormDetail,
+      onClickClosePopupNotice,
+      onClickClosePopup,
+      showPopup,
     }
   },
   computed: {
     ...mapState({
       roleOption: (state) => state.auth.roleOption,
     }),
+    // Đăng ký đối tượng Enum trong phạm vi của component
+    Enum() {
+      return Enum
+    },
   },
   mounted() {
     this.showLoading(true)
