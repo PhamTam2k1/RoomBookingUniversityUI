@@ -28,6 +28,7 @@
               @onClickShowPopupReject="confirmRefuseClick"
               @onClickShowPopupApprove="confirmApproveClick"
               :isAdmin="dataComponent.isAdmin"
+              @onClickShowPopupEdit="onClickShowViewDetailPopup"
             ></BaseCellTemplace>
           </template>
         </BaseTable>
@@ -47,7 +48,17 @@
       <!-- End Paging -->
     </div>
   </div>
-
+  <!--Begin Popup detail -->
+  <RoomBookingPopup
+    v-if="dataComponent.isShowForm"
+    @onCloseForm="dataComponent.isShowForm = false"
+    @onShowLoading="showLoading(true)"
+    :bookingID="dataComponent.bookingID"
+    :popupMode="dataComponent.popupMode"
+    :isAdmin="dataComponent.isAdmin"
+    @onLoadData="getData"
+  />
+  <!-- Loading -->
   <!-- Loading -->
   <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>
 </template>
@@ -61,6 +72,8 @@ import Enum from '@/commons/Enum'
 import { reactive } from 'vue'
 import { mapState } from 'vuex'
 import BaseLoading from '@/components/base/BaseLoading.vue'
+import RoomBookingPopup from '../booking/RoomBookingPopup.vue'
+
 export default {
   components: {
     BaseTable,
@@ -68,6 +81,7 @@ export default {
     DxTextBox,
     BasePaging,
     BaseLoading,
+    RoomBookingPopup,
   },
   props: {
     weekID: {
@@ -93,6 +107,9 @@ export default {
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
       userID: null,
+      bookingID: null,
+      popupMode: 0,
+      isShowForm: false,
     })
     var headerTableBookingRoom = [
       {
@@ -104,31 +121,25 @@ export default {
         dataField: 'FullName',
         caption: 'Người đặt lịch',
         visible: true,
-        width: 260,
+        width: 200,
       },
       {
         dataField: 'RoomName',
-        caption: 'Tên phòng',
+        caption: 'Địa điểm',
         visible: true,
         width: 180,
-      },
-      {
-        dataField: 'BuildingName',
-        caption: 'Tên tòa nhà',
-        visible: true,
-        width: 160,
       },
       {
         dataField: 'TimeSlotName',
         caption: 'Ca đặt',
         visible: true,
-        width: 70,
+        width: 150,
       },
       {
         dataField: 'DateRequest',
         caption: 'Ngày yêu cầu',
         visible: true,
-        width: 160,
+        width: 130,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
@@ -143,7 +154,7 @@ export default {
         dataField: 'StartDate',
         caption: 'Ngày đặt',
         visible: true,
-        width: 160,
+        width: 120,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
@@ -154,6 +165,7 @@ export default {
           return `${day}/${month}/${year}`
         },
       },
+
       {
         dataField: 'StatusBooking',
         caption: 'Trạng thái',
@@ -161,10 +173,14 @@ export default {
         width: 150,
       },
       {
-        dataField: 'd',
-        caption: '',
-        width: 0,
+        dataField: 'RefusalReason',
+        caption: 'Lý do',
+        width: 200,
         visible: true,
+      },
+      {
+        dataField: 'detail',
+        caption: '',
       },
     ]
     /**
@@ -205,7 +221,7 @@ export default {
      */
     const getData = () => {
       try {
-        BookingRoomApi.getPagingRequest({
+        BookingRoomApi.getPagingHistory({
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
           keyword: dataComponent.keyword,
@@ -242,7 +258,16 @@ export default {
       showLoading(true)
       getData()
     }
-
+    /** Mô tả: Hàm hiển thị popup sửa vai trò của người dùng
+     * @param {Object} user đối tượng người dùng
+     * CreatedBy: PTTAM
+     * Created Date: 03-09-2022 07:02:41
+     */
+    function onClickShowViewDetailPopup(id) {
+      dataComponent.bookingID = id
+      dataComponent.popupMode = Enum.PopupMode.HistoryMode // Gán lại trạng thái của popup
+      dataComponent.isShowForm = true
+    }
     return {
       dataComponent,
       getData,
@@ -253,6 +278,7 @@ export default {
       filterBooking,
       showLoading,
       onClickClosePopup,
+      onClickShowViewDetailPopup,
     }
   },
   computed: {
@@ -269,10 +295,7 @@ export default {
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true
         : false
-    this.dataComponent.userID =
-      this.dataComponent.isAdmin == true
-        ? null
-        : JSON.parse(localStorage.getItem('user')).UserID
+    this.dataComponent.userID = JSON.parse(localStorage.getItem('user')).UserID
 
     this.getData()
   },

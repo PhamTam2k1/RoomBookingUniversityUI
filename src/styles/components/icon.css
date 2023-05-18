@@ -35,18 +35,16 @@
   background-position: -128px -312px;
   transform: scale(1);
 }
-.icon-pending{
+.icon-pending {
   background-position: -77px -37px;
   filter: invert(51%) sepia(217%) saturate(154%) hue-rotate(1397deg)
     brightness(85%) contrast(525%);
-
 }
-.icon-arrow-left{
+.icon-arrow-left {
   background-position: -77px -18px;
   filter: invert(51%) sepia(217%) saturate(154%) hue-rotate(1397deg)
     brightness(85%) contrast(525%);
-    transform: rotate(180deg);
-
+  transform: rotate(180deg);
 }
 .misa-icon-8 {
   width: 8px;
@@ -54,9 +52,25 @@
   min-width: 8px;
   min-height: 8px;
 }
+.t-people-contact {
+  background-position: 200px 200px;
+}
 .t-infomation {
   background-position: -1232px -312px;
   transform: scale(2);
+}
+.t-information-red {
+  background-position: -1696px -312px;
+}
+.t-question-nocation {
+  background-position: -1611px -360px;
+  transform: scale(1.7);
+  min-width: 16px ;
+  width: 16px ;
+}
+.t-infomation-room {
+  background-position: -1232px -312px;
+  transform: scale(1);
 }
 .t-icon-import-excel {
   background-position: -1265px -90px;

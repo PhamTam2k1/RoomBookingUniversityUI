@@ -70,6 +70,7 @@
     :popupMode="dataComponent.popupMode"
     :isAdmin="dataComponent.isAdmin"
     @onLoadData="getData"
+    @isSuccess="onSendingEmail"
   />
   <!-- Loading -->
   <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>
@@ -157,7 +158,7 @@ export default {
         dataField: 'TimeSlotName',
         caption: 'Ca đặt',
         visible: true,
-        width: 40,
+        width: 200,
       },
       {
         dataField: 'Discription',
@@ -169,7 +170,7 @@ export default {
         dataField: 'DateRequest',
         caption: 'Ngày yêu cầu',
         visible: true,
-        width: 120,
+        width: 130,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
@@ -199,11 +200,23 @@ export default {
         dataField: 'StatusBooking',
         caption: 'Trạng thái',
         visible: true,
-        width: 200,
+        width: 150,
+      },
+      {
+        dataField: 'detail',
+        caption: '',
+        visible:
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+            ? false
+            : true,
       },
       {
         dataField: 'Approve',
         caption: '',
+        visible:
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+            ? true
+            : false,
       },
     ]
     /**
@@ -327,6 +340,7 @@ export default {
      *
      */
     const approveClick = async () => {
+      showLoading(true)
       try {
         const res = await BookingRoomApi.approveRequest({
           bookingRoomID: dataComponent.dataSelect,
@@ -335,7 +349,7 @@ export default {
 
         if (res && res.data) {
           closePopup()
-          showLoading(true)
+          // showLoading(true)
           getData()
           onClickClosePopup()
 
@@ -350,6 +364,11 @@ export default {
             Resource.Messenger.Error,
           )
         }
+
+        onSendingEmail({
+          option: Enum.OptionRequest.Approve,
+          bookingID: dataComponent.dataSelect,
+        })
       } catch (error) {
         console.log(error)
       }
@@ -360,6 +379,7 @@ export default {
      *
      */
     const refuseClick = (reson) => {
+      showLoading(true)
       try {
         BookingRoomApi.approveRequest({
           bookingRoomID: dataComponent.dataSelect,
@@ -368,7 +388,7 @@ export default {
         }).then((res) => {
           if (res && res.data) {
             closePopup()
-            showLoading(true)
+
             getData()
             onClickClosePopup()
             ObjectFunction.toastMessage(
@@ -383,8 +403,42 @@ export default {
             )
           }
         })
+
+        onSendingEmail({
+          option: Enum.OptionRequest.Reject,
+          bookingID: dataComponent.dataSelect,
+        })
       } catch (error) {
         console.log(error)
+      }
+    }
+    /**
+     * Thực hiện gửi email
+     */
+    function onSendingEmail(result) {
+      switch (result.option) {
+        case Enum.OptionRequest.Approve:
+          BookingRoomApi.sendingEmailAproveOrReject({
+            bookingRoomID: result.bookingID,
+            option: Enum.OptionRequest.Approve,
+          }).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
+        case Enum.OptionRequest.Reject:
+          BookingRoomApi.sendingEmailAproveOrReject({
+            bookingRoomID: result.bookingID,
+            option: Enum.OptionRequest.Reject,
+          }).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
+        default:
+          break
       }
     }
 
@@ -404,6 +458,7 @@ export default {
       showLoading,
       onClickClosePopup,
       onClickShowViewDetailPopup,
+      onSendingEmail,
     }
   },
   computed: {

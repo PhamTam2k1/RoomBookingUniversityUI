@@ -5,6 +5,8 @@
         :title="data.value"
         v-if="
           dataField != 'FullName' &&
+          dataField != 'AdminName' &&
+          dataField != 'SupporterName' &&
           (dataField != 'StatusBooking') & (dataField != '')
         "
         class="wrap-text"
@@ -16,6 +18,28 @@
           <div
             class="misa-cell-avatar-color"
             :style="{ backgroundColor: data.data.AvartarColor }"
+          >
+            {{ CommonFunction.splitFullName(data.value) }}
+          </div>
+          <div class="misa-cell-FullName">{{ data.value }}</div>
+        </div>
+      </div>
+      <div v-if="dataField == 'SupporterName'" :title="data.value">
+        <div class="misa-full-name-avatar-table flex">
+          <div
+            class="misa-cell-avatar-color"
+            :style="{ backgroundColor: data.data.AvartarSupporter }"
+          >
+            {{ CommonFunction.splitFullName(data.value) }}
+          </div>
+          <div class="misa-cell-FullName">{{ data.value }}</div>
+        </div>
+      </div>
+      <div v-if="dataField == 'AdminName'" :title="data.value">
+        <div class="misa-full-name-avatar-table flex">
+          <div
+            class="misa-cell-avatar-color"
+            :style="{ backgroundColor: data.data.AvartarAdmin }"
           >
             {{ CommonFunction.splitFullName(data.value) }}
           </div>
@@ -71,6 +95,13 @@
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24"
             ></div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="dataField == 'detail'">
+      <div class="display-none">
+        <div class="flex detail">
+          <div @click="onClickShowPopupEdit(data.data[id])">Chi tiết</div>
         </div>
       </div>
     </div>
@@ -144,7 +175,7 @@ export default {
       this.$emit('onClickShowPopupReject', id)
     },
   },
-  created() {
+  mounted() {
     this.dataField = this.data.column.dataField
   },
 }
@@ -171,5 +202,13 @@ tr.dx-row.dx-data-row.dx-column-lines:hover .display-none {
 
 .refuse {
   color: red !important;
+}
+.detail {
+  color: rgb(10, 143, 143);
+  font-style: italic;
+}
+.detail:hover {
+  color: rgb(5, 80, 80);
+  text-decoration: underline;
 }
 </style>

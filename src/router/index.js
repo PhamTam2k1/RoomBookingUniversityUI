@@ -8,7 +8,7 @@ const routes = [
     path: '/',
     name: 'Trang chủ',
     component: DefaultLayout,
-    redirect: '/dashboard',
+    redirect: '/booking/booking-room',
     children: [
       {
         path: '/dashboard',
@@ -35,7 +35,7 @@ const routes = [
       {
         path: '/booking/booking-await',
         name: 'Chờ duyệt',
-        component: () => import('@/views/RoomBrowsing/RoomBrowsing1.vue'),
+        component: () => import('@/views/RoomBrowsing/RoomBrowsing.vue'),
         meta: { requiresAuth: true },
       },
       {

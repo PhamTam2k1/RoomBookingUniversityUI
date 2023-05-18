@@ -250,6 +250,7 @@
         :dataDate="currentDate"
         @onShowLoading="showLoading(true)"
         @onLoadData="loadDataBooking()"
+        @onSendingEmail="onSendingEmail"
       ></ColumnBookingForWeekTemplate>
     </div>
 
@@ -263,6 +264,7 @@
       :dateBooking="dateBooking"
       :popupMode="popupMode"
       @onLoadData="loadDataBooking()"
+      @isSuccess="onSendingEmail"
     />
     <ImportRoom
       v-if="isShowImportScheduler"
@@ -464,6 +466,7 @@ export default {
      */
     showLoading(isShow) {
       this.isShowLoading = isShow
+      console.log('loading')
     },
     /**
      * Sự kiện tăng giảm ngày
@@ -637,15 +640,49 @@ export default {
       this.showLoading(true)
       this.loadDataBooking()
     },
+    /**
+     * Thực hiện gửi email
+     */
+    onSendingEmail(result) {
+      switch (result.popupMode) {
+        case Enum.PopupMode.AddMode:
+          BookingRoomApi.sendEmailPending(result.bookingRoomData).then(
+            (res) => {
+              if (res) {
+                console.log(res)
+              }
+            },
+          )
+          break
+        case Enum.PopupMode.EditMode:
+          BookingRoomApi.sendingEmailUpdate(
+            result.bookingID,
+            result.bookingRoomData,
+          ).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
+        case 9:
+          BookingRoomApi.sendingEmailCancel(result.bookingID).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
+        default:
+          break
+      }
+    },
   },
 
-  async created() {
+  async created() {},
+  async mounted() {
     this.showLoading(true)
     this.loadDataBooking()
     await this.loadDataBuildings()
     await this.loadDataRooms()
-  },
-  mounted() {
     this.loadDataBooking()
     this.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin

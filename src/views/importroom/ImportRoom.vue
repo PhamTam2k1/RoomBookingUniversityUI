@@ -195,7 +195,7 @@
                           class="wrap-icon misa-icon ic-status-record ic-invalid"
                         ></div>
                         <div class="invalid-record record-text">
-                          <span class="total-invalid">{{ successCount }}</span>
+                          <span class="total-invalid">{{ successImport }}</span>
                           <span>&nbsp;</span> bản ghi hợp lệ
                         </div>
                       </div>
@@ -213,7 +213,7 @@
                           class="wrap-icon misa-icon ic-status-record ic-valid"
                         ></div>
                         <div class="valid-record record-text">
-                          <span class="total-valid">{{ errorCount }}</span>
+                          <span class="total-valid">{{ errorImport }}</span>
                           <span>&nbsp;</span> bản ghi không hợp lệ
                         </div>
                       </div>
@@ -427,23 +427,17 @@ export default {
             this.sumaryData = response.data.Count
             if (response.data.IsSuccess) {
               this.successCount = this.sumaryData
+              ObjectFunction.toastMessage(
+                'Nhập khẩu thành công',
+                Resource.Messenger.Success,
+              )
+             
             } else {
               this.isSuccess = false
             }
             break
           case 4:
-            if (this.isSuccess) {
-              this.$emit('onCloseForm')
-              this.$emit('onShowLoading') // hiển thị loading
-
-              this.$emit('onLoadData')
-              ObjectFunction.toastMessage(
-                'Nhập khẩu thành công',
-                Resource.Messenger.Success,
-              )
-            } else {
-              this.$emit('onCloseForm')
-            }
+           this.$emit('onCloseForm')
 
             break
           default:
@@ -523,7 +517,15 @@ export default {
      * Đóng Popup
      */
     onClickClosePopup() {
-      this.$emit('onClickClosePopup')
+      this.$emit('onCloseForm')
+    },
+  },
+  computed: {
+    errorImport() {
+      return this.errorCount
+    },
+    successImport() {
+      return this.successCount
     },
   },
 }

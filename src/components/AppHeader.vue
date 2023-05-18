@@ -16,7 +16,9 @@
               icon="cil-bell"
               size="lg"
               @click="showNotify = true"
-            />
+            >
+            </CIcon>
+            <span class="badge" v-if="countNotify != 0">{{ countNotify }}</span>
             <div
               v-if="showNotify"
               class="dropdown-menu show dropdown-menu-end pt-0"
@@ -124,6 +126,7 @@ export default {
       showNotify: false,
       title: 'My Component',
       dataConvert: [],
+      countNotify: 0,
     }
   },
   methods: {
@@ -150,6 +153,9 @@ export default {
       }
     },
   },
+  mounted() {
+    console.log(this.dataConvert)
+  },
   async created() {
     debugger
     // lấy thông tin đăng nhập
@@ -164,6 +170,7 @@ export default {
             const notification = data[key]
             this.dataConvert.push(notification)
           }
+          this.countNotify = this.dataConvert.length
           this.dataConvert.sort((a, b) => new Date(b.time) - new Date(a.time))
         } else {
           console.log('Không tìm thấy đối tượng con ')
@@ -173,7 +180,7 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
 .dropdown-menu.dropdown-menu-end {
   min-width: 315px;
   max-height: 500px;
@@ -185,5 +192,20 @@ export default {
   top: 0px;
   left: 0px;
   z-index: 99;
+}
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 17px;
+  background-color: #ff0000;
+  color: #ffffff;
+  border-radius: 50%;
+  height: 14px;
+  width: 15px;
+  font-size: 7px;
+  padding-top: 3px;
+}
+.nav-link {
+  position: relative;
 }
 </style>

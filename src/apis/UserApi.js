@@ -18,7 +18,7 @@ class UserAPI {
    *Created date: 13:40 03/09/2022
    */
   async getAll() {
-    return await BaseAPIConfig.get(`${this.controller}`)
+    return await BaseAPIConfig.get(`${this.controller}/getAll`)
   }
 
   /**

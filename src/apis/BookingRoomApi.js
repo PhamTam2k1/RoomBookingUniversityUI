@@ -45,11 +45,32 @@ class BookingRoomAPI {
     )
   }
   /**
+   * Mô tả : gọi Api paging history
+   * @param {Object} param
+   * - pageIndex - trang hiện tại
+   * - pageSize - sô bản ghi / trang
+   * - keyword - từ khóa tìm kiếm
+   * @Createdby: PTTAM
+   */
+  async getPagingHistory(param) {
+    return await BaseAPIConfig.post(
+      `${this.controller}/pagingHistoryBooking`,
+      param,
+    )
+  }
+  /**
    * Mô tả: Thực hiện insert
    * @param: đối tượng
    */
   insert(entity) {
     return BaseAPIConfig.post(`${this.controller}/insertBookingRequest`, entity)
+  }
+  /**
+   * Mô tả: Thực hiện gửi email chờ duyệt
+   * @param: đối tượng
+   */
+  sendEmailPending(entity) {
+    return BaseAPIConfig.post(`${this.controller}/sendEmailPending`, entity)
   }
   /**
    * Thực hiện phê duyệt yêu cầu đặt phòng
@@ -64,7 +85,19 @@ class BookingRoomAPI {
       param,
     )
   }
-
+  /**
+   * Thực hiện gửi email phê duyệt yêu cầu đặt phòng
+   * @param {*} param
+   * BookingRequest - entity
+   * option - 1 - đồng ý, 2- từ chối
+   * @returns
+   */
+  async sendingEmailAproveOrReject(param) {
+    return await BaseAPIConfig.post(
+      `${this.controller}/sendingEmailAproveOrReject`,
+      param,
+    )
+  }
   /**
    * Lấy đối tượng theo khóa chính
    * @param {*} id
@@ -72,6 +105,24 @@ class BookingRoomAPI {
    */
   getByID(id) {
     return BaseAPIConfig.get(`${this.controller}/getById/${id}`)
+  }
+  /**
+   * Lấy đối tượng theo khóa chính
+   * @param {*} id
+   * @returns
+   */
+  cancelBookingRequest(id) {
+    return BaseAPIConfig.put(
+      `${this.controller}/cancelBookingRequestNomal/${id}`,
+    )
+  }
+  /**
+   * Thực hiện gửi email hủy lịch đặt phòng
+   * @param {*} id
+   * @returns
+   */
+  sendingEmailCancel(id) {
+    return BaseAPIConfig.put(`${this.controller}/sendingEmailCancel/${id}`)
   }
   /**
    * Update lịch đặt
@@ -82,6 +133,18 @@ class BookingRoomAPI {
   updated(id, entity) {
     return BaseAPIConfig.put(
       `${this.controller}/updateBookingRequest/${id}`,
+      entity,
+    )
+  }
+  /**
+   * Thực hiên gửi email khi update lịch đặt
+   * @param {*} id - khóa chính
+   * @param {*} entity - vai trò
+   * @returns
+   */
+  sendingEmailUpdate(id, entity) {
+    return BaseAPIConfig.put(
+      `${this.controller}/sendingEmailUpdate/${id}`,
       entity,
     )
   }

@@ -473,15 +473,14 @@ export default {
    * Thực hiện gọi api để lấy dữ liệu phòng ban, vai trò
    * PTTAM 02.04.2023
    */
-  async created() {
+  async created() {},
+  async mounted() {
     try {
       await this.loadDataDepartments()
       await this.loadDataRoles()
     } catch (error) {
       console.error(error)
     }
-  },
-  mounted() {
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.getNewUserCode()
     } else if (this.popupMode == Enum.PopupMode.EditMode) {

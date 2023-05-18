@@ -26,7 +26,9 @@
             v-for="room in rooms"
             :key="room.RoomID"
             @click="
-              onClickCell(timeSlot.dateTime, room.RoomID), (isShowForm = true)
+              onClickCell(timeSlot.dateTime, room.RoomID),
+                (isShowForm = true),
+                $event.stopPropagation()
             "
             class="rowColor"
             :class="{
@@ -52,6 +54,7 @@
                       booking.RoomID,
                       booking.BookingRoomID,
                     ),
+                      $event.stopPropagation(),
                       (isShowForm = true)
                   "
                   v-for="(booking, index) in getSubject(
@@ -68,6 +71,7 @@
                       backgroundColor: getBookingStatusColor(
                         timeSlot.dateTime,
                         room.RoomID,
+                        booking.BookingRoomID,
                       ),
                     }"
                   ></div>
@@ -108,6 +112,7 @@
       :dateBooking="dateBooking"
       :popupMode="popupMode"
       @onLoadData="onLoadDataBooking"
+      @isSuccess="onSendingEmail"
     />
     <BasePopup
       v-if="popupNoticeMode"
@@ -130,7 +135,12 @@
           <div class="misa-active-status-table flex">
             <div
               @click="
-                onClickCell(booking.dateTime, booking.RoomID),
+                onClickCell(
+                  booking.dateTime,
+                  booking.RoomID,
+                  booking.BookingRoomID,
+                ),
+                  $event.stopPropagation(),
                   (isShowForm = true)
               "
               v-for="(booking, index) in generate"
@@ -143,6 +153,7 @@
                   backgroundColor: getBookingStatusColor(
                     booking.dateTime,
                     booking.RoomID,
+                    booking.BookingRoomID,
                   ),
                 }"
               ></div>
@@ -311,9 +322,12 @@ export default {
       let color = booking ? booking.color : null
       return color
     },
-    getBookingStatusColor(value, RoomID) {
+    getBookingStatusColor(value, RoomID, BookingRoomID) {
       const booking = this.bookingRooms.find(
-        (item) => item.dateTime === value && item.RoomID === RoomID,
+        (item) =>
+          item.dateTime === value &&
+          item.RoomID === RoomID &&
+          item.BookingRoomID === BookingRoomID,
       )
       let status = booking ? booking.StatusBooking : 0
       let corlor = ''
@@ -346,6 +360,7 @@ export default {
       // this.rooms = uniqueRooms
     },
     onClickCell(TimeSlotID, RoomID, BookingRoomID) {
+      debugger
       this.isShowTooltip = false
       this.popupNoticeMode = false
       this.dateBooking = moment(TimeSlotID, 'DD/MM/YYYY').toDate()
@@ -404,6 +419,7 @@ export default {
     },
     // tạo ra template ngày tháng
     dateCellTemplate() {
+      debugger
       const today = new Date(this.dataDate)
       let daysOfWeek = []
       if (this.view && this.view == 'week') {
@@ -420,7 +436,7 @@ export default {
         const daysWithDate = daysOfWeek.map((day) => {
           const date = new Date(today)
           const dayOfWeek = date.getDay()
-          const diff = day.id - dayOfWeek
+          const diff = day.id - dayOfWeek - (dayOfWeek === 0 ? 7 : 0)
           date.setDate(today.getDate() + diff)
           const momentObj = moment(date)
           const formattedString = momentObj.format('DD/MM')
@@ -487,6 +503,12 @@ export default {
           break
       }
       return name
+    },
+    /**
+     * Thực hiện gửi email
+     */
+    onSendingEmail(result) {
+      this.$emit('onSendingEmail', result)
     },
   },
   computed: {

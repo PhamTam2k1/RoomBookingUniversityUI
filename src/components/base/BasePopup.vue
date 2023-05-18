@@ -15,7 +15,7 @@
       </div>
       <div class="misa-dialog-footer">
         <BaseButton
-          lableButton="Hủy"
+          :lableButton="lableButton"
           classButton="misa-button-normal w-80"
           @click="onClickClosePopup"
           :tabindex="tabindex"
@@ -54,7 +54,11 @@ export default {
       type: String,
       default: '',
     },
-
+    /**Title của popup */
+    lableButton: {
+      type: String,
+      default: 'Hủy',
+    },
     /**Trạng thái của popup */
     popupMode: {
       type: Number,
