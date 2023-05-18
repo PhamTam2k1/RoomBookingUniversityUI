@@ -112,6 +112,7 @@
       :dateBooking="dateBooking"
       :popupMode="popupMode"
       @onLoadData="onLoadDataBooking"
+      @isSuccess="onSendingEmail"
     />
     <BasePopup
       v-if="popupNoticeMode"
@@ -502,6 +503,12 @@ export default {
           break
       }
       return name
+    },
+    /**
+     * Thực hiện gửi email
+     */
+    onSendingEmail(result) {
+      this.$emit('onSendingEmail', result)
     },
   },
   computed: {

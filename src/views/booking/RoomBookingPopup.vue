@@ -609,8 +609,9 @@ export default {
      * Thực hiện lưu form
      */
     saveData() {
-      debugger
       let me = this
+      let bookingData = {}
+      debugger
       if (me.popupMode == Enum.PopupMode.AddMode) {
         try {
           me.bookingRoomData.StartDate = moment(
@@ -622,6 +623,7 @@ export default {
           BookingRoomApi.insert(me.bookingRoomData).then((res) => {
             if (res) {
               if (res.data.IsSucess) {
+                bookingData = res.data.BookingData
                 me.$emit('onCloseForm')
 
                 me.$emit('onLoadData')
@@ -637,6 +639,10 @@ export default {
                   )
                 }
                 me.$emit('onShowLoading') // hiển thị loading
+                me.$emit('isSuccess', {
+                  popupMode: me.popupMode,
+                  bookingRoomData: bookingData,
+                })
               } else {
                 me.showLoading(false)
                 let data = res.data.Data
@@ -666,7 +672,7 @@ export default {
           this.bookingRoomData.EndDate = moment(
             this.bookingRoomData.EndDate,
           ).format('YYYY/MM/DD')
-          BookingRoomApi.updated(this.bookingID, this.bookingRoomData).then(
+          BookingRoomApi.updated(me.bookingID, me.bookingRoomData).then(
             (res) => {
               if (res && res.data) {
                 if (res.data.IsSusses) {
@@ -682,6 +688,7 @@ export default {
                     'Cập nhật thất bại',
                     Resource.Messenger.Error,
                   )
+
                   this.$emit('onCloseForm')
                 }
               }
@@ -690,6 +697,11 @@ export default {
         } catch (error) {
           console.log(error)
         }
+        this.$emit('isSuccess', {
+          popupMode: this.popupMode,
+          bookingRoomData: this.bookingRoomData,
+          bookingID: this.bookingID,
+        })
       }
     },
     /**
@@ -749,21 +761,26 @@ export default {
      */
     async ApproveRequest() {
       try {
+        let me = this
         const res = await BookingRoomApi.approveRequest({
-          bookingRoomID: this.bookingID,
+          bookingRoomID: me.bookingID,
           option: Enum.OptionRequest.Approve,
         })
 
         if (res && res.data) {
-          this.$emit('onShowLoading')
-          this.$emit('onCloseForm')
-          this.$emit('onLoadData')
+          me.$emit('onShowLoading')
+          me.$emit('onCloseForm')
+          me.$emit('onLoadData')
           ObjectFunction.toastMessage(
             'Phê duyệt thành công',
             Resource.Messenger.Success,
           )
+          me.$emit('isSuccess', {
+            bookingID: me.bookingID,
+            option: Enum.OptionRequest.Approve,
+          })
         } else {
-          this.$emit('onCloseForm')
+          me.$emit('onCloseForm')
           ObjectFunction.toastMessage(
             'Phê duyệt thất bại',
             Resource.Messenger.Error,
@@ -784,23 +801,28 @@ export default {
      */
     refuseClick(reson) {
       try {
+        let me = this
         BookingRoomApi.approveRequest({
-          bookingRoomID: this.bookingID,
+          bookingRoomID: me.bookingID,
           refusalReason: reson,
           option: Enum.OptionRequest.Reject,
         }).then((res) => {
           if (res && res.data) {
-            this.$emit('onShowLoading')
-            this.$emit('onCloseForm')
-            this.$emit('onLoadData')
-            this.popupModeRefuse = -1
+            me.$emit('onShowLoading')
+            me.$emit('onCloseForm')
+            me.$emit('onLoadData')
+            me.popupModeRefuse = -1
             ObjectFunction.toastMessage(
               'Từ chối thành công',
               Resource.Messenger.Success,
             )
+            me.$emit('isSuccess', {
+              bookingID: me.bookingID,
+              option: Enum.OptionRequest.Reject,
+            })
           } else {
-            this.$emit('onCloseForm')
-            this.popupModeRefuse = -1
+            me.$emit('onCloseForm')
+            me.popupModeRefuse = -1
             ObjectFunction.toastMessage(
               'Từ chối thất bại',
               Resource.Messenger.Success,
@@ -816,20 +838,24 @@ export default {
      */
     onClickCancelBooking() {
       try {
-        debugger
-        BookingRoomApi.cancelBookingRequest(this.bookingID).then((res) => {
+        let me = this
+        BookingRoomApi.cancelBookingRequest(me.bookingID).then((res) => {
           if (res && res.data.IsSusses) {
-            this.$emit('onShowLoading')
-            this.$emit('onCloseForm')
-            this.$emit('onLoadData')
-            this.popupNoticeMode = -1
+            me.$emit('onShowLoading')
+            me.$emit('onCloseForm')
+            me.$emit('onLoadData')
+            me.popupNoticeMode = -1
+            me.$emit('isSuccess', {
+              popupMode: 9,
+              bookingID: me.bookingID,
+            })
             ObjectFunction.toastMessage(
               'Hủy đặt phòng thành công',
               Resource.Messenger.Success,
             )
           } else {
-            this.$emit('onCloseForm')
-            this.popupNoticeMode = -1
+            me.$emit('onCloseForm')
+            me.popupNoticeMode = -1
             ObjectFunction.toastMessage(
               'Hủy đặt phòng thất bại',
               Resource.Messenger.Success,

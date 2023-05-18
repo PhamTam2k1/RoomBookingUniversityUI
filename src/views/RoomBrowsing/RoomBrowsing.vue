@@ -70,6 +70,7 @@
     :popupMode="dataComponent.popupMode"
     :isAdmin="dataComponent.isAdmin"
     @onLoadData="getData"
+    @isSuccess="onSendingEmail"
   />
   <!-- Loading -->
   <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>
@@ -363,6 +364,11 @@ export default {
             Resource.Messenger.Error,
           )
         }
+
+        onSendingEmail({
+          option: Enum.OptionRequest.Approve,
+          bookingID: dataComponent.dataSelect,
+        })
       } catch (error) {
         console.log(error)
       }
@@ -397,8 +403,42 @@ export default {
             )
           }
         })
+
+        onSendingEmail({
+          option: Enum.OptionRequest.Reject,
+          bookingID: dataComponent.dataSelect,
+        })
       } catch (error) {
         console.log(error)
+      }
+    }
+    /**
+     * Thực hiện gửi email
+     */
+    function onSendingEmail(result) {
+      switch (result.option) {
+        case Enum.OptionRequest.Approve:
+          BookingRoomApi.sendingEmailAproveOrReject({
+            bookingRoomID: result.bookingID,
+            option: Enum.OptionRequest.Approve,
+          }).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
+        case Enum.OptionRequest.Reject:
+          BookingRoomApi.sendingEmailAproveOrReject({
+            bookingRoomID: result.bookingID,
+            option: Enum.OptionRequest.Reject,
+          }).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
+        default:
+          break
       }
     }
 
@@ -418,6 +458,7 @@ export default {
       showLoading,
       onClickClosePopup,
       onClickShowViewDetailPopup,
+      onSendingEmail,
     }
   },
   computed: {

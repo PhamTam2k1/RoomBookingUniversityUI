@@ -60,7 +60,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.templateModel)
+    // console.log(this.templateModel)
   },
 }
 </script>
