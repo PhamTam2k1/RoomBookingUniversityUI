@@ -806,7 +806,7 @@ thead {
   position: sticky;
   left: 0;
   top: 0;
-  z-index: 887;
+  z-index: 1 !important;
   background-color: #fff;
   border-top: 2px solid #ddd;
   border-bottom: 2px solid #ddd;
