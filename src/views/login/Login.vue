@@ -37,11 +37,13 @@
           </DxValidator>
           <div class="input-field-icon icon-password"></div>
         </DxTextBox>
+        <div class="error" v-if="error != ''">{{ error }}</div>
         <DxButton
           width="100%"
           :use-submit-behavior="true"
           text="Đăng nhập"
           type="default"
+          class="mgt-8"
         />
       </div>
     </div>
@@ -53,7 +55,6 @@ import store from '@/store'
 import DxButton from 'devextreme-vue/button'
 import DxValidator, { DxValidationRule } from 'devextreme-vue/validator'
 import DxTextBox from 'devextreme-vue/text-box'
-
 export default {
   components: {
     DxTextBox,
@@ -65,9 +66,9 @@ export default {
     return {
       username: '',
       password: '',
+      error: '',
     }
   },
-
   methods: {
     async handleSubmit() {
       const user = { Username: this.username, Password: this.password }
@@ -75,10 +76,11 @@ export default {
       try {
         // Gọi action login trong store để thực hiện yêu cầu đăng nhập
         await store.dispatch('auth/login', user)
-
+        this.error = ''
         // Chuyển hướng đến trang Dashboard sau khi đăng nhập thành công
         this.$router.push('/')
       } catch (error) {
+        this.error = 'Tên đăng nhập hoặc mật khẩu không đúng!'
         // console.error(error)
         // Hiển thị thông báo lỗi đăng nhập
       }
@@ -89,6 +91,11 @@ export default {
 <style scoped lang="scss">
 aside {
   display: none;
+}
+.error {
+  color: #e14242;
+  font-size: 13px;
+  font-family: 'Roboto';
 }
 #content-header {
   display: none;
@@ -125,7 +132,7 @@ form {
   }
   .form-body {
     width: 400px;
-    height: 400px;
+    height: 420px;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 40px;
