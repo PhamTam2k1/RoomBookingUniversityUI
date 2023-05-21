@@ -2,7 +2,7 @@
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
       class="misa-dialog"
-      titlePopup="Thêm người dùng"
+      :titlePopup="titlePopup"
       classPopup="popup-dictionary-user-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
@@ -243,6 +243,7 @@ export default {
       /**Trạng thái của popup */
       popupNoticeMode: -1,
       Error: {},
+      titlePopup: 'Thêm người dùng',
     }
   },
 
@@ -483,8 +484,10 @@ export default {
     }
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.getNewUserCode()
+      this.titlePopup = 'Thêm người dùng'
     } else if (this.popupMode == Enum.PopupMode.EditMode) {
       this.getUserByID()
+      this.titlePopup = 'Cập nhật người dùng'
     }
   },
 }

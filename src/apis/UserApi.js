@@ -47,7 +47,13 @@ class UserAPI {
   insert(entity) {
     return BaseAPIConfig.post(`${this.controller}/insert`, entity)
   }
-
+  /**
+   * Mô tả: Thực hiện insert
+   * @param: đối tượng
+   */
+  changePass(entity) {
+    return BaseAPIConfig.post(`${this.controller}/changepass`, entity)
+  }
   /**
    * Mô tả: Thực hiện delete
    * @param: entityID - khóa chính vai trò

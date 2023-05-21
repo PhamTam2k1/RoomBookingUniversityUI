@@ -2,7 +2,7 @@
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
       class="misa-dialog"
-      titlePopup="Thêm phòng học"
+      :titlePopup="titlePopup"
       classPopup="popup-dictionary-room-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
@@ -146,7 +146,7 @@
               :isSearch="true"
               :height="34"
               :tabindex="6"
-              placeholder="Chọn người phê duyệt"
+              placeholder="Chọn người phụ trách"
               @onValueChange="onValueChangeSupporterRoom"
               v-model:value="room.SupporterID"
               @handleBlurInput="validate('SupporterID')"
@@ -171,7 +171,7 @@
             :isSearch="true"
             :height="34"
             :tabindex="6"
-            placeholder="Chọn người phê duyệt"
+            placeholder="Chọn loại phòng"
             @onValueChange="onValueChangeRoomType"
             v-model:value="room.RoomTypeID"
             @handleBlurInput="validate('RoomTypeID')"
@@ -397,6 +397,7 @@ export default {
       /**Trạng thái của popup */
       popupNoticeMode: -1,
       Error: {},
+      titlePopup: 'Thêm phòng học',
     }
   },
 
@@ -683,7 +684,9 @@ export default {
     )
     if (this.popupMode == Enum.PopupMode.EditMode) {
       this.getRoomByID()
-      console.log(this.room)
+      this.titlePopup = 'Cập nhật phòng'
+    } else if (this.popupMode == Enum.PopupMode.AddMode) {
+      this.titlePopup = 'Thêm phòng học'
     }
   },
 }

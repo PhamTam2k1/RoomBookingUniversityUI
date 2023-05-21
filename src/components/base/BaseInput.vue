@@ -87,7 +87,8 @@ export default {
     type: {
       type: [String, Number],
       default: 'text',
-      validator: (value) => ['text', 'number'].includes(value.toLowerCase()),
+      validator: (value) =>
+        ['text', 'number', 'password'].includes(value.toLowerCase()),
     },
   },
   data() {
