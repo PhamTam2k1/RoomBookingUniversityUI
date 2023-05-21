@@ -195,6 +195,7 @@ const Resource = Object.freeze({
     Reject: '#000',
     //Hủy
     Cancel: '',
+    OpenDoor: '',
   },
   /**Mảng chứa trạng thái của người dùng */
   BookingStatus: {
@@ -206,6 +207,8 @@ const Resource = Object.freeze({
     Reject: 'Từ chối',
     //Hủy
     Cancel: 'Hủy yêu cầu',
+    // Mở cửa
+    OpenDoor: 'Đã mở cửa',
   },
   PassWordDefault: '12345678@Utc',
 })

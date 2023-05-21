@@ -73,12 +73,17 @@ export default {
     async handleSubmit() {
       const user = { Username: this.username, Password: this.password }
       localStorage.setItem('user', JSON.stringify(user))
+      debugger
       try {
         // Gọi action login trong store để thực hiện yêu cầu đăng nhập
         await store.dispatch('auth/login', user)
         this.error = ''
         // Chuyển hướng đến trang Dashboard sau khi đăng nhập thành công
-        this.$router.push('/')
+        if (localStorage.getItem('roleOption') - 0 === 3) {
+          this.$router.push('/booking/booking-await')
+        } else {
+          this.$router.push('/')
+        }
       } catch (error) {
         this.error = 'Tên đăng nhập hoặc mật khẩu không đúng!'
         // console.error(error)

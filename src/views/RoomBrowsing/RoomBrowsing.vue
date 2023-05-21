@@ -29,6 +29,7 @@
               @onClickShowPopupApprove="confirmApproveClick"
               @onClickShowPopupEdit="onClickShowViewDetailPopup"
               :isAdmin="dataComponent.isAdmin"
+              :isSupporter="dataComponent.isSupporter"
             ></BaseCellTemplace>
           </template>
         </BaseTable>
@@ -53,6 +54,7 @@
     :popupMode="dataComponent.popupMode"
     v-if="dataComponent.popupMode == Enum.PopupMode.ApproveMode"
     @approveClick="approveClick"
+    :isAdmin="dataComponent.isAdmin"
   />
 
   <ConfirmRefuseProcessVue
@@ -120,6 +122,7 @@ export default {
       endRecord: 1,
       totalRecord: 1,
       isShowForm: false,
+      isSupporter: false,
       /**Timout của tìm kiếm */
       timeout: 1000,
       keyword: '',
@@ -206,17 +209,17 @@ export default {
         dataField: 'detail',
         caption: '',
         visible:
-          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
-            ? false
-            : true,
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.User
+            ? true
+            : false,
       },
       {
         dataField: 'Approve',
         caption: '',
         visible:
-          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
-            ? true
-            : false,
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.User
+            ? false
+            : true,
       },
     ]
     /**
@@ -342,9 +345,12 @@ export default {
     const approveClick = async () => {
       showLoading(true)
       try {
+        let option = dataComponent.isAdmin
+          ? Enum.OptionRequest.Approve
+          : Enum.OptionRequest.OpenDoor
         const res = await BookingRoomApi.approveRequest({
           bookingRoomID: dataComponent.dataSelect,
-          option: Enum.OptionRequest.Approve,
+          option: option,
         })
 
         if (res && res.data) {
@@ -366,7 +372,7 @@ export default {
         }
 
         onSendingEmail({
-          option: Enum.OptionRequest.Approve,
+          option: option,
           bookingID: dataComponent.dataSelect,
         })
       } catch (error) {
@@ -427,6 +433,16 @@ export default {
             }
           })
           break
+        case Enum.OptionRequest.OpenDoor:
+          BookingRoomApi.sendingEmailAproveOrReject({
+            bookingRoomID: result.bookingID,
+            option: Enum.OptionRequest.OpenDoor,
+          }).then((res) => {
+            if (res) {
+              console.log(res)
+            }
+          })
+          break
         case Enum.OptionRequest.Reject:
           BookingRoomApi.sendingEmailAproveOrReject({
             bookingRoomID: result.bookingID,
@@ -473,6 +489,10 @@ export default {
   mounted() {
     this.dataComponent.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+        ? true
+        : false
+    this.dataComponent.isSupporter =
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Supporter
         ? true
         : false
     this.dataComponent.userID = JSON.parse(localStorage.getItem('user')).UserID

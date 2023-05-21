@@ -62,7 +62,7 @@
         </div>
       </div>
     </div>
-    <div v-if="dataField == 'Approve' && isAdmin">
+    <div v-if="dataField == 'Approve' && (isAdmin || isSupporter)">
       <div class="display-none">
         <div class="flex">
           <div class="misa-icon-style" title="Phê duyệt">
@@ -71,7 +71,7 @@
               class="icon-sibar icon-approve misa-icon-24"
             ></div>
           </div>
-          <div class="misa-icon-style" title="Từ chối">
+          <div class="misa-icon-style" title="Từ chối" v-if="isAdmin">
             <div
               @click="onClickShowPopupReject(data.data[id])"
               class="icon-sibar icon-reject misa-icon-24"
@@ -131,6 +131,10 @@ export default {
       default: '',
     },
     isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    isSupporter: {
       type: Boolean,
       default: false,
     },
