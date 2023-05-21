@@ -2,7 +2,7 @@
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
       class="misa-dialog"
-      titlePopup="Thêm phòng học"
+      :titlePopup="titlePopup"
       classPopup="popup-dictionary-room-detail"
       @onClickClosePopup="onCloseForm"
       :tabindex="9"
@@ -124,7 +124,7 @@
               :tabindex="5"
               placeholder="Chọn người phê duyệt"
               @onValueChange="onValueChangeAdminRoom"
-              v-model:value="room.UserID"
+              v-model:value="room.AdminID"
               @handleBlurInput="validate('AdminID')"
               @handleKeyupInput="removeError('AdminID')"
               :error="Error['AdminID']"
@@ -146,9 +146,9 @@
               :isSearch="true"
               :height="34"
               :tabindex="6"
-              placeholder="Chọn người phê duyệt"
+              placeholder="Chọn người phụ trách"
               @onValueChange="onValueChangeSupporterRoom"
-              v-model:value="room.UserID"
+              v-model:value="room.SupporterID"
               @handleBlurInput="validate('SupporterID')"
               @handleKeyupInput="removeError('SupporterID')"
               :error="Error['SupporterID']"
@@ -157,7 +157,7 @@
         </div>
         <div class="t-row-block mgt-16">
           <div class="t-lable mgb-8 flex">
-            <div class="t-lable-title">Chọn thiết bị</div>
+            <div class="t-lable-title">Chọn loại phòng</div>
             <div class="required">
               <span class="t-required"> &nbsp;*</span>
             </div>
@@ -171,7 +171,7 @@
             :isSearch="true"
             :height="34"
             :tabindex="6"
-            placeholder="Chọn người phê duyệt"
+            placeholder="Chọn loại phòng"
             @onValueChange="onValueChangeRoomType"
             v-model:value="room.RoomTypeID"
             @handleBlurInput="validate('RoomTypeID')"
@@ -367,7 +367,7 @@ export default {
       Capacity: 0,
       showIcon: false,
       message: '',
-      equipment: [],
+      Equipment: [],
       items: [1],
       userAdmin: [],
       userSupporter: [],
@@ -397,6 +397,7 @@ export default {
       /**Trạng thái của popup */
       popupNoticeMode: -1,
       Error: {},
+      titlePopup: 'Thêm phòng học',
     }
   },
 
@@ -438,14 +439,15 @@ export default {
       try {
         if (
           !this.room[fieldName] &&
-          fieldName != 'ListEquipmentID' &&
           fieldName != 'ListEquipmentName' &&
           fieldName != 'AvartarSupporter' &&
           fieldName != 'AvartarAdmin' &&
           fieldName != 'SupporterEmail' &&
           fieldName != 'SupporterName' &&
           fieldName != 'AdminEmail' &&
-          fieldName != 'AdminName'
+          fieldName != 'AdminName' &&
+          fieldName != 'RoomEquipment' &&
+          fieldName != 'RoomStatus'
         ) {
           let field = ''
           if (fieldName == 'RoomCode') {
@@ -524,10 +526,15 @@ export default {
         try {
           RoomApi.updated(this.roomData.RoomID, this.room).then((res) => {
             if (res && res.data) {
-              this.message = 'Cập nhật thành công'
-              this.$emit('closePopup', false)
+              ObjectFunction.toastMessage(
+                Resource.Messenger.UpdateSucces,
+                Resource.Messenger.Success,
+              )
+              this.$emit('onShowLoading')
+              this.$emit('onCloseForm')
+              this.$emit('onLoadData')
             } else {
-              this.message = 'Cập nhật thất bại'
+              this.message = 'Lưu thất bại'
             }
           })
         } catch (error) {
@@ -588,10 +595,10 @@ export default {
         let name = ''
         values?.forEach((element) => {
           ids += '' + element.EquipmentID.trim() + ','
-          name += '' + element.EquipmentName.trim() + ','
+          name += '' + element.EquipmentName.trim() + ' + '
         })
         ids = ids.slice(0, -1)
-        name = name.slice(0, -1)
+        name = name.slice(0, -2)
         this.room.ListEquipmentID = ids
         this.room.ListEquipmentName = name
         console.log(name)
@@ -627,6 +634,33 @@ export default {
     onValueChangeRoomType(value) {
       this.room.RoomTypeID = value
     },
+    /**
+     * Lấy đối tượng user theo khóa chính
+     * PTTAM 1/05/2023
+     */
+    getRoomByID() {
+      debugger
+      let me = this
+      RoomApi.getByID(this.roomData.RoomID).then((res) => {
+        if (res) {
+          let data = res.data
+          me.room = data
+          me.Equipment = me.room.ListEquipmentID.split(',').map((id) =>
+            id.trim(),
+          )
+          // this.user = {
+          //   UserID: data.UserID,
+          //   UserCode: data.UserCode,
+          //   FullName: data.FullName,
+          //   DepartmentID: data.DepartmentID,
+          //   RoleID: data.RoleID,
+          //   Email: data.Email,
+          //   PhoneNumber: data.PhoneNumber,
+          //   Address: data.Address,
+          // }
+        }
+      })
+    },
   },
   async mounted() {
     try {
@@ -648,6 +682,12 @@ export default {
     this.userSupporter = this.dataUser.filter(
       (x) => x.RoleID == roleSupporter.RoleID,
     )
+    if (this.popupMode == Enum.PopupMode.EditMode) {
+      this.getRoomByID()
+      this.titlePopup = 'Cập nhật phòng'
+    } else if (this.popupMode == Enum.PopupMode.AddMode) {
+      this.titlePopup = 'Thêm phòng học'
+    }
   },
 }
 </script>

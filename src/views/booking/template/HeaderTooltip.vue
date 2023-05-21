@@ -50,7 +50,7 @@ export default {
 </script>
 <style scoped>
 .t-content-tooltip {
-  width: 300px;
+  width: fit-content;
   height: 200px;
   font-size: 15px;
   padding: 10px;

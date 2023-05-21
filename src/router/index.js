@@ -27,6 +27,12 @@ const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: '/infor-user',
+        name: 'Thông tin cá nhân',
+        component: () => import('@/views/dictionary/User/UserInfor.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
         path: '/booking/booking-room',
         name: 'Đặt phòng',
         component: () => import('@/views/booking/RoomBooking.vue'),
