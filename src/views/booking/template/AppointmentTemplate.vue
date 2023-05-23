@@ -53,6 +53,9 @@ export default {
         case Enum.OptionRequest.Approve:
           corlor = Resource.BookingStatusColor.Approve
           break
+        case Enum.OptionRequest.OpenDoor:
+          corlor = Resource.BookingStatusColor.OpenDoor
+          break
         default:
           break
       }

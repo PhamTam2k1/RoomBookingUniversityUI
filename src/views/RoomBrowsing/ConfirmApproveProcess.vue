@@ -1,7 +1,7 @@
 <template>
   <base-popup
     class="misa-dialog"
-    titlePopup="Phê duyệt"
+    :titlePopup="isAdmin ? 'Phê duyệt' : 'Mở cửa'"
     classPopup="misa-popup-delete"
     :popupMode="popupMode"
     @onClickClosePopup="onClickClosePopup"
@@ -15,13 +15,23 @@
     </template>
     <template #contentPopup>
       <div class="content-popup-delete">
-        Bạn có chắc chắn muốn phê duyệt lịch họp này không?
+        <div v-if="isAdmin">
+          Bạn có chắc chắn muốn phê duyệt lịch họp này không?
+        </div>
+        <div v-else>Bạn có muốn chọn mở cửa phòng cho lịch họp này không?</div>
       </div>
     </template>
     <template #buttonPopup>
       <base-button
+        v-if="isAdmin"
         @click="onClickAcceptApprove"
         lableButton="Phê duyệt"
+        classButton="misa-button-normal w-120 misa-button-primary "
+      ></base-button>
+      <base-button
+        v-else
+        @click="onClickAcceptApprove"
+        lableButton="Có"
         classButton="misa-button-normal w-120 misa-button-primary "
       ></base-button>
     </template>
@@ -46,6 +56,10 @@ export default {
     /**Mode của popup */
     popupMode: {
       type: Number,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

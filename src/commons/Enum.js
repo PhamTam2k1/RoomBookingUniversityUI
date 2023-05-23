@@ -24,6 +24,8 @@ const Enum = Object.freeze({
     Reject: 3,
     //Hủy
     Cancel: 4,
+    // Mở cửa
+    OpenDoor: 5,
   },
   /**Trạng thái lọc lịch họp */
   SchedulerConnection: {
@@ -52,6 +54,8 @@ const Enum = Object.freeze({
     Reject: 3,
     //Hủy
     Cancel: 4,
+    // Mở cửa
+    OpenDoor: 5,
   },
   /**Trạng thái mở popup */
   PopupMode: {
