@@ -77,4 +77,9 @@ export default {
 .icon-sibar.misa-icon-24.t-question-nocation {
   margin-top: 8px;
 }
+.t-dialog-text {
+  min-height: 40px;
+  overflow: auto;
+  max-height: 150px;
+}
 </style>

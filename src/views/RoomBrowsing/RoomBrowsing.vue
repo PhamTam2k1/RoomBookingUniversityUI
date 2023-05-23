@@ -163,12 +163,12 @@ export default {
         visible: true,
         width: 200,
       },
-      {
-        dataField: 'Discription',
-        caption: 'Lý do',
-        visible: true,
-        width: 160,
-      },
+      // {
+      //   dataField: 'Discription',
+      //   caption: 'Lý do',
+      //   visible: true,
+      //   width: 160,
+      // },
       {
         dataField: 'DateRequest',
         caption: 'Ngày yêu cầu',
@@ -186,13 +186,28 @@ export default {
       },
       {
         dataField: 'StartDate',
-        caption: 'Ngày đặt',
+        caption: 'Ngày sử dụng',
         visible: true,
         width: 120,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
           const date = new Date(data.StartDate)
+          const day = date.getDate().toString().padStart(2, '0')
+          const month = (date.getMonth() + 1).toString().padStart(2, '0')
+          const year = date.getFullYear()
+          return `${day}/${month}/${year}`
+        },
+      },
+      {
+        dataField: 'EndDate',
+        caption: 'Ngày kết thúc',
+        visible: true,
+        width: 140,
+        dataType: 'date',
+        format: 'dd/MM/yyyy',
+        calculateCellValue: function (data) {
+          const date = new Date(data.EndDate)
           const day = date.getDate().toString().padStart(2, '0')
           const month = (date.getMonth() + 1).toString().padStart(2, '0')
           const year = date.getFullYear()
