@@ -706,7 +706,7 @@ export default {
 }
 
 .table_multi {
-  height: 75vh;
+  height: calc(100vh - 146px);
   overflow: auto;
   background-color: #fff;
 }

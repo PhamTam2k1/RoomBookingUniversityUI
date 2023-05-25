@@ -394,7 +394,7 @@ export default {
   }
 }
 #bd-equipment {
-  height: calc(100vh - 180px);
+  height: calc(100vh - 90px);
   background: white;
   padding: 20px;
 }

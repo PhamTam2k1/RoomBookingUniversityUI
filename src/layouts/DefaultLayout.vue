@@ -4,15 +4,13 @@
     <div class="wrapper d-flex flex-column min-vh-100 bg-light">
       <AppHeader />
       <div class="body flex-grow-1">
-        <CContainer lg>
-          <router-view />
-        </CContainer>
+        <router-view />
       </div>
     </div>
   </div>
 </template>
 <script>
-import { CContainer } from '@coreui/vue'
+// import { CContainer } from '@coreui/vue'
 import AppHeader from '@/components/AppHeader.vue'
 import AppSidebar from '@/components/AppSidebar.vue'
 
@@ -21,7 +19,7 @@ export default {
   components: {
     AppHeader,
     AppSidebar,
-    CContainer,
+    // CContainer,
   },
 }
 </script>

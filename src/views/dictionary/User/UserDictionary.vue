@@ -359,7 +359,7 @@ export default {
   height: calc(100% - 75px);
 }
 #bd-user {
-  height: calc(100vh - 160px);
+  height: calc(100vh - 90px);
   background: white;
   padding: 20px;
 }

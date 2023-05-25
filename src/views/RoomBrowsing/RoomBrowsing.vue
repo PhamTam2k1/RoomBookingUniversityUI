@@ -525,7 +525,7 @@ export default {
 }
 
 #bd-room-browsing {
-  height: calc(100vh - 180px);
+  height: calc(100vh - 90px);
   background: white;
   padding: 20px;
 }
