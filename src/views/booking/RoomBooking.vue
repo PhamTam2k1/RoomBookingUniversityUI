@@ -54,7 +54,7 @@
             optionName="RoomName"
             optionValue="RoomID"
             :isSearch="true"
-            :height="34"
+            :height="38"
             :width="150"
             @onValueChange="onValueChangeRoom"
             :value="'tatca'"
@@ -173,7 +173,7 @@
         <DxView
           class="day"
           type="day"
-          height="75vh"
+          height="81vh"
           :scrolling="{
             mode: 'virtual',
             showScrollbar: 'always',
@@ -186,7 +186,7 @@
         />
         <DxView
           type="week"
-          height="75vh"
+          height="81vh"
           :scrolling="{
             mode: 'virtual',
             showScrollbar: 'always',
@@ -200,7 +200,7 @@
 
         <DxView
           type="month"
-          height="75vh"
+          height="81vh"
           :scrolling="{
             mode: 'virtual',
             showScrollbar: 'always',
