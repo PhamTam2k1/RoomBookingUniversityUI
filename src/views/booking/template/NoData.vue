@@ -13,7 +13,7 @@
   background-color: #fff;
   text-align: center;
   padding: 20px;
-  height: calc(100vh - 146px);
+  height: calc(100vh - 122px);
   width: 100%;
 }
 </style>

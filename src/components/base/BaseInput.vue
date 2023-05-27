@@ -195,7 +195,7 @@ export default {
   display: none;
   margin-top: -15px;
   margin-left: 40%;
-  font-family: Notosans;
+  /* font-family: Notosans; */
   font-weight: 100;
 }
 .misa-input:disabled {

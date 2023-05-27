@@ -117,12 +117,7 @@ export default {
         visible: false,
         width: 0,
       },
-      {
-        dataField: 'FullName',
-        caption: 'Người đặt lịch',
-        visible: true,
-        width: 200,
-      },
+
       {
         dataField: 'RoomName',
         caption: 'Địa điểm',
@@ -152,7 +147,7 @@ export default {
       },
       {
         dataField: 'StartDate',
-        caption: 'Ngày đặt',
+        caption: 'Ngày sử dụng',
         visible: true,
         width: 120,
         dataType: 'date',
@@ -175,7 +170,7 @@ export default {
       {
         dataField: 'RefusalReason',
         caption: 'Lý do',
-        width: 200,
+        width: 400,
         visible: true,
       },
       {
@@ -296,7 +291,7 @@ export default {
         ? true
         : false
     this.dataComponent.userID = JSON.parse(localStorage.getItem('user')).UserID
-
+    this.showLoading(true)
     this.getData()
   },
 }

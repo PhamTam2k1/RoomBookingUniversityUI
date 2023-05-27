@@ -141,7 +141,10 @@ export default {
       {
         dataField: 'FullName',
         caption: 'Người đặt lịch',
-        visible: true,
+        visible:
+          localStorage.getItem('roleOption') - 0 == Enum.RoleOption.User
+            ? false
+            : true,
         width: 180,
       },
       {
@@ -188,7 +191,7 @@ export default {
         dataField: 'StartDate',
         caption: 'Ngày sử dụng',
         visible: true,
-        width: 120,
+        width: 150,
         dataType: 'date',
         format: 'dd/MM/yyyy',
         calculateCellValue: function (data) {
@@ -511,7 +514,7 @@ export default {
         ? true
         : false
     this.dataComponent.userID = JSON.parse(localStorage.getItem('user')).UserID
-
+    this.showLoading(true)
     this.getData()
   },
 }

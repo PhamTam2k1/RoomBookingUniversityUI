@@ -173,7 +173,7 @@
         <DxView
           class="day"
           type="day"
-          height="81vh"
+          height="85vh"
           :scrolling="{
             mode: 'virtual',
             showScrollbar: 'always',
@@ -186,7 +186,7 @@
         />
         <DxView
           type="week"
-          height="81vh"
+          height="85vh"
           :scrolling="{
             mode: 'virtual',
             showScrollbar: 'always',
@@ -200,7 +200,7 @@
 
         <DxView
           type="month"
-          height="81vh"
+          height="85vh"
           :scrolling="{
             mode: 'virtual',
             showScrollbar: 'always',
@@ -739,9 +739,9 @@ tr.dx-scheduler-group-row {
   border-bottom: 1px solid rgba(221, 221, 221, 0.6) !important;
 }
 .my-popper-class {
-  margin-top: 171px;
+  margin-top: 100px;
   margin-left: 20px;
-  right: 29px;
+  right: 18px;
   top: 20px !important;
   left: unset !important;
   z-index: 1000 !important;
