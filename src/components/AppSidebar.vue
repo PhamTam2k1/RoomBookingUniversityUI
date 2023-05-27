@@ -59,7 +59,7 @@ export default {
 .t-nav-title {
   font-size: 22px;
   font-weight: 600;
-  font-family: Notosans;
+  /* font-family: Notosans; */
   color: #e6e8d3;
   margin-left: 30px;
 }

@@ -6,6 +6,9 @@
 @import url(./styles/components/toat-msg-el.css);
 // Import Main styles for this application
 @import 'styles/style';
+#app {
+  font-style: 'Roboto';
+}
 .mgl-16 {
   margin-left: 16px !important;
 }

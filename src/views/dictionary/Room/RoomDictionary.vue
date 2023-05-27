@@ -54,7 +54,7 @@
     </div>
   </div>
   <!-- Loading -->
-  <!-- <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading> -->
+  <BaseLoading :isShowLoading="dataComponent.isShowLoading"></BaseLoading>
 
   <RoomDictionaryDetail
     :width="700"
@@ -114,7 +114,7 @@ import { reactive } from 'vue'
 import { mapState } from 'vuex'
 import DxTextBox from 'devextreme-vue/text-box'
 import RoomApi from '@/apis/RoomApi'
-// import BaseLoading from '@/components/base/BaseLoading.vue'
+import BaseLoading from '@/components/base/BaseLoading.vue'
 import RoomDictionaryDetail from './RoomDictionaryDetail.vue'
 import DeleteRoomPopup from './DeleteRoomPopup.vue'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
@@ -130,6 +130,7 @@ export default {
     DeleteRoomPopup,
     PopupNotice,
     BaseButton,
+    BaseLoading,
   },
   props: {
     weekID: {
