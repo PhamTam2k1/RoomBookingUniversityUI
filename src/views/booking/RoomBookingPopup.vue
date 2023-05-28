@@ -611,7 +611,6 @@ export default {
     saveData() {
       let me = this
       let bookingData = {}
-      debugger
       if (me.popupMode == Enum.PopupMode.AddMode) {
         try {
           me.bookingRoomData.StartDate = moment(

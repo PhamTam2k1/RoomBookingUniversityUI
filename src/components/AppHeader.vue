@@ -37,6 +37,8 @@
                 v-for="item in dataConvert"
                 :key="item"
                 class="dropdown-item"
+                :class="{ watched: !item.status }"
+                @click="!item.status && updateFirebaseData(item.key)"
                 href="#"
                 ><div class="message">
                   <div class="pt-3 me-3 float-start">
@@ -88,7 +90,7 @@ import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
 import clickOutSide from '@mahdikhashan/vue3-click-outside'
 import { logo } from '@/assets/brand/logo'
 import { initializeApp } from 'firebase/app'
-import { getDatabase, ref, get, child } from 'firebase/database'
+import { getDatabase, ref, onValue, child, update } from 'firebase/database'
 const firebaseConfig = {
   apiKey: 'AIzaSyC79t9n29m5Ayy0gg0lvqAFPEleapma-hQ',
   authDomain: 'room-90f68.firebaseapp.com',
@@ -124,11 +126,61 @@ export default {
     }
   },
   methods: {
+    // Cập nhật dữ liệu khi xem
+    updateFirebaseData(clickedItemId) {
+      // Lấy thông tin đăng nhập
+      const user = JSON.parse(localStorage.getItem('user'))
+      if (user && user.UserID) {
+        const notificationsRef = ref(db, 'notifications')
+        const childRef = child(notificationsRef, user.UserID)
+
+        // Thực hiện cập nhật dữ liệu trên Firebase
+        const clickedItemRef = child(childRef, clickedItemId)
+        update(clickedItemRef, {
+          status: true,
+        })
+          .then(() => {
+            console.log('Dữ liệu đã được cập nhật thành công trên Firebase')
+          })
+          .catch((error) => {
+            console.log('Lỗi khi cập nhật dữ liệu trên Firebase:', error)
+          })
+      }
+    },
+    callNotify() {
+      debugger
+      // lấy thông tin đăng nhập
+      const user = JSON.parse(localStorage.getItem('user'))
+      if (user && user.UserID) {
+        const notificationsRef = ref(db, 'notifications')
+        const childRef = child(notificationsRef, user.UserID)
+        onValue(childRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.val()
+            const dataConvert = []
+            for (const key in data) {
+              const notification = data[key]
+              notification.key = key
+              dataConvert.push(notification)
+            }
+            const countNotify = dataConvert.filter(
+              (item) => item.status === false,
+            )
+            dataConvert.sort((a, b) => new Date(b.time) - new Date(a.time))
+
+            // Assign the values to reactive data properties
+            this.dataConvert = dataConvert
+            this.countNotify = countNotify.length
+          } else {
+            console.log('Không tìm thấy đối tượng con')
+          }
+        })
+      }
+    },
     showPopupNotify() {
       this.showNotify = false
     },
     timeAgo(timestamp) {
-      debugger
       const time = Date.parse(timestamp)
       const now = Date.now()
       const seconds = Math.floor((now - time) / 1000)
@@ -149,28 +201,10 @@ export default {
   },
   mounted() {
     console.log(this.dataConvert)
+    this.callNotify()
   },
-  async created() {
-    debugger
-    // lấy thông tin đăng nhập
-    var user = JSON.parse(localStorage.getItem('user'))
-    if (user && user.UserID) {
-      const notificationsRef = ref(db, 'notifications')
-      const childRef = child(notificationsRef, user.UserID)
-      get(childRef).then((snapshot) => {
-        if (snapshot.exists()) {
-          var data = snapshot.val()
-          for (const key in data) {
-            const notification = data[key]
-            this.dataConvert.push(notification)
-          }
-          this.countNotify = this.dataConvert.length
-          this.dataConvert.sort((a, b) => new Date(b.time) - new Date(a.time))
-        } else {
-          console.log('Không tìm thấy đối tượng con ')
-        }
-      })
-    }
+  updated() {
+    this.callNotify()
   },
 }
 </script>
@@ -201,5 +235,13 @@ export default {
 }
 .nav-link {
   position: relative;
+}
+.watched {
+  background-color: aliceblue;
+}
+.dropdown-item:active {
+  color: rgba(44, 56, 74, 0.681) !important;
+  text-decoration: none;
+  background-color: #478bc4f0 !important;
 }
 </style>

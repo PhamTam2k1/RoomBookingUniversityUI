@@ -17,6 +17,14 @@ class AccountAPI {
   async changepass(user) {
     return await BaseAPIConfig.post(`${this.controller}/changepass`, user)
   }
+  /**
+   * Mô tả : login bằng google
+   * @param {Object} param
+   * @Createdby: PTTAM
+   */
+  async loginGoogle(param) {
+    return await BaseAPIConfig.post(`${this.controller}/loginGoogle`, param)
+  }
 }
 export default new AccountAPI()
 // await UserApi.getUserByID(userID).then(

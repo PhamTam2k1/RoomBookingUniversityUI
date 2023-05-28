@@ -45,6 +45,13 @@
           type="default"
           class="mgt-8"
         />
+        <div style="margin-top: 10px">
+          <GoogleLogin
+            :callback="callback"
+            class="custom-google-login"
+            :style="{ width: '100%' }"
+          />
+        </div>
       </div>
     </div>
   </form>
@@ -52,9 +59,11 @@
 
 <script>
 import store from '@/store'
+import { decodeCredential } from 'vue3-google-login'
 import DxButton from 'devextreme-vue/button'
 import DxValidator, { DxValidationRule } from 'devextreme-vue/validator'
 import DxTextBox from 'devextreme-vue/text-box'
+import AccountApi from '@/apis/AccountApi'
 export default {
   components: {
     DxTextBox,
@@ -70,10 +79,42 @@ export default {
     }
   },
   methods: {
+    async callback(response) {
+      const userData = decodeCredential(response.credential)
+      console.log(userData)
+      // gửi thông tin lên serve
+      var param = {
+        fullName: userData.name,
+        password: userData.sub,
+        email: userData.email,
+        avartarColor: 'blue',
+      }
+      AccountApi.loginGoogle(param)
+        .then((res) => {
+          if (res) {
+            console.log(res)
+            localStorage.setItem('token', res.data.Value)
+            // Lưu thông tin đăng nhập vào local storage
+            localStorage.setItem('user', JSON.stringify(res))
+            localStorage.setItem('roleOption', res.roleOption)
+            // Chuyển hướng đến trang Dashboard sau khi đăng nhập thành công
+            if (localStorage.getItem('roleOption') - 0 === 3) {
+              this.$router.push('/booking/booking-await')
+            } else {
+              this.$router.push('/')
+            }
+          }
+        })
+        .catch((res) => {
+          console.log(res)
+        })
+
+      debugger
+    },
     async handleSubmit() {
+      debugger
       const user = { Username: this.username, Password: this.password }
       localStorage.setItem('user', JSON.stringify(user))
-      debugger
       try {
         // Gọi action login trong store để thực hiện yêu cầu đăng nhập
         await store.dispatch('auth/login', user)
@@ -96,6 +137,10 @@ export default {
 <style scoped lang="scss">
 aside {
   display: none;
+}
+[aria-labelledby] {
+  min-width: 50px !important;
+  width: 50px !important;
 }
 .error {
   color: #e14242;
@@ -128,7 +173,7 @@ form {
     width: 100px;
     height: 100px;
     margin: 0 auto;
-    background: url('@/assets/logoUniversity.png') no-repeat;
+    background: url('@/assets/logo1.png') no-repeat;
     background-size: contain;
     margin-bottom: 20px;
   }
@@ -137,7 +182,7 @@ form {
   }
   .form-body {
     width: 400px;
-    height: 420px;
+    height: 500px;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 40px;
@@ -168,5 +213,8 @@ form {
       }
     }
   }
+}
+iframe {
+  width: 300px !important;
 }
 </style>
