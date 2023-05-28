@@ -1,53 +1,58 @@
 <template>
-  <form @submit.prevent="handleSubmit">
-    <div class="form-body">
-      <div class="logo"></div>
-      <div class="dx-fieldset-header">Đăng nhập</div>
-      <div class="input-container">
-        <DxTextBox
-          label="Email"
-          label-mode="static"
-          class="input-field"
-          v-model:value="username"
-        >
-          <DxValidator>
-            <DxValidationRule
-              type="required"
-              message="Email không được để trống"
+  <div class="flex login">
+    <div class="t-left"><div class="login-logo"></div></div>
+    <div class="t-right">
+      <form @submit.prevent="handleSubmit">
+        <div class="form-body">
+          <div class="logo"></div>
+          <div class="dx-fieldset-header">Đăng nhập</div>
+          <div class="input-container">
+            <div class="mgb-8">Email</div>
+            <DxTextBox
+              label-mode="static"
+              class="input-field"
+              v-model:value="username"
+            >
+              <DxValidator>
+                <DxValidationRule
+                  type="required"
+                  message="Email không được để trống"
+                />
+                <DxValidationRule
+                  type="email"
+                  message="Email không đúng định dạng"
+                />
+              </DxValidator>
+              <div class="input-field-icon icon-email"></div>
+            </DxTextBox>
+            <div class="mgb-8">Password</div>
+            <DxTextBox
+              v-model:value="password"
+              label-mode="static"
+              class="input-field"
+              mode="password"
+            >
+              <DxValidator>
+                <DxValidationRule
+                  type="required"
+                  message="Password không được để trống"
+                />
+              </DxValidator>
+              <div class="input-field-icon icon-password"></div>
+            </DxTextBox>
+            <div class="error" v-if="error != ''">{{ error }}</div>
+            <DxButton
+              width="100%"
+              :use-submit-behavior="true"
+              text="Đăng nhập"
+              type="default"
+              class="mgt-16"
             />
-            <DxValidationRule
-              type="email"
-              message="Email không đúng định dạng"
-            />
-          </DxValidator>
-          <div class="input-field-icon icon-email"></div>
-        </DxTextBox>
-        <DxTextBox
-          v-model:value="password"
-          label="Password"
-          label-mode="static"
-          class="input-field"
-          mode="password"
-        >
-          <DxValidator>
-            <DxValidationRule
-              type="required"
-              message="Password không được để trống"
-            />
-          </DxValidator>
-          <div class="input-field-icon icon-password"></div>
-        </DxTextBox>
-        <div class="error" v-if="error != ''">{{ error }}</div>
-        <DxButton
-          width="100%"
-          :use-submit-behavior="true"
-          text="Đăng nhập"
-          type="default"
-          class="mgt-8"
-        />
-      </div>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -109,28 +114,61 @@ aside {
   height: 100vh;
   width: 100vw;
 }
+.t-left {
+  width: 50%;
+  height: 100vh;
+  // background: #f8fafb;
+}
+.t-right {
+  width: 50%;
+  height: 100vh;
+
+  // background: #f8fafb;
+}
+.login {
+  .logo {
+    @media (min-width: 1568px) {
+      margin-top: 165px;
+    }
+  }
+  // border: 1px solid #ccc;
+  // @media (min-width: 768px) {
+  //   display: none !important;
+  // }
+}
+.login-logo {
+  // border-top: 1px solid #ccc;
+  // border-bottom: 1px solid #ccc;
+  // border-left: 1px solid #ccc;
+
+  width: 100%;
+  height: 77%;
+  margin: 0 auto;
+  background: url('@/assets/Scholl.png') no-repeat;
+  background-size: contain;
+  margin-top: 15%;
+  margin-left: 150px;
+}
 form {
   margin: 0 auto;
   display: flex;
-  align-items: center;
-  width: 100vw;
   height: 100vh;
-  position: absolute;
-  justify-content: center;
-  top: 0;
+  // margin-top: 180px;
   left: 0;
+  margin-left: 103px;
 
   .dx-fieldset-header {
     text-align: center;
     font-size: 20px;
   }
   .logo {
-    width: 100px;
-    height: 100px;
+    width: 130px;
+    height: 130px;
     margin: 0 auto;
     background: url('@/assets/logoUniversity.png') no-repeat;
     background-size: contain;
     margin-bottom: 20px;
+    margin-top: 90px;
   }
   .input-container {
     width: 100%;
@@ -138,7 +176,7 @@ form {
   .form-body {
     width: 400px;
     height: 420px;
-    border: 1px solid #ddd;
+    // border: 1px solid #ddd;
     border-radius: 4px;
     padding: 40px;
     background-color: #fff;
