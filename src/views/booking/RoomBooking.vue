@@ -321,7 +321,7 @@ export default {
       dataSource: [],
       isSelect: 1,
       showView: true,
-      currentView: 'week',
+      currentView: 'day',
       currentDate: new Date(),
       startDayHour: 7,
       endDayHour: 21,
