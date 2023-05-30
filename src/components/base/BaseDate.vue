@@ -11,9 +11,6 @@
     label="Tiêu đề"
     @value-changed="onValueChanged"
   >
-    <DxValidator>
-      <DxRequiredRule />
-    </DxValidator>
     <template #iconDropdown="{}">
       <div class="icon-sibar icon-date misa-icon-24"></div>
     </template>
@@ -21,14 +18,11 @@
 </template>
 
 <script>
-import { DxValidator, DxRequiredRule } from 'devextreme-vue/validator'
 import DxDateBox from 'devextreme-vue/date-box'
 export default {
   name: 'MsDate',
   components: {
     DxDateBox,
-    DxValidator,
-    DxRequiredRule,
   },
   props: {
     value: {

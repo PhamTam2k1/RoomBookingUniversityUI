@@ -1,17 +1,31 @@
 <template>
   <div id="body-browsing">
     <div id="bd-room-browsing" class="Body">
-      <div class="filter-options">
-        <DxTextBox
-          placeholder="Tìm kiếm lịch họp"
-          class="input-field"
-          v-model:value="dataComponent.keyword"
-          height="34"
-          :width="300"
-          @input="filterBooking"
-        >
-          <div class="input-field-icon icon-search"></div>
-        </DxTextBox>
+      <div class="filter-options flex">
+        <div class="t-row">
+          <BaseDate
+            class="mt-16"
+            :labelMode="'hidden'"
+            :stylingMode="'outlined'"
+            :value="dataComponent.CurrentDate"
+            @onValueChanged="onDateBoxChanged"
+            placeholder="DD/MM/YYYY"
+          >
+          </BaseDate>
+        </div>
+
+        <div class="t-row">
+          <BaseDropdownbox
+            placeholder="Chọn ca học"
+            classDropdownbox="drop-down-utc mgl-16"
+            :dataSource="dataTimeWithAll"
+            optionName="TimeSlotName"
+            optionValue="TimeSlotID"
+            :height="38"
+            :width="150"
+            @onValueChange="onValueChangeTime"
+          ></BaseDropdownbox>
+        </div>
       </div>
       <!-- Begin table -->
       <div class="misa-tabble">
@@ -67,21 +81,22 @@ import BookingRoomApi from '@/apis/BookingRoomApi'
 import BasePaging from '@/components/base/BasePaging.vue'
 import BaseCellTemplace from '@/components/base/BaseCellTemplace.vue'
 import BaseTable from '@/components/base/BaseTable.vue'
-import DxTextBox from 'devextreme-vue/text-box'
 import Enum from '@/commons/Enum'
 import { reactive } from 'vue'
-import { mapState } from 'vuex'
 import BaseLoading from '@/components/base/BaseLoading.vue'
 import RoomBookingPopup from '../booking/RoomBookingPopup.vue'
-
+import BaseDate from '@/components/base/BaseDate.vue'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
     BaseTable,
     BaseCellTemplace,
-    DxTextBox,
     BasePaging,
     BaseLoading,
     RoomBookingPopup,
+    BaseDate,
+    BaseDropdownbox,
   },
   props: {
     weekID: {
@@ -110,6 +125,8 @@ export default {
       bookingID: null,
       popupMode: 0,
       isShowForm: false,
+      TimeSlotID: null,
+      CurrentDate: new Date(),
     })
     var headerTableBookingRoom = [
       {
@@ -221,6 +238,8 @@ export default {
           pageSize: dataComponent.pageSize,
           keyword: dataComponent.keyword,
           userID: dataComponent.userID,
+          timeSlotID: dataComponent.TimeSlotID,
+          currentDate: dataComponent.CurrentDate,
         }).then((res) => {
           dataComponent.dataSource = res.data.Data || []
           dataComponent.pageIndex = res.data.CurrentPage
@@ -263,6 +282,20 @@ export default {
       dataComponent.popupMode = Enum.PopupMode.HistoryMode // Gán lại trạng thái của popup
       dataComponent.isShowForm = true
     }
+    /**
+     * Sự kiện thay đổi phòng
+     * @param {*} value
+     */
+    function onValueChangeTime(value) {
+      dataComponent.TimeSlotID = value ? value : null
+      showLoading(true)
+      getData()
+    }
+    // cập nhật lại ngày khi chọn lại
+    function onDateBoxChanged(item) {
+      dataComponent.CurrentDate = item.value
+      getData()
+    }
     return {
       dataComponent,
       getData,
@@ -274,18 +307,43 @@ export default {
       showLoading,
       onClickClosePopup,
       onClickShowViewDetailPopup,
+      onValueChangeTime,
+      onDateBoxChanged,
     }
   },
+  methods: {
+    // Gọi hàm load data từ store
+    // PTTAM
+    ...mapActions({
+      loadDataTimes: 'dictionary/loadDataTimes',
+    }),
+  },
+
   computed: {
     ...mapState({
       roleOption: (state) => state.auth.roleOption,
+      dataTime: (state) => state.dictionary.dataTime,
     }),
+    dataTimeWithAll() {
+      const dataTime = this.dataTime
+      return (
+        dataTime?.unshift({
+          TimeSlotName: 'Tất cả',
+          TimeSlotID: null,
+        }) && dataTime
+      )
+    },
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
       return Enum
     },
   },
-  mounted() {
+  async mounted() {
+    try {
+      await this.loadDataTimes()
+    } catch (error) {
+      console.error(error)
+    }
     this.dataComponent.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
         ? true

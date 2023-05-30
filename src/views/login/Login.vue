@@ -1,71 +1,113 @@
 <template>
-  <div class="flex login">
-    <div class="t-left"><div class="login-logo"></div></div>
-    <div class="t-right">
-      <form @submit.prevent="handleSubmit">
-        <div class="form-body">
-          <div class="logo"></div>
-          <div class="dx-fieldset-header">Đăng nhập</div>
-          <div class="input-container">
-            <div class="mgb-8">Email</div>
-            <DxTextBox
-              label-mode="static"
-              class="input-field"
-              v-model:value="username"
-            >
-              <DxValidator>
-                <DxValidationRule
-                  type="required"
-                  message="Email không được để trống"
-                />
-                <DxValidationRule
-                  type="email"
-                  message="Email không đúng định dạng"
-                />
-              </DxValidator>
-              <div class="input-field-icon icon-email"></div>
-            </DxTextBox>
-            <div class="mgb-8">Password</div>
-            <DxTextBox
-              v-model:value="password"
-              label-mode="static"
-              class="input-field"
-              mode="password"
-            >
-              <DxValidator>
-                <DxValidationRule
-                  type="required"
-                  message="Password không được để trống"
-                />
-              </DxValidator>
-              <div class="input-field-icon icon-password"></div>
-            </DxTextBox>
-            <div class="error" v-if="error != ''">{{ error }}</div>
-            <DxButton
-              width="100%"
-              :use-submit-behavior="true"
-              text="Đăng nhập"
-              type="default"
-              class="mgt-16"
-            />
-          </div>
+  <section class="vh-100">
+    <div class="container-fluid h-custom">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-9 col-lg-6 col-xl-5">
+          <img
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+            class="img-fluid"
+            alt="Sample image"
+          />
         </div>
-      </form>
+        <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+          <form @submit.prevent="handleSubmit">
+            <div class="form-body">
+              <div class="logo"></div>
+              <div class="dx-fieldset-header">Đăng nhập</div>
+              <div class="input-container">
+                <div class="mgb-8">Email</div>
+                <DxTextBox
+                  label-mode="static"
+                  class="input-field"
+                  v-model:value="username"
+                >
+                  <DxValidator>
+                    <DxValidationRule
+                      type="required"
+                      message="Email không được để trống"
+                    />
+                    <DxValidationRule
+                      type="email"
+                      message="Email không đúng định dạng"
+                    />
+                  </DxValidator>
+                  <div class="input-field-icon icon-email"></div>
+                </DxTextBox>
+                <div class="mgb-8">Password</div>
+                <DxTextBox
+                  v-model:value="password"
+                  label-mode="static"
+                  class="input-field"
+                  mode="password"
+                >
+                  <DxValidator>
+                    <DxValidationRule
+                      type="required"
+                      message="Password không được để trống"
+                    />
+                  </DxValidator>
+                  <div class="input-field-icon icon-password"></div>
+                </DxTextBox>
+                <div class="error" v-if="error != ''">{{ error }}</div>
+                <!-- <DxButton
+                  width="100%"
+                  :use-submit-behavior="true"
+                  text="Đăng nhập"
+                  type="default"
+                  class="mgt-16 btn-login"
+                /> -->
+                <BaseButton
+                  class="mgt-16"
+                  :use-submit-behavior="true"
+                  :tabindex="3"
+                  lableButton="Đăng nhập"
+                  classButton="misa-button-normal w-120 misa-button-primary "
+                ></BaseButton>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
+    <div
+      class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5"
+      style="background: #337ab7"
+    >
+      <!-- Copyright -->
+      <div class="text-white mb-3 mb-md-0"></div>
+      <!-- Copyright -->
+
+      <!-- Right -->
+      <div>
+        <a href="#!" class="text-white me-4">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#!" class="text-white me-4">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#!" class="text-white me-4">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="#!" class="text-white">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </div>
+  </section>
 </template>
 
 <script>
 import store from '@/store'
-import DxButton from 'devextreme-vue/button'
 import DxValidator, { DxValidationRule } from 'devextreme-vue/validator'
 import DxTextBox from 'devextreme-vue/text-box'
+import BaseButton from '@/components/base/BaseButton.vue'
 export default {
   components: {
     DxTextBox,
     DxValidator,
     DxValidationRule,
-    DxButton,
+    BaseButton,
   },
   data() {
     return {
@@ -126,6 +168,8 @@ aside {
   // background: #f8fafb;
 }
 .login {
+  // width: 50%;
+  // justify-content: center;
   .logo {
     @media (min-width: 1568px) {
       margin-top: 165px;
@@ -149,62 +193,76 @@ aside {
   margin-top: 15%;
   margin-left: 150px;
 }
-form {
+
+.dx-fieldset-header {
+  text-align: center;
+  font-size: 20px;
+}
+.btn-login {
+  width: 180px;
+}
+.logo {
+  width: 100px;
+  height: 100px;
   margin: 0 auto;
+  background: url('@/assets/logoUniversity.png') no-repeat;
+  background-size: contain;
+  margin-bottom: 20px;
+  // margin-top: 90px;
+}
+.input-container {
+  width: 100%;
+}
+.form-body {
+  // border-top: 1px solid #ccc;
+  // border-bottom: 1px solid #ccc;
+  // border-right: 1px solid #ccc;
+  width: 400px;
+  height: 420px;
+  // border: 1px solid #ddd;
+  border-radius: 4px;
+  // padding: 40px;
+  background-color: #fff;
+  margin-bottom: 40px;
+}
+.input-field {
+  height: 40px;
+  position: relative;
+  margin-bottom: 20px;
   display: flex;
-  height: 100vh;
-  // margin-top: 180px;
-  left: 0;
-  margin-left: 103px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 30px;
 
-  .dx-fieldset-header {
-    text-align: center;
-    font-size: 20px;
-  }
-  .logo {
-    width: 130px;
-    height: 130px;
-    margin: 0 auto;
-    background: url('@/assets/logoUniversity.png') no-repeat;
-    background-size: contain;
-    margin-bottom: 20px;
-    margin-top: 90px;
-  }
-  .input-container {
-    width: 100%;
-  }
-  .form-body {
-    width: 400px;
-    height: 420px;
-    // border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 40px;
-    background-color: #fff;
-  }
-  .input-field {
-    height: 40px;
-    position: relative;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: 30px;
+  .input-field-icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 1;
+    margin-left: -20px;
+    background: url('@/assets/images/Icon_process.2df8445b.svg') no-repeat;
 
-    .input-field-icon {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      z-index: 1;
-      margin-left: -20px;
-      background: url('@/assets/images/Icon_process.2df8445b.svg') no-repeat;
-
-      &.icon-email {
-        background-position: -156px -205px;
-      }
-      &.icon-password {
-        background-position: -204px -229px;
-      }
+    &.icon-email {
+      background-position: -156px -205px;
     }
+    &.icon-password {
+      background-position: -204px -229px;
+    }
+  }
+}
+.divider:after,
+.divider:before {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+.h-custom {
+  height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
   }
 }
 </style>
