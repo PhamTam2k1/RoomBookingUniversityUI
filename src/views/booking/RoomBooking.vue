@@ -169,6 +169,7 @@
         :on-appointment-click="onAppointmentClick"
         resource-cell-template="resourceCellTemplate"
         :groups="['RoomID']"
+        :disabled="isDisabled"
       >
         <DxView
           class="day"
@@ -356,6 +357,7 @@ export default {
       isShowImportScheduler: false,
       isAdmin: false,
       schedulerConnection: Resource.SchedulerConnection,
+      isDisabled: false,
     }
   },
   computed: {
@@ -504,6 +506,7 @@ export default {
       this.isShowForm = true
       // Lấy thời gian hiện tại
       var now = new Date()
+
       this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
     },
     /**

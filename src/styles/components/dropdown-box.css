@@ -298,3 +298,27 @@
   font-weight: 700;
   font-size: 15px;
 }
+.dx-scheduler-work-space-month {
+  overflow: auto !important;
+}
+.dx-scheduler-work-space-month .dx-scheduler-date-table-cell {
+  height: 120px !important;
+}
+.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-count):not(
+    .dx-scheduler-work-space-vertical-grouped
+  )
+  .dx-scheduler-date-table-scrollable-content,
+.dx-scheduler-work-space-month:not(.dx-scheduler-work-space-count):not(
+    .dx-scheduler-work-space-vertical-grouped
+  )
+  .dx-scrollable-content {
+  overflow: scroll !important;
+}
+.dx-scheduler-work-space-day .dx-scheduler-date-time-shader-bottom:before,
+.dx-scheduler-work-space-day .dx-scheduler-date-time-shader-top:before,
+.dx-scheduler-work-space-week .dx-scheduler-date-time-shader-bottom:before,
+.dx-scheduler-work-space-week .dx-scheduler-date-time-shader-top:before,
+.dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-bottom:before,
+.dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-top:before {
+  background-color: rgba(231, 179, 234, 0.11) !important;
+}

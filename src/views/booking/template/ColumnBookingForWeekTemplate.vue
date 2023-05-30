@@ -584,6 +584,7 @@ export default {
   border-radius: 50%;
   margin-right: 8px;
   margin-top: 5px;
+  cursor: pointer;
 }
 
 .wrap-text {
@@ -631,6 +632,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 
 .schedule-cell-inner {
@@ -691,6 +693,8 @@ export default {
 
 .misa-cell-active-group {
   display: flex;
+  pointer-events: auto !important;
+  cursor: pointer;
 }
 
 .misa-cell-active-group:hover {
@@ -765,12 +769,16 @@ thead {
 
 .rowColor.isDisable {
   background-color: #f0f0f3 !important;
+  /* pointer-events: none; */
 }
 
 .rowColor.isDisable :hover {
   background-color: #f0f0f3 !important;
 }
-
+.rowColor.isDisable .schedule-cell:hover {
+  cursor: not-allowed;
+  /* pointer-events: none; */
+}
 .generate {
   height: 100%;
   overflow: auto;
