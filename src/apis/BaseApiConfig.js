@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from 'axios'
 let BaseAPIConfig = axios.create({ baseURL: `http://34.96.176.17:8888/api/v1/` })
-// let BaseAPIConfig = axios.create({ baseURL: `http://localhost:5081/api/v1/` })
+// let BaseAPIConfig = axios.create({ baseURL: `http://localhost:51585/api/v1/` })
 BaseAPIConfig.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {

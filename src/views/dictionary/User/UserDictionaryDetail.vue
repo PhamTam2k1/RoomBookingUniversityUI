@@ -131,7 +131,7 @@
             :error="Error['DepartmentID']"
           ></BaseDropdownbox>
         </div>
-        <div class="t-row-block">
+        <div class="t-row-block" v-if="isAdmin">
           <div class="t-lable mgb-8 flex">
             <div class="t-lable-title">Vai trò</div>
             <div class="required">
@@ -244,6 +244,7 @@ export default {
       popupNoticeMode: -1,
       Error: {},
       titlePopup: 'Thêm người dùng',
+      isAdmin: false,
     }
   },
 
@@ -482,6 +483,10 @@ export default {
     } catch (error) {
       console.error(error)
     }
+    this.isAdmin =
+      localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
+        ? true
+        : false
     if (this.popupMode == Enum.PopupMode.AddMode) {
       this.getNewUserCode()
       this.titlePopup = 'Thêm người dùng'

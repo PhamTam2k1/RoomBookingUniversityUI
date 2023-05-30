@@ -10,12 +10,12 @@
 }
 
 .misa-button-primary {
-  background-color: var(--button-primary-normal-bg-color) !important;
+  background-color: #337ab7 !important;
   color: var(--button-primary-color);
   color: #fff !important;
 }
-.misa-button-primary:hover{
-  background-color:#068ac7 !important;
+.misa-button-primary:hover {
+  background-color: #068ac7 !important;
 }
 .misa-button-normal {
   background-color: #fff;
