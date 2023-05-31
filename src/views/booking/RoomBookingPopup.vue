@@ -104,6 +104,7 @@
                 lable=""
                 :tabindex="3"
                 :value="bookingRoomData.StartDate"
+                :min="currentDate"
               ></BaseDate>
             </div>
             <div class="t-row flex">
@@ -117,6 +118,7 @@
                 lable=""
                 :tabindex="4"
                 :value="bookingRoomData.EndDate"
+                :min="currentDate"
               ></BaseDate>
             </div>
 
@@ -418,6 +420,7 @@ export default {
       isAdmin: false,
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
+      currentDate: new Date(),
     }
   },
 

@@ -566,14 +566,14 @@ export default {
           capacityMax: this.filterOption.CapacityMax
             ? this.filterOption.CapacityMax
             : null,
-          pageSize: this.pageSize ? this.pageSize : 20,
+          pageSize: this.pageSize ? this.pageSize : 15,
           pageIndex: this.pageIndex ? this.pageIndex : 1,
         }).then((res) => {
           debugger
-          ;(this.pageIndex = res.CurrentPage),
-            (this.startRecord = res.startRecord),
-            (this.endRecord = res.endRecord),
-            (this.totalRecord = res.totalRecord),
+          ;(this.pageIndex = res.data.CurrentPage),
+            (this.startRecord = res.data.startRecord),
+            (this.endRecord = res.data.endRecord),
+            (this.totalRecord = res.data.totalRecord),
             (this.dataSource = res.data.dataBooking || [])
           this.lstRoom = res.data.dataRoom || []
           if (res.data.option == 1 || this.isTypeDay) {

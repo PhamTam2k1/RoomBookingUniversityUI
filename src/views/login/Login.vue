@@ -117,38 +117,6 @@ export default {
     }
   },
   methods: {
-    async callback(response) {
-      const userData = decodeCredential(response.credential)
-      console.log(userData)
-      // gửi thông tin lên serve
-      var param = {
-        fullName: userData.name,
-        password: userData.sub,
-        email: userData.email,
-        avartarColor: 'blue',
-      }
-      AccountApi.loginGoogle(param)
-        .then((res) => {
-          if (res) {
-            console.log(res)
-            localStorage.setItem('token', res.data.Value)
-            // Lưu thông tin đăng nhập vào local storage
-            localStorage.setItem('user', JSON.stringify(res))
-            localStorage.setItem('roleOption', res.roleOption)
-            // Chuyển hướng đến trang Dashboard sau khi đăng nhập thành công
-            if (localStorage.getItem('roleOption') - 0 === 3) {
-              this.$router.push('/booking/booking-await')
-            } else {
-              this.$router.push('/')
-            }
-          }
-        })
-        .catch((res) => {
-          console.log(res)
-        })
-
-      debugger
-    },
     async handleSubmit() {
       debugger
       const user = { Username: this.username, Password: this.password }

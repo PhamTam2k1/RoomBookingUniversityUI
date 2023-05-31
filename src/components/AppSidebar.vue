@@ -12,7 +12,11 @@
     "
   >
     <CSidebarBrand>
-      <img class="img-logo" src="../assets/logo1.png" alt="mô tả ảnh" />
+      <img
+        class="img-logo"
+        src="../assets/logoUniversity.png"
+        alt="mô tả ảnh"
+      />
       <div class="t-nav-title">Đặt phòng học</div>
       <CIcon
         custom-class-name="sidebar-brand-narrow"

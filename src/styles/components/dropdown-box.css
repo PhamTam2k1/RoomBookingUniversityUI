@@ -322,3 +322,8 @@
 .dx-scheduler-work-space-work-week .dx-scheduler-date-time-shader-top:before {
   background-color: rgba(231, 179, 234, 0.11) !important;
 }
+.dx-calendar-cell.dx-calendar-empty-cell {
+  background: unset !important;
+  cursor: default;
+  opacity: 0.8;
+}
