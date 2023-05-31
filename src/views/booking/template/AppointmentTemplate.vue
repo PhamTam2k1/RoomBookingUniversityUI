@@ -75,6 +75,8 @@ export default {
   height: 100%;
 
   font-size: 14px;
+  width: fit-content;
+  white-space: break-spaces;
 }
 .misa-cell-active-color {
   height: 8px;
