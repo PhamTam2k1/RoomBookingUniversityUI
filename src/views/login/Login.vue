@@ -118,9 +118,9 @@ export default {
   },
   methods: {
     async handleSubmit() {
+      debugger
       const user = { Username: this.username, Password: this.password }
       localStorage.setItem('user', JSON.stringify(user))
-      debugger
       try {
         // Gọi action login trong store để thực hiện yêu cầu đăng nhập
         await store.dispatch('auth/login', user)
@@ -143,6 +143,10 @@ export default {
 <style scoped lang="scss">
 aside {
   display: none;
+}
+[aria-labelledby] {
+  min-width: 50px !important;
+  width: 50px !important;
 }
 .error {
   color: #e14242;
@@ -264,5 +268,8 @@ aside {
   .h-custom {
     height: 100%;
   }
+}
+iframe {
+  width: 300px !important;
 }
 </style>

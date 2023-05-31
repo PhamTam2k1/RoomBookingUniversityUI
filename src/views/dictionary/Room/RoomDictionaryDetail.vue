@@ -614,7 +614,6 @@ export default {
      * Sự kiện thay đổi tòa nhà
      */
     onValueChangeSupporterRoom(value) {
-      debugger
       let user = this.dataUser.find((x) => x.UserID == value)
       this.room.SupporterID = value
       this.room.SupporterName = user.FullName
@@ -639,7 +638,6 @@ export default {
      * PTTAM 1/05/2023
      */
     getRoomByID() {
-      debugger
       let me = this
       RoomApi.getByID(this.roomData.RoomID).then((res) => {
         if (res) {
