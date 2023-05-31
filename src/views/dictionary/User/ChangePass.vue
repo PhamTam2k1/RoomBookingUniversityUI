@@ -16,10 +16,19 @@
     <template #contentPopup>
       <div class="content-popup">
         <BaseInput
+          lable="Mật khẩu"
+          placeholder="Nhập mật khẩu hiện tại"
+          classInput="misa-input"
+          class="misa-input-secondary"
+          :tabindex="1"
+          type="password"
+          v-model="passOld"
+        ></BaseInput>
+        <BaseInput
           lable="Mật khẩu mới"
           placeholder="Nhập mật khẩu mới"
           classInput="misa-input"
-          class="misa-input-secondary"
+          class="misa-input-secondary mgt-16"
           :tabindex="1"
           type="password"
           v-model="passNew"
@@ -77,6 +86,7 @@ export default {
       reson: '',
       passNew: '',
       pasNew1: '',
+      passOld: '',
       ObjectFunction: ObjectFunction,
     }
   },
@@ -100,13 +110,21 @@ export default {
           UserID: JSON.parse(localStorage.getItem('user')).UserID,
           Password: this.passNew,
           PasswordNew: this.passNew,
+          PasswordOld: this.passOld,
         }).then((res) => {
-          if (res && res.data) {
-            ObjectFunction.toastMessage(
-              'Thay đổi mật khẩu thành công!',
-              Resource.Messenger.Success,
-            )
-            this.onClickClosePopup()
+          if (res) {
+            if (res.data) {
+              ObjectFunction.toastMessage(
+                'Thay đổi mật khẩu thành công!',
+                Resource.Messenger.Success,
+              )
+              this.onClickClosePopup()
+            } else {
+              ObjectFunction.toastMessage(
+                'Mật khẩu hiện tại bạn nhập chưa đúng!',
+                Resource.Messenger.Warning,
+              )
+            }
           } else {
             ObjectFunction.toastMessage(
               'Thay đổi mật khẩu thất bại',
