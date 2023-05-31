@@ -37,11 +37,9 @@ export default {
       notificationsRef,
       '00000000-0000-0000-0000-000000000000',
     )
-    debugger
 
     get(childRef).then((snapshot) => {
       if (snapshot.exists()) {
-        debugger
         var data = snapshot.val()
         for (const key in data) {
           const notification = data[key]

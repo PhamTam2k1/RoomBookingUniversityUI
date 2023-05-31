@@ -363,7 +363,6 @@ export default {
       // this.rooms = uniqueRooms
     },
     onClickCell(TimeSlotID, RoomID, BookingRoomID) {
-      debugger
       this.isShowTooltip = false
       this.popupNoticeMode = false
       this.dateBooking = moment(TimeSlotID, 'DD/MM/YYYY').toDate()
@@ -422,7 +421,6 @@ export default {
     },
     // tạo ra template ngày tháng
     dateCellTemplate() {
-      debugger
       const today = new Date(this.dataDate)
       let daysOfWeek = []
       if (this.view && this.view == 'week') {
@@ -710,7 +708,7 @@ export default {
 }
 
 .table_multi {
-  height: calc(100vh - 122px);
+  height: calc(100vh - 166px);
   overflow: auto;
   background-color: #fff;
 }

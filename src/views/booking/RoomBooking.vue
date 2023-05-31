@@ -144,10 +144,10 @@
         </div>
       </div>
     </div>
-    <div v-if="lstRoom.length === 0">
+    <div v-if="lstRoom.length === 0" style="height: calc(100vh - 166px)">
       <NoData />
     </div>
-    <div v-else>
+    <div v-else style="height: calc(100vh - 166px)">
       <DxScheduler
         v-if="showView || isTypeDay"
         :dataSource="dataSource"
@@ -254,7 +254,6 @@
         @onSendingEmail="onSendingEmail"
       ></ColumnBookingForWeekTemplate>
     </div>
-
     <!--Begin Popup detail -->
     <RoomBookingPopup
       v-if="isShowForm"
@@ -275,6 +274,16 @@
     ></ImportRoom>
     <!-- End popup detail -->
     <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
+    <div class="misa-pagingtion">
+      <BasePaging
+        :totalRecord="totalRecord"
+        @pageSizeSelected="pageSizeSelected"
+        @currentPage="currentPage"
+        :currentPage="pageIndex"
+        :startRecord="startRecord"
+        :endRecord="endRecord"
+      ></BasePaging>
+    </div>
   </div>
 </template>
 
@@ -297,6 +306,7 @@ import HeaderTooltip from './template/HeaderTooltip.vue'
 import RoomBookingSetting from './RoomBookingSetting.vue'
 import ImportRoom from '../importroom/ImportRoom.vue'
 import Resource from '@/commons/Resource'
+import BasePaging from '@/components/base/BasePaging.vue'
 
 export default {
   name: 'App',
@@ -315,6 +325,7 @@ export default {
     HeaderTooltip,
     RoomBookingSetting,
     ImportRoom,
+    BasePaging,
   },
   data() {
     return {
@@ -349,6 +360,10 @@ export default {
       shouldRenderScheduler: true,
       scheduler: null,
       rangeCapacity: [],
+      pageIndex: 0,
+      startRecord: 0,
+      endRecord: 0,
+      totalRecord: 0,
       /** Biến show loading: true- show, false - hide*/
       isShowLoading: false,
       /**Biến show popup lọc theo điều kiện */
@@ -429,6 +444,22 @@ export default {
     },
   },
   methods: {
+    /**
+     * Sự kiện thay đổi số bản ghi/trang
+     */
+    pageSizeSelected(size) {
+      this.pageSize = size
+      this.showLoading(true)
+      this.loadDataBooking()
+    },
+    /**
+     * Sự kiện thay đổi số trang
+     */
+    currentPage(val) {
+      this.pageIndex = val
+      this.showLoading(true)
+      this.loadDataBooking()
+    },
     demo() {
       this.loadDataBooking()
       console.log('a')
@@ -535,8 +566,15 @@ export default {
           capacityMax: this.filterOption.CapacityMax
             ? this.filterOption.CapacityMax
             : null,
+          pageSize: this.pageSize ? this.pageSize : 20,
+          pageIndex: this.pageIndex ? this.pageIndex : 1,
         }).then((res) => {
-          this.dataSource = res.data.dataBooking || []
+          debugger
+          ;(this.pageIndex = res.CurrentPage),
+            (this.startRecord = res.startRecord),
+            (this.endRecord = res.endRecord),
+            (this.totalRecord = res.totalRecord),
+            (this.dataSource = res.data.dataBooking || [])
           this.lstRoom = res.data.dataRoom || []
           if (res.data.option == 1 || this.isTypeDay) {
             this.showView = true
@@ -760,5 +798,14 @@ tr.dx-scheduler-group-row {
 .t-location-building {
   border: 1px solid rgba(221, 221, 221, 0.6);
   background: #fff;
+}
+.misa-pagingtion {
+  border-top: none;
+  padding: 0px 0 !important;
+  height: 40px;
+  position: relative;
+  /* margin: 0 10px 8px 10px; */
+  margin-top: 3px;
+  background-color: #f9fafc !important;
 }
 </style>

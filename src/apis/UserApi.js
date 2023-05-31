@@ -32,6 +32,7 @@ class UserAPI {
   async getPaging(param) {
     return await BaseAPIConfig.post(`${this.controller}/pagingUser`, param)
   }
+
   /**
    * Mô tả : Hàm lấy mã Người dùng mới
    * @Createdby: PTTAM
