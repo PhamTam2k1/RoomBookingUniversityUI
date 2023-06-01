@@ -95,7 +95,7 @@
                           >
                             <a
                               href=" https://mily.misa.vn/download-file-nhap-khau"
-                              download
+                              download="NhapKhau.xlsx"
                               >NhapKhau.xlsx</a
                             >
                           </div>
@@ -221,7 +221,7 @@
                           <span>&nbsp;</span> bản ghi không hợp lệ
                         </div>
                       </div>
-                      <div class="download-file">
+                      <!-- <div class="download-file">
                         <div class="d-flex justify-content-end">
                           <div
                             class="d-flex download-link text-link"
@@ -236,7 +236,7 @@
                           <span>&nbsp;</span>
                           <span>để xem chi tiết lỗi</span>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="fixed-column-right">
                       <div class="total-record">
@@ -303,12 +303,12 @@
                         ></div>
                         <div class="valid-record record-text">
                           <span class="not-valid-total"
-                            >{{ errorCount }}/{{ sumaryData }}</span
+                            >{{ sumaryData }}/{{ sumaryData }}</span
                           >
                           <span>&nbsp;</span> bản ghi nhập không thành công
                         </div>
                       </div>
-                      <div class="download-file">
+                      <!-- <div class="download-file">
                         <div class="d-flex justify-content-end">
                           <div
                             class="d-flex download-link text-link"
@@ -323,7 +323,7 @@
                           <span>&nbsp;</span>
                           <span> để xem chi tiết lỗi</span>
                         </div>
-                      </div>
+                      </div> -->
                     </div>
                   </div>
                 </div>
@@ -347,7 +347,7 @@
               style="
                 width: 90px;
                 color: #fff !important;
-                background-color: #00ad56;
+                background-color: #337ab7;
               "
               @click="nextStep"
             />
@@ -669,16 +669,16 @@ export default {
     }
     .step-item.active {
       .prc-icon {
-        border: 2px solid #27ae60;
+        border: 2px solid #337ab7;
         background-color: #fff;
         .step-number {
-          color: #27ae60;
+          color: #337ab7;
         }
       }
     }
     .step-item.done {
       .prc-icon {
-        background: #27ae60;
+        background: #337ab7;
         .step-number {
           color: transparent;
           height: 12px;
@@ -691,7 +691,7 @@ export default {
       }
       + {
         .line-space {
-          background: #27ae60;
+          background: #337ab7;
         }
       }
     }
@@ -747,6 +747,8 @@ export default {
             height: 48px;
             background-position: 2px -480px;
             margin-bottom: 8px;
+            filter: invert(46%) sepia(100%) saturate(2147%) hue-rotate(182deg)
+              brightness(70%) contrast(85%);
           }
           #btnDownTempFile {
             text-align: center;
@@ -794,6 +796,8 @@ export default {
             // background: url("../../assets../../assets/images/misa-bm_icon_sprites.svg") center no-repeat;
             background-position: -313px -144px;
             margin-right: 8px;
+            filter: invert(46%) sepia(100%) saturate(2147%) hue-rotate(182deg)
+              brightness(70%) contrast(85%);
           }
         }
       }
@@ -860,6 +864,8 @@ export default {
           height: 48px;
           background-position: -148px -480px;
           margin-bottom: 8px;
+          filter: invert(46%) sepia(100%) saturate(2147%) hue-rotate(182deg)
+            brightness(70%) contrast(85%);
         }
         .import-file {
           padding: 15px;
@@ -880,6 +886,8 @@ export default {
             background: url('../../assets/images/misa-bm_icon_sprites.svg')
               center no-repeat;
             background-position: -76px -243px;
+            filter: invert(46%) sepia(100%) saturate(2147%) hue-rotate(182deg)
+              brightness(70%) contrast(85%);
           }
           .delete-file {
             width: 19px;

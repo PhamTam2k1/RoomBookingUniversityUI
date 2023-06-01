@@ -2,14 +2,27 @@
   <div id="body-user-dictionary">
     <div id="bd-user" class="Body">
       <div class="filter-options">
-        <DxTextBox
-          placeholder="Tìm kiếm"
-          class="input-field"
-          v-model:value="searchText"
-          height="34"
+        <base-input
+          class="misa-input-wrap flex w-240 mg-12"
+          placeholder="Tìm kiếm người dùng"
+          v-model="dataComponent.userFilter"
+          @keyup="filterUser"
+          classInput="misa-input"
         >
-          <div class="input-field-icon icon-search"></div>
-        </DxTextBox>
+          <div class="misa-icon misa-icon-search misa-icon-24"></div>
+        </base-input>
+        <div class="mgl-16">
+          <base-dropdownbox
+            classDropdownbox="drop-down"
+            placeholder="Chọn vai trò"
+            :dataSource="dataRole"
+            optionName="RoleName"
+            optionValue="RoleID"
+            @onValueChange="onValueChangeRole"
+            :height="36"
+            :width="208"
+          ></base-dropdownbox>
+        </div>
         <DxButton
           class="btn-add"
           icon="add"
@@ -104,17 +117,17 @@ import BaseTable from '@/components/base/BaseTable.vue'
 import Enum from '@/commons/Enum'
 import { DxButton } from 'devextreme-vue/button'
 import { reactive } from 'vue'
-import { mapState } from 'vuex'
-import DxTextBox from 'devextreme-vue/text-box'
+import { mapActions, mapState } from 'vuex'
 import UserApi from '@/apis/UserApi'
 import BaseLoading from '@/components/base/BaseLoading.vue'
 import UserDictionaryDetail from './UserDictionaryDetail.vue'
 import DeleteUserPopupVue from './DeleteUserPopup.vue'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 export default {
   components: {
-    DxTextBox,
     DxButton,
     BaseTable,
     BasePaging,
@@ -124,6 +137,8 @@ export default {
     DeleteUserPopupVue,
     PopupNotice,
     BaseButton,
+    BaseInput,
+    BaseDropdownbox,
   },
   props: {
     weekID: {
@@ -151,6 +166,11 @@ export default {
       userData: {},
       popupNoticeMode: -1,
       contentPopup: '',
+      /** Từ khóa tìm kiếm thông tin người dùng*/
+      userFilter: '',
+      RoleID: '',
+      /**Timout của tìm kiếm */
+      timeout: 1000,
     })
 
     /**
@@ -283,7 +303,8 @@ export default {
         UserApi.getPaging({
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
-          keyword: '',
+          keyword: dataComponent.userFilter.trim(),
+          roleID: dataComponent.RoleID,
         }).then((res) => {
           dataComponent.dataSource = res.data.Data || []
           dataComponent.pageIndex = res.data.CurrentPage
@@ -332,16 +353,50 @@ export default {
       addUser,
     }
   },
+  methods: {
+    // Gọi hàm load data từ store
+    ...mapActions({
+      loadDataDepartments: 'dictionary/loadDataDepartments',
+      loadDataRoles: 'dictionary/loadDataRoles',
+    }),
+    /** Mô tả: Sự kiện keyup để tìm kiếm nhân viên
+     * CreatedBy: PTTAM
+     * Created Date: 11-09-2022 08:23:11
+     */
+    filterUser() {
+      clearTimeout(this.dataComponent.timeout)
+      this.dataComponent.timeout = setTimeout(() => {
+        this.getData()
+      }, 1000)
+    },
+    /** Mô tả: Sự kiện thay đổi vai trò tìm kiếm
+     * @param {object} optionId khóa chính vai trò
+     * CreatedBy: PTTAM
+     * Created Date: 03-09-2022 13:02:31
+     */
+    onValueChangeRole(option) {
+      this.dataComponent.RoleID = option
+      this.getData()
+    },
+  },
   computed: {
     ...mapState({
       roleOption: (state) => state.auth.roleOption,
+      dataDepartment: (state) => state.dictionary.dataDepartment,
+      dataRole: (state) => state.dictionary.dataRole,
     }),
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
       return Enum
     },
   },
-  mounted() {
+  async mounted() {
+    try {
+      await this.loadDataDepartments()
+      await this.loadDataRoles()
+    } catch (error) {
+      console.error(error)
+    }
     this.showLoading(true)
     this.getData()
     this.isAdmin =

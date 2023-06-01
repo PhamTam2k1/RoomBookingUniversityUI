@@ -6,7 +6,6 @@
       'misa-input-required': error != '' && !isDisable,
       tooltip: error != '' && !isDisable,
     }"
-    :data_title="error"
   >
     <div class="lable-input t-title-lable flex" v-if="lable">
       {{ lable }}
@@ -15,19 +14,21 @@
       </div>
     </div>
     <slot></slot>
-    <input
-      ref="input"
-      :type="type"
-      :class="classInput"
-      :placeholder="placeholder"
-      :value="modelValue"
-      @input="input"
-      :tabindex="tabindex"
-      @blur="handleBlur"
-      @keyup="handleKeyup"
-      :maxlength="maxlength"
-      :disabled="isDisable"
-    />
+    <el-tooltip :disabled="error == ''" :content="error" placement="top">
+      <input
+        ref="input"
+        :type="type"
+        :class="classInput"
+        :placeholder="placeholder"
+        :value="modelValue"
+        @input="input"
+        :tabindex="tabindex"
+        @blur="handleBlur"
+        @keyup="handleKeyup"
+        :maxlength="maxlength"
+        :disabled="isDisable"
+      />
+    </el-tooltip>
   </div>
 </template>
 
@@ -180,24 +181,7 @@ export default {
   font-size: 14px;
   white-space: nowrap;
 }
-.tooltip:after {
-  content: attr(data_title);
-  background: #393a3d;
-  position: absolute;
-  color: #fff;
-  width: auto;
-  white-space: nowrap;
-  padding: 0px 6px;
-  font-size: 12px;
-  height: 24px;
-  z-index: 99;
-  line-height: 24px;
-  display: none;
-  margin-top: -15px;
-  margin-left: 40%;
-  /* font-family: Notosans; */
-  font-weight: 100;
-}
+
 .misa-input:disabled {
   color: #585959;
   background-color: #f5f5f5;

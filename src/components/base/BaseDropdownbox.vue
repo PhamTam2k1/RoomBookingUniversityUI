@@ -2,59 +2,60 @@
   <div
     class="dx-field-value misa-selectbox flex"
     :class="{ 'misa-input-required': error != '', tooltip: error != '' }"
-    :data_title="error"
   >
     <div class="lable-input t-title-lable flex" v-if="lable">
       {{ lable }}
       <div v-if="required" :class="{ requiredField: required }">
-        <span class="t-required"> &nbsp;(*)</span>
+        <span class="t-required"> &nbsp;*</span>
       </div>
     </div>
-    <DxSelectBox
-      :class="[{ 'misa-input-required': error != '' }, classDropdownbox]"
-      :data-source="dataSource"
-      drop-down-button-template="iconDropdown"
-      item-template="customItem"
-      :display-expr="optionName"
-      :value-expr="optionValue"
-      :placeholder="placeholder"
-      v-model:selected-item="selectedItem"
-      :tabIndex="tabindex"
-      :value="value"
-      @value-changed="onValueChange"
-      :height="height"
-      :width="width"
-      :searchEnabled="isSearch"
-      @focusIn="handleFocusIn"
-      @focusOut="validateError"
-      :opened="opened"
-      @enterKey="handleEnterkey"
-      :onInput="handleInput"
-      ref="dropdown"
-      :disabled="isDisable"
-    >
-      <template #iconDropdown="{}">
-        <div class="misa-icon misa-icon-dropdown misa-icon-24"></div>
-      </template>
-      <template #customItem="{ data }">
-        <el-tooltip
-          :content="data[optionName]"
-          placement="top"
-          :hide-after="50"
-        >
-          <div class="flex">
-            {{ data[optionName] }}
+    <el-tooltip :disabled="error == ''" :content="error" placement="top">
+      <DxSelectBox
+        :class="[{ 'misa-input-required': error != '' }, classDropdownbox]"
+        :data-source="dataSource"
+        drop-down-button-template="iconDropdown"
+        item-template="customItem"
+        :display-expr="optionName"
+        :value-expr="optionValue"
+        :placeholder="placeholder"
+        v-model:selected-item="selectedItem"
+        :tabIndex="tabindex"
+        :value="value"
+        @value-changed="onValueChange"
+        :height="height"
+        :width="width"
+        :searchEnabled="isSearch"
+        @focusIn="handleFocusIn"
+        @focusOut="validateError"
+        :opened="opened"
+        @enterKey="handleEnterkey"
+        :onInput="handleInput"
+        ref="dropdown"
+        :disabled="isDisable"
+      >
+        <template #iconDropdown="{}">
+          <div class="misa-icon misa-icon-dropdown misa-icon-24"></div>
+        </template>
+        <template #customItem="{ data }">
+          <el-tooltip
+            :content="data[optionName]"
+            placement="top"
+            :hide-after="50"
+          >
+            <div class="flex">
+              {{ data[optionName] }}
 
-            <div
-              class="div"
-              v-if="selectedItem[optionValue] == data[optionValue]"
-            >
-              <slot></slot>
+              <div
+                class="div"
+                v-if="selectedItem[optionValue] == data[optionValue]"
+              >
+                <slot></slot>
+              </div>
             </div>
-          </div>
-        </el-tooltip>
-      </template>
-    </DxSelectBox>
+          </el-tooltip>
+        </template>
+      </DxSelectBox>
+    </el-tooltip>
   </div>
 </template>
 
@@ -219,24 +220,6 @@ export default {
   font-size: 14px;
   width: 30%;
   padding-top: 5px;
-}
-.tooltip:after {
-  content: attr(data_title);
-  background: #393a3d;
-  position: absolute;
-  color: #fff;
-  width: auto;
-  white-space: nowrap;
-  padding: 0px 6px;
-  font-size: 12px;
-  height: 24px;
-  z-index: 99;
-  line-height: 24px;
-  display: none;
-  margin-top: -15px;
-  margin-left: 40%;
-  /* font-family: Notosans; */
-  font-weight: 100;
 }
 
 .tooltip:hover:after {

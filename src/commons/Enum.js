@@ -81,7 +81,7 @@ const Enum = Object.freeze({
     /**
      * Chờ phê duyệt
      */
-    HistoryMode: 6,
+    HistoryMode: 7,
   },
 })
 export default Enum
