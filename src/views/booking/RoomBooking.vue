@@ -282,6 +282,9 @@
         :currentPage="pageIndex"
         :startRecord="startRecord"
         :endRecord="endRecord"
+        lableRecord="phòng"
+        lableSumary="Tổng số phòng:"
+        lableTotalInPageRecord="Số phòng/trang"
       ></BasePaging>
     </div>
   </div>

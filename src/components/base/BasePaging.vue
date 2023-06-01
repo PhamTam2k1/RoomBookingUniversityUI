@@ -2,11 +2,11 @@
   <!-- Begin Paging -->
   <div class="misa-paging flex">
     <div class="paging-total">
-      {{ Resource.Pagging.totalRecord }} <b>{{ totalRecord }}</b>
+      {{ lableSumary }} <b>{{ totalRecord }}</b>
     </div>
     <div class="page-size-selector flex">
       <div class="page-size-infor">
-        {{ Resource.Pagging.totalRecordOfPage }}
+        {{ lableTotalInPageRecord }}
       </div>
       <div class="paging-dropdown">
         <BaseDropdownbox
@@ -24,7 +24,7 @@
       </div>
 
       <div class="page-infor">
-        <b>{{ startRecord }}</b> - <b>{{ endRecord }}</b> bản ghi
+        <b>{{ startRecord }}</b> - <b>{{ endRecord }}</b> {{ lableRecord }}
       </div>
     </div>
     <div class="pagingation">
@@ -82,6 +82,18 @@ export default {
     /** trang hiện tại*/
     endRecord: {
       type: Number,
+    },
+    lableSumary: {
+      type: String,
+      default: 'Tổng số bản ghi:',
+    },
+    lableRecord: {
+      type: String,
+      default: 'bản ghi',
+    },
+    lableTotalInPageRecord: {
+      type: String,
+      default: 'Số bản ghi/trang',
     },
   },
   methods: {
