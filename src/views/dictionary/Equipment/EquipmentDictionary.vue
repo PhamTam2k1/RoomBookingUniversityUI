@@ -3,14 +3,15 @@
     <!-- Begin body -->
     <div id="bd-equipment" class="Body">
       <div class="filter-options">
-        <DxTextBox
-          placeholder="Tìm kiếm"
-          class="input-field"
-          v-model:value="searchText"
-          height="34"
+        <base-input
+          class="misa-input-wrap flex w-240 mg-12"
+          placeholder="Tìm kiếm thiết bị"
+          v-model="dataComponent.userFilter"
+          @keyup="filterUser"
+          classInput="misa-input"
         >
-          <div class="input-field-icon icon-search"></div>
-        </DxTextBox>
+          <div class="misa-icon misa-icon-search misa-icon-24"></div>
+        </base-input>
         <DxButton
           class="btn-add"
           icon="add"
@@ -90,8 +91,8 @@ import { mapState } from 'vuex'
 import BuidingDictionaryDetail from '../Equipment/EquipmentDictionaryDetailPopup.vue'
 import EquipmentApi from '@/apis/EquipmentApi'
 import DeleteEquipmentPopup from '../Equipment/DeleteEquipmentPopup.vue'
-import DxTextBox from 'devextreme-vue/text-box'
 import BaseLoading from '@/components/base/BaseLoading.vue'
+import BaseInput from '@/components/base/BaseInput.vue'
 export default {
   components: {
     DxButton,
@@ -100,8 +101,8 @@ export default {
     BaseTable,
     BuidingDictionaryDetail,
     DeleteEquipmentPopup,
-    DxTextBox,
     BaseLoading,
+    BaseInput,
   },
 
   setup() {
@@ -151,6 +152,11 @@ export default {
       isShowForm: false,
       /**Biến trạng thái popup */
       popupMode: 0,
+      /** Từ khóa tìm kiếm thông tin người dùng*/
+      userFilter: '',
+      RoleID: '',
+      /**Timout của tìm kiếm */
+      timeout: 1000,
     })
     /**
      * Hiển thị popup
@@ -271,7 +277,7 @@ export default {
         EquipmentApi.getPaging({
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
-          keyword: '',
+          keyword: dataComponent.userFilter,
         }).then((res) => {
           dataComponent.dataSource = res.data.Data || []
           dataComponent.pageIndex = res.data.CurrentPage
@@ -318,7 +324,16 @@ export default {
       dataComponent.popupMode = Enum.PopupMode.AddMode
       dataComponent.popupVisible = true
     }
-
+    /** Mô tả: Sự kiện keyup để tìm kiếm nhân viên
+     * CreatedBy: PTTAM
+     * Created Date: 11-09-2022 08:23:11
+     */
+    function filterUser() {
+      clearTimeout(dataComponent.timeout)
+      dataComponent.timeout = setTimeout(() => {
+        getData()
+      }, 1000)
+    }
     return {
       dataComponent,
       getData,
@@ -335,6 +350,7 @@ export default {
       showLoading,
       showFormDetail,
       onClickClosePopup,
+      filterUser,
     }
   },
   computed: {
@@ -394,7 +410,7 @@ export default {
   }
 }
 #bd-equipment {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 72px);
   background: white;
   padding: 20px;
 }

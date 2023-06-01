@@ -148,7 +148,6 @@ export default {
       }
     },
     callNotify() {
-      debugger
       // lấy thông tin đăng nhập
       const user = JSON.parse(localStorage.getItem('user'))
       if (user && user.UserID) {

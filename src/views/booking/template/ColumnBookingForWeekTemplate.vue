@@ -271,7 +271,9 @@ export default {
       booking.length > 1
         ? (this.bookingExists = true)
         : (this.bookingExists = false)
-      return booking.slice(0, 4)
+      return booking
+        .slice(0, 4)
+        .sort((a, b) => a.TimeSlotName.localeCompare(b.TimeSlotName))
     },
     // lấy vị trí x y khi hover
     handleMouseMove(event, booking, popup) {
@@ -462,7 +464,7 @@ export default {
       const days = []
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day)
-        const dayOfWeek = date.getDay() -1
+        const dayOfWeek = date.getDay() - 1
         const momentObj = moment(date)
         const formattedString = momentObj.format('DD/MM')
         days.push({

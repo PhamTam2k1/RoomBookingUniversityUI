@@ -2,14 +2,22 @@
   <div id="body-room-dictionary">
     <div id="bd-room" class="Body">
       <div class="filter-options">
-        <DxTextBox
-          placeholder="Tìm kiếm"
-          class="input-field"
-          v-model:value="searchText"
-          height="34"
-        >
-          <div class="input-field-icon icon-search"></div>
-        </DxTextBox>
+        <div class="t-location-building flex">
+          <div class="misa-icon-style mgl-16 mgt-5">
+            <div class="icon-booking t-icon-location misa-icon-24"></div>
+          </div>
+          <BaseDropdownbox
+            classDropdownbox="drop-down-bulding"
+            :dataSource="dataBuildingWithAll"
+            optionName="BuildingName"
+            optionValue="BuildingID"
+            :height="34"
+            :width="120"
+            placeholder="Chọn vị trí"
+            @onValueChange="onValueChangeBuilding"
+            :value="'tatca'"
+          ></BaseDropdownbox>
+        </div>
         <DxButton
           class="btn-add"
           icon="add"
@@ -111,17 +119,16 @@ import BaseTable from '@/components/base/BaseTable.vue'
 import Enum from '@/commons/Enum'
 import { DxButton } from 'devextreme-vue/button'
 import { reactive } from 'vue'
-import { mapState } from 'vuex'
-import DxTextBox from 'devextreme-vue/text-box'
+import { mapActions, mapState } from 'vuex'
 import RoomApi from '@/apis/RoomApi'
 import BaseLoading from '@/components/base/BaseLoading.vue'
 import RoomDictionaryDetail from './RoomDictionaryDetail.vue'
 import DeleteRoomPopup from './DeleteRoomPopup.vue'
 import PopupNotice from '@/components/popup/PopupNotice.vue'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 export default {
   components: {
-    DxTextBox,
     DxButton,
     BaseTable,
     BasePaging,
@@ -131,6 +138,7 @@ export default {
     PopupNotice,
     BaseButton,
     BaseLoading,
+    BaseDropdownbox,
   },
   props: {
     weekID: {
@@ -157,6 +165,7 @@ export default {
       popupMode: 0,
       popupNoticeMode: -1,
       isShowForm: false,
+      BuildingID: null,
     })
 
     /**
@@ -235,6 +244,7 @@ export default {
     function showFormDetail(isShow) {
       dataComponent.isShowForm = isShow
     }
+
     /**
      * Mô tả : Hàm show/hide loading
      * @param {Boolean} isShow true: hiển thị loading, false: ẩn loading
@@ -327,6 +337,7 @@ export default {
           pageIndex: dataComponent.pageIndex,
           pageSize: dataComponent.pageSize,
           keyword: '',
+          buildingID: dataComponent.BuildingID,
         }).then((res) => {
           dataComponent.dataSource = res.data.Data || []
           dataComponent.pageIndex = res.data.CurrentPage
@@ -394,17 +405,43 @@ export default {
       showPopup,
     }
   },
+  methods: {
+    // Gọi hàm load data từ store
+    ...mapActions({
+      loadDataBuildings: 'dictionary/loadDataBuildings',
+    }),
+    /**
+     * Sự kiện thay đổi tòa nhà
+     */
+    onValueChangeBuilding(value) {
+      this.dataComponent.BuildingID = value != 'tatca' ? value : null
+      this.showLoading(true)
+
+      this.getData()
+    },
+  },
   computed: {
     ...mapState({
       roleOption: (state) => state.auth.roleOption,
+      dataBuilding: (state) => state.dictionary.dataBuilding,
     }),
+    dataBuildingWithAll() {
+      const dataBuilding = this.dataBuilding
+      return (
+        dataBuilding?.unshift({
+          BuildingName: 'Tất cả',
+          BuildingID: 'tatca',
+        }) && dataBuilding
+      )
+    },
     // Đăng ký đối tượng Enum trong phạm vi của component
     Enum() {
       return Enum
     },
   },
-  mounted() {
+  async mounted() {
     this.showLoading(true)
+    await this.loadDataBuildings()
     this.getData()
     this.isAdmin =
       localStorage.getItem('roleOption') - 0 == Enum.RoleOption.Admin
@@ -422,7 +459,7 @@ export default {
 }
 
 #bd-room {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 72px);
   background: white;
   padding: 20px;
 }

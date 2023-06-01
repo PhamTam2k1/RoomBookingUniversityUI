@@ -47,6 +47,10 @@ button {
   width: 86px;
   min-width: 86px;
 }
+.w-240 {
+  width: 240px;
+  min-width: 240px;
+}
 .required {
   color: #e54848;
 }
