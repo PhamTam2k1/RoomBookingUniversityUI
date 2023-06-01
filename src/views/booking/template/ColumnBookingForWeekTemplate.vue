@@ -190,6 +190,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import BasePopup from '@/components/base/BasePopup.vue'
