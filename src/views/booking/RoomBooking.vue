@@ -164,7 +164,7 @@
         :date-cell-template="dateCellTemplate"
         appointment-template="AppointmentTemplateSlot"
         :on-content-ready="onContentReady"
-        :on-appointment-form-opening="onAppointmentClick"
+        
         :on-cell-click="onCellClick"
         :on-appointment-click="onAppointmentClick"
         resource-cell-template="resourceCellTemplate"
