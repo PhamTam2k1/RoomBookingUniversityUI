@@ -572,7 +572,6 @@ export default {
           pageSize: this.pageSize ? this.pageSize : 15,
           pageIndex: this.pageIndex ? this.pageIndex : 1,
         }).then((res) => {
-          debugger
           ;(this.pageIndex = res.data.CurrentPage),
             (this.startRecord = res.data.startRecord),
             (this.endRecord = res.data.endRecord),

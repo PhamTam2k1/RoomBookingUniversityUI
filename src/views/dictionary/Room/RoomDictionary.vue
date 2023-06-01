@@ -422,7 +422,7 @@ export default {
 }
 
 #bd-room {
-  height: calc(100vh - 90px);
+  height: calc(100vh - 72px);
   background: white;
   padding: 20px;
 }

@@ -93,7 +93,11 @@
                             id="btnDownTempFile"
                             title="Bấm vào đây để tải tệp"
                           >
-                            NhapKhau.xlsx
+                            <a
+                              href=" https://mily.misa.vn/download-file-nhap-khau"
+                              download
+                              >NhapKhau.xlsx</a
+                            >
                           </div>
                         </div>
                       </div>
@@ -352,7 +356,9 @@
       </div>
     </template>
   </base-popup>
+  <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
 </template>
+
 <script>
 /* eslint-disable */
 import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup'
@@ -368,6 +374,7 @@ import {
   DxColumn,
   DxPaging,
 } from 'devextreme-vue/data-grid'
+import BaseLoading from '@/components/base/BaseLoading.vue'
 export default {
   components: {
     DxPopup,
@@ -379,6 +386,7 @@ export default {
     DxColumn,
     DxPaging,
     BasePopup,
+    BaseLoading,
   },
   props: {
     isShowPopupImport: {
@@ -397,6 +405,7 @@ export default {
       successCount: 0,
       sumaryData: 0,
       isSuccess: true,
+      isShowLoading: false,
     }
   },
 
@@ -411,10 +420,11 @@ export default {
         }
         switch (this.step) {
           case 2:
+            this.isShowLoading = true
             const formData = new FormData()
             formData.append('file', this.fileUpload)
             const response = await axios.post(
-              'http://34.96.176.17:8888/api/v1/BookingRooms/excel',
+              'http://localhost:51585/api/v1/BookingRooms/excel',
               formData,
               {
                 headers: {
@@ -427,15 +437,19 @@ export default {
             this.sumaryData = response.data.Count
             if (response.data.IsSuccess) {
               this.successCount = this.sumaryData
+              this.isShowLoading = false
               ObjectFunction.toastMessage(
                 'Nhập khẩu thành công',
                 Resource.Messenger.Success,
               )
+              this.$emit('onLoadData')
             } else {
+              this.isShowLoading = false
               this.isSuccess = false
             }
             break
           case 4:
+            this.isShowLoading = false
             this.$emit('onCloseForm')
 
             break

@@ -19,7 +19,7 @@
           lable="Mật khẩu"
           placeholder="Nhập mật khẩu hiện tại"
           classInput="misa-input"
-          class="misa-input-secondary"
+          class="misa-input-secondary mgt-16"
           :tabindex="1"
           type="password"
           v-model="passOld"

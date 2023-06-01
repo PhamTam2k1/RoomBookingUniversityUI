@@ -95,6 +95,7 @@
       <!-- Right -->
     </div>
   </section>
+  <BaseLoading :isShowLoading="isShowLoading"></BaseLoading>
 </template>
 
 <script>
@@ -102,29 +103,33 @@ import store from '@/store'
 import DxValidator, { DxValidationRule } from 'devextreme-vue/validator'
 import DxTextBox from 'devextreme-vue/text-box'
 import BaseButton from '@/components/base/BaseButton.vue'
+import BaseLoading from '@/components/base/BaseLoading.vue'
 export default {
   components: {
     DxTextBox,
     DxValidator,
     DxValidationRule,
     BaseButton,
+    BaseLoading,
   },
   data() {
     return {
       username: '',
       password: '',
       error: '',
+      isShowLoading: false,
     }
   },
   methods: {
     async handleSubmit() {
-      debugger
+      this.isShowLoading = true
       const user = { Username: this.username, Password: this.password }
       localStorage.setItem('user', JSON.stringify(user))
       try {
         // Gọi action login trong store để thực hiện yêu cầu đăng nhập
         await store.dispatch('auth/login', user)
         this.error = ''
+
         // Chuyển hướng đến trang Dashboard sau khi đăng nhập thành công
         if (localStorage.getItem('roleOption') - 0 === 3) {
           this.$router.push('/booking/booking-await')
@@ -132,6 +137,7 @@ export default {
           this.$router.push('/')
         }
       } catch (error) {
+        this.isShowLoading = false
         this.error = 'Tên đăng nhập hoặc mật khẩu không đúng!'
         // console.error(error)
         // Hiển thị thông báo lỗi đăng nhập
