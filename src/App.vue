@@ -21,6 +21,9 @@
 .mgt-8 {
   margin-top: 8px;
 }
+.mgl-8 {
+  margin-left: 8px;
+}
 .mgt-10 {
   margin-top: 10px;
 }

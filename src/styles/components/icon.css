@@ -31,6 +31,9 @@
   min-width: 16px;
   min-height: 16px;
 }
+.icon-refesh {
+  background-position: -1024px -29px;
+}
 .icon-date {
   background-position: -128px -312px;
   transform: scale(1);
@@ -65,8 +68,8 @@
 .t-question-nocation {
   background-position: -1611px -360px;
   transform: scale(1.7);
-  min-width: 16px ;
-  width: 16px ;
+  min-width: 16px;
+  width: 16px;
 }
 .t-infomation-room {
   background-position: -1232px -312px;

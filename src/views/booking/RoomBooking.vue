@@ -131,6 +131,7 @@
               @valueFilterRoom="valueFilterRoom"
             ></RoomBookingSetting>
           </div>
+
           <el-tooltip content="Nhập khẩu lịch học" placement="top">
             <div
               v-if="isAdmin"
@@ -139,6 +140,11 @@
               ref="buttonSetting"
             >
               <div class="icon-sibar t-icon-import-excel misa-icon-24"></div>
+            </div>
+          </el-tooltip>
+          <el-tooltip content="Lấy lại dữ liệu" placement="top">
+            <div class="mgl-8" @click="showLoading(true), loadDataBooking()">
+              <div class="icon-sibar icon-refesh misa-icon-24 mgt-8"></div>
             </div>
           </el-tooltip>
         </div>

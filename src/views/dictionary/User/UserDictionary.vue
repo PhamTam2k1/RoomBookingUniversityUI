@@ -21,17 +21,25 @@
             @onValueChange="onValueChangeRole"
             :height="36"
             :width="208"
+            :isSearch="true"
           ></base-dropdownbox>
         </div>
-        <DxButton
-          class="btn-add"
-          icon="add"
-          :width="130"
-          text="Thêm mới"
-          type="default"
-          styling-mode="contained"
-          @click="addUser"
-        />
+        <div class="btn-add flex">
+          <DxButton
+            class=""
+            icon="add"
+            :width="130"
+            text="Thêm mới"
+            type="default"
+            styling-mode="contained"
+            @click="addUser"
+          />
+          <el-tooltip content="Lấy lại dữ liệu" placement="top">
+            <div class="mgl-16" @click="showLoading(true), getData()">
+              <div class="icon-sibar icon-refesh misa-icon-24 mgt-8"></div>
+            </div>
+          </el-tooltip>
+        </div>
       </div>
       <!-- Begin table -->
       <div class="misa-tabble">
