@@ -190,6 +190,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Enum from '@/commons/Enum'
 import Resource from '@/commons/Resource'
 import BasePopup from '@/components/base/BasePopup.vue'
@@ -461,7 +462,7 @@ export default {
       const days = []
       for (let day = 1; day <= daysInMonth; day++) {
         const date = new Date(year, month, day)
-        const dayOfWeek = date.getDay()
+        const dayOfWeek = date.getDay() -1
         const momentObj = moment(date)
         const formattedString = momentObj.format('DD/MM')
         days.push({

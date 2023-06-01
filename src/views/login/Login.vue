@@ -13,7 +13,7 @@
           <form @submit.prevent="handleSubmit">
             <div class="form-body">
               <div class="logo"></div>
-              <div class="dx-fieldset-header">Đăng nhập</div>
+              <div class="dx-fieldset-header">Đặt lịch phòng học</div>
               <div class="input-container">
                 <div class="mgb-8">Email</div>
                 <DxTextBox

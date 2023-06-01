@@ -164,7 +164,6 @@
         :date-cell-template="dateCellTemplate"
         appointment-template="AppointmentTemplateSlot"
         :on-content-ready="onContentReady"
-        :on-appointment-form-opening="onAppointmentClick"
         :on-cell-click="onCellClick"
         :on-appointment-click="onAppointmentClick"
         resource-cell-template="resourceCellTemplate"
@@ -291,6 +290,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler'
 import 'devextreme/dist/css/dx.common.css'
 import 'devextreme/dist/css/dx.light.css'
@@ -534,13 +534,13 @@ export default {
       //   new Date(e.appointmentData.startDate) >= now ? true : false
     },
     onCellClick(e) {
+      e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
       this.dateBooking = e.cellData.startDate
       this.roomID = e.cellData.groups.RoomID
       this.popupMode = Enum.PopupMode.AddMode
       this.isShowForm = true
       // Lấy thời gian hiện tại
       var now = new Date()
-
       this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
     },
     /**
