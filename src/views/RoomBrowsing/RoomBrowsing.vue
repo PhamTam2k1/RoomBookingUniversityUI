@@ -27,6 +27,14 @@
             v-model:value="dataComponent.TimeSlotID"
           ></BaseDropdownbox>
         </div>
+        <el-tooltip content="Lấy lại dữ liệu" placement="top">
+          <div
+            class="absolute-right mgl-16"
+            @click="showLoading(true), getData()"
+          >
+            <div class="icon-sibar icon-refesh misa-icon-24 mgt-8"></div>
+          </div>
+        </el-tooltip>
       </div>
       <!-- Begin table -->
       <div class="misa-tabble">
@@ -641,5 +649,9 @@ export default {
 }
 #gridContainer {
   height: 600px;
+}
+.absolute-right {
+  right: 0;
+  position: absolute;
 }
 </style>

@@ -303,7 +303,9 @@
                         ></div>
                         <div class="valid-record record-text">
                           <span class="not-valid-total"
-                            >{{ sumaryData }}/{{ sumaryData }}</span
+                            >{{
+                              successCount == 0 ? sumaryData : successCount
+                            }}/{{ sumaryData }}</span
                           >
                           <span>&nbsp;</span> bản ghi nhập không thành công
                         </div>

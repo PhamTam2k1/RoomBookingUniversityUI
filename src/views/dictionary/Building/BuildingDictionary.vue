@@ -12,15 +12,22 @@
         >
           <div class="misa-icon misa-icon-search misa-icon-24"></div>
         </base-input>
-        <DxButton
-          class="btn-add"
-          icon="add"
-          :width="130"
-          text="Thêm mới"
-          type="default"
-          styling-mode="contained"
-          @click="addBuilding"
-        />
+        <div class="btn-add flex">
+          <DxButton
+            class=""
+            icon="add"
+            :width="130"
+            text="Thêm mới"
+            type="default"
+            styling-mode="contained"
+            @click="addBuilding"
+          />
+          <el-tooltip content="Lấy lại dữ liệu" placement="top">
+            <div class="mgl-16" @click="showLoading(true), getData()">
+              <div class="icon-sibar icon-refesh misa-icon-24 mgt-8"></div>
+            </div>
+          </el-tooltip>
+        </div>
       </div>
       <!-- Begin table -->
       <div class="misa-tabble">
