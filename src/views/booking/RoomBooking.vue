@@ -531,13 +531,13 @@ export default {
       //   new Date(e.appointmentData.startDate) >= now ? true : false
     },
     onCellClick(e) {
+      e.cancel = true // Hủy bỏ việc hiển thị popup mặc định của DevExtreme
       this.dateBooking = e.cellData.startDate
       this.roomID = e.cellData.groups.RoomID
       this.popupMode = Enum.PopupMode.AddMode
       this.isShowForm = true
       // Lấy thời gian hiện tại
       var now = new Date()
-
       this.isShowForm = new Date(e.cellData.startDate) >= now ? true : false
     },
     /**
