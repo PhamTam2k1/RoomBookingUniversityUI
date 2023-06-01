@@ -288,6 +288,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { DxScheduler, DxResource, DxView } from 'devextreme-vue/scheduler'
 import 'devextreme/dist/css/dx.common.css'
 import 'devextreme/dist/css/dx.light.css'
