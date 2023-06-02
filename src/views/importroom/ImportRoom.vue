@@ -297,7 +297,7 @@
                           <span>&nbsp;</span> bản ghi nhập thành công
                         </div>
                       </div>
-                      <div class="wrap-record">
+                      <!-- <div class="wrap-record">
                         <div
                           class="wrap-icon misa-icon ic-status-record ic-valid"
                         ></div>
@@ -309,7 +309,7 @@
                           >
                           <span>&nbsp;</span> bản ghi nhập không thành công
                         </div>
-                      </div>
+                      </div> -->
                       <!-- <div class="download-file">
                         <div class="d-flex justify-content-end">
                           <div
