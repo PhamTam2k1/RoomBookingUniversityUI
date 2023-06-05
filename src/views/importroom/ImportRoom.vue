@@ -94,7 +94,7 @@
                             title="Bấm vào đây để tải tệp"
                           >
                             <a
-                              href=" https://mily.misa.vn/download-file-nhap-khau"
+                              href="https://docs.google.com/spreadsheets/d/1m3wwNMEP9lhNfbjcH_dWtTD2BQleQGDx/export?format=xlsx&id=1m3wwNMEP9lhNfbjcH_dWtTD2BQleQGDx"
                               download="NhapKhau.xlsx"
                               >NhapKhau.xlsx</a
                             >
