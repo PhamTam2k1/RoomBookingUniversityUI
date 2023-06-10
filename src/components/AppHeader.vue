@@ -31,15 +31,9 @@
               <h6
                 class="dropdown-header dropdown-header bg-light dark:bg-white dark:bg-opacity-10"
               >
-                <strong>Bạn có {{ dataConvert.length }} thông báo mới</strong>
+                <strong>Bạn có 5 thông báo mới</strong>
               </h6>
-              <a
-                v-for="item in dataConvert"
-                :key="item"
-                class="dropdown-item"
-                :class="{ watched: !item.status }"
-                @click="!item.status && updateFirebaseData(item.key)"
-                href="#"
+              <a class="dropdown-item" href="#"
                 ><div class="message">
                   <div class="pt-3 me-3 float-start">
                     <div class="avatar undefined">
@@ -50,8 +44,9 @@
                   </div>
                   <div>
                     <small class="text-medium-emphasis"></small
-                    ><small class="text-medium-emphasis float-end mt-1">{{
-                      timeAgo(item.time)
+                    ><small
+                      class="text-medium-emphasis float-end mt-1"
+                      >{{
                     }}</small>
                   </div>
                   <div class="text-truncate font-weight-bold">
@@ -89,20 +84,20 @@ import AppBreadcrumb from './AppBreadcrumb'
 import AppHeaderDropdownAccnt from './AppHeaderDropdownAccnt'
 import clickOutSide from '@mahdikhashan/vue3-click-outside'
 import { logo } from '@/assets/brand/logo'
-import { initializeApp } from 'firebase/app'
-import { getDatabase, ref, onValue, child, update } from 'firebase/database'
-const firebaseConfig = {
-  apiKey: 'AIzaSyC79t9n29m5Ayy0gg0lvqAFPEleapma-hQ',
-  authDomain: 'room-90f68.firebaseapp.com',
-  projectId: 'room-90f68',
-  storageBucket: 'room-90f68.appspot.com',
-  messagingSenderId: '660048698458',
-  appId: '1:660048698458:web:22727bc42c38273b5e4c63',
-  measurementId: 'G-1TP028XG2N',
-}
+// import { initializeApp } from 'firebase/app'
+// import { getDatabase, ref, onValue, child, update } from 'firebase/database'
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyC79t9n29m5Ayy0gg0lvqAFPEleapma-hQ',
+//   authDomain: 'room-90f68.firebaseapp.com',
+//   projectId: 'room-90f68',
+//   storageBucket: 'room-90f68.appspot.com',
+//   messagingSenderId: '660048698458',
+//   appId: '1:660048698458:web:22727bc42c38273b5e4c63',
+//   measurementId: 'G-1TP028XG2N',
+// }
 
-const app = initializeApp(firebaseConfig)
-const db = getDatabase(app)
+// const app = initializeApp(firebaseConfig)
+// const db = getDatabase(app)
 export default {
   name: 'AppHeader',
   components: {
@@ -127,83 +122,80 @@ export default {
   },
   methods: {
     // Cập nhật dữ liệu khi xem
-    updateFirebaseData(clickedItemId) {
-      // Lấy thông tin đăng nhập
-      const user = JSON.parse(localStorage.getItem('user'))
-      if (user && user.UserID) {
-        const notificationsRef = ref(db, 'notifications')
-        const childRef = child(notificationsRef, user.UserID)
-
-        // Thực hiện cập nhật dữ liệu trên Firebase
-        const clickedItemRef = child(childRef, clickedItemId)
-        update(clickedItemRef, {
-          status: true,
-        })
-          .then(() => {
-            console.log('Dữ liệu đã được cập nhật thành công trên Firebase')
-          })
-          .catch((error) => {
-            console.log('Lỗi khi cập nhật dữ liệu trên Firebase:', error)
-          })
-      }
-    },
-    callNotify() {
-      // lấy thông tin đăng nhập
-      const user = JSON.parse(localStorage.getItem('user'))
-      if (user && user.UserID) {
-        const notificationsRef = ref(db, 'notifications')
-        const childRef = child(notificationsRef, user.UserID)
-        onValue(childRef, (snapshot) => {
-          if (snapshot.exists()) {
-            const data = snapshot.val()
-            const dataConvert = []
-            for (const key in data) {
-              const notification = data[key]
-              notification.key = key
-              dataConvert.push(notification)
-            }
-            const countNotify = dataConvert.filter(
-              (item) => item.status === false,
-            )
-            dataConvert.sort((a, b) => new Date(b.time) - new Date(a.time))
-
-            // Assign the values to reactive data properties
-            this.dataConvert = dataConvert
-            this.countNotify = countNotify.length
-          } else {
-            console.log('Không tìm thấy đối tượng con')
-          }
-        })
-      }
-    },
+    // updateFirebaseData(clickedItemId) {
+    //   // Lấy thông tin đăng nhập
+    //   const user = JSON.parse(localStorage.getItem('user'))
+    //   if (user && user.UserID) {
+    //     const notificationsRef = ref(db, 'notifications')
+    //     const childRef = child(notificationsRef, user.UserID)
+    //     // Thực hiện cập nhật dữ liệu trên Firebase
+    //     const clickedItemRef = child(childRef, clickedItemId)
+    //     update(clickedItemRef, {
+    //       status: true,
+    //     })
+    //       .then(() => {
+    //         console.log('Dữ liệu đã được cập nhật thành công trên Firebase')
+    //       })
+    //       .catch((error) => {
+    //         console.log('Lỗi khi cập nhật dữ liệu trên Firebase:', error)
+    //       })
+    //   }
+    // },
+    // callNotify() {
+    //   // lấy thông tin đăng nhập
+    //   const user = JSON.parse(localStorage.getItem('user'))
+    //   if (user && user.UserID) {
+    //     const notificationsRef = ref(db, 'notifications')
+    //     const childRef = child(notificationsRef, user.UserID)
+    //     onValue(childRef, (snapshot) => {
+    //       if (snapshot.exists()) {
+    //         const data = snapshot.val()
+    //         const dataConvert = []
+    //         for (const key in data) {
+    //           const notification = data[key]
+    //           notification.key = key
+    //           dataConvert.push(notification)
+    //         }
+    //         const countNotify = dataConvert.filter(
+    //           (item) => item.status === false,
+    //         )
+    //         dataConvert.sort((a, b) => new Date(b.time) - new Date(a.time))
+    //         // Assign the values to reactive data properties
+    //         this.dataConvert = dataConvert
+    //         this.countNotify = countNotify.length
+    //       } else {
+    //         console.log('Không tìm thấy đối tượng con')
+    //       }
+    //     })
+    //   }
+    // },
     showPopupNotify() {
       this.showNotify = false
     },
-    timeAgo(timestamp) {
-      const time = Date.parse(timestamp)
-      const now = Date.now()
-      const seconds = Math.floor((now - time) / 1000)
-      const minutes = Math.floor(seconds / 60)
-      const hours = Math.floor(minutes / 60)
-      const days = Math.floor(hours / 24)
-
-      if (seconds < 60) {
-        return 'vừa xong'
-      } else if (minutes < 60) {
-        return `${minutes} phút trước`
-      } else if (hours < 24) {
-        return `${hours} giờ trước`
-      } else {
-        return `${days} ngày trước`
-      }
-    },
+    // timeAgo(timestamp) {
+    //   const time = Date.parse(timestamp)
+    //   const now = Date.now()
+    //   const seconds = Math.floor((now - time) / 1000)
+    //   const minutes = Math.floor(seconds / 60)
+    //   const hours = Math.floor(minutes / 60)
+    //   const days = Math.floor(hours / 24)
+    //   if (seconds < 60) {
+    //     return 'vừa xong'
+    //   } else if (minutes < 60) {
+    //     return `${minutes} phút trước`
+    //   } else if (hours < 24) {
+    //     return `${hours} giờ trước`
+    //   } else {
+    //     return `${days} ngày trước`
+    //   }
+    // },
   },
   mounted() {
-    console.log(this.dataConvert)
-    this.callNotify()
+    // console.log(this.dataConvert)
+    // this.callNotify()
   },
   updated() {
-    this.callNotify()
+    // this.callNotify()
   },
 }
 </script>
