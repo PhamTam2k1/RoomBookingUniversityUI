@@ -72,3 +72,16 @@
 .misa-input-required .misa-input {
   border: 1px solid #f7453b;
 }
+.input-number{
+  width: 350px;
+}
+.t-row2 .misa-input{
+  margin-left: 39%;
+}
+.t-row3 .misa-input{
+  margin-left: 29%;
+}
+.t-row .text{
+  margin-left: 20px;
+  margin-top: 7px;
+}

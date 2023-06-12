@@ -211,5 +211,24 @@ const Resource = Object.freeze({
     OpenDoor: 'Đã mở cửa',
   },
   PassWordDefault: '12345678@Utc',
+  /**Mảng chứa số bản ghi/trang */
+  RepeatTime: [
+    {
+      Text: 'Không lặp',
+      Value: 'NONE',
+    },
+    {
+      Text: 'Theo ngày',
+      Value: 'DAY',
+    },
+    {
+      Text: 'Theo tuần',
+      Value: 'WEEK',
+    },
+    {
+      Text: 'Theo tháng',
+      Value: 'MONTH',
+    },
+  ],
 })
 export default Resource

@@ -816,4 +816,18 @@ tr.dx-scheduler-group-row {
   margin-top: 3px;
   background-color: #f9fafc !important;
 }
+
+.my-popper-class-edit {
+  margin-top: 105px;
+  margin-right: 15%;
+  right: 18px;
+  top: 20px !important;
+  left: unset !important;
+  z-index: 100000 !important;
+  padding: 10px !important;
+  border-radius: 6px;
+}
+.my-popper-class-edit span.el-popper__arrow {
+  display: none;
+}
 </style>

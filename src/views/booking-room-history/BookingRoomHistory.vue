@@ -19,7 +19,7 @@
             placeholder="Chọn ca học"
             classDropdownbox="drop-down-utc mgl-16"
             :dataSource="dataTimeWithAll"
-            optionName="TimeSlotName"
+            optionName="NameTime"
             optionValue="TimeSlotID"
             :height="38"
             :width="150"
@@ -336,7 +336,7 @@ export default {
       const dataTime = this.dataTime
       return (
         dataTime?.unshift({
-          TimeSlotName: 'Tất cả',
+          NameTime: 'Tất cả',
           TimeSlotID: null,
         }) && dataTime
       )

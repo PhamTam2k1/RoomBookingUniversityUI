@@ -1,7 +1,7 @@
 <template>
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
-      class="misa-dialog"
+      class="misa-dialog font-weight"
       :titlePopup="titlePopupBooking"
       classPopup="popup-room-detail"
       @onClickClosePopup="onCloseForm"
@@ -16,15 +16,24 @@
         <div class="flex">
           <el-tooltip content="Sửa" placement="bottom">
             <div
-              v-if="
-                popupMode == Enum.PopupMode.EditMode &&
-                isUserBooking &&
-                bookingRoomData.StatusBooking == 2
-              "
+              v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
               class="misa-icon misa-icon-pencil misa-icon-24"
               @click="onClickUpdate"
             ></div>
           </el-tooltip>
+          <el-popover
+            v-if="isShowPoperEdit"
+            :visible="isShowPoperEdit"
+            placement="bottom"
+            trigger="click"
+            width="120"
+            height="200"
+            popper-class="my-popper-class-edit"
+            style="transform: translateX(-50%)"
+          >
+            <div class="t-">Chỉnh sửa lịch đặt</div>
+            <div class="t-">Chỉnh sửa tòa bộ</div>
+          </el-popover>
           <el-tooltip content="Xóa" placement="bottom">
             <div
               v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
@@ -117,14 +126,13 @@
                 class="mt-16"
                 :labelMode="'hidden'"
                 :stylingMode="'outlined'"
-                @onValueChanged="onEndDateChanged"
+                @onValueChanged="onStartDateChanged"
                 lable=""
-                :tabindex="4"
-                :value="bookingRoomData.EndDate"
+                :tabindex="3"
+                :value="bookingRoomData.StartDate"
                 :min="currentDate"
-                :disabled="disableEndDate"
-                :isError="isErrorEndDate"
-                :content="contentErrEndDate"
+                :disabled="disableStartDate"
+                :content="contentErrStartDate"
               ></BaseDate>
             </div>
 
@@ -136,7 +144,7 @@
                 :tabindex="5"
                 :required="true"
                 classDropdownbox="drop-down-utc"
-                optionName="TimeSlotName"
+                optionName="NameTime"
                 optionValue="TimeSlotID"
                 placeholder="Chọn 1 hoặc nhiều ca học"
                 @onOptionChange="onValueChangeTimeSlot"
@@ -164,19 +172,87 @@
               </div>
             </div>
             <div class="t-row">
-              <base-input
-                lable="Số người tham gia"
-                classInput="misa-input"
-                class="misa-input-secondary mgb-8"
-                :required="true"
-                :tabindex="7"
-                v-model="bookingRoomData.Quantity"
-                @handleBlurInput="validate('Quantity')"
-                @handleKeyupInput="removeError('Quantity')"
-                :error="Error['Quantity']"
-                type="Number"
+              <BaseDropdownbox
+                lable="Lặp lại"
+                :required="false"
+                classDropdownbox="drop-down-utc "
+                :dataSource="reapeatTimes"
+                optionName="Text"
+                optionValue="Value"
+                :value="bookingRoomData.RepeatValue"
+                :isSearch="false"
+                :height="34"
+                :tabindex="2"
+                :width="142"
+                @onValueChange="onValueChangeRepeatValue"
                 :isDisable="isDisable || !isUserBooking"
-              ></base-input>
+              ></BaseDropdownbox>
+            </div>
+            <div
+              class="t-row flex"
+              v-if="bookingRoomData.RepeatValue != 'NONE'"
+            >
+              <div class="t-row2">
+                <base-input
+                  lable="Chu kì lặp"
+                  classInput="misa-input "
+                  class="misa-input-secondary mgb-8 input-number"
+                  :required="true"
+                  :tabindex="7"
+                  v-model="bookingRoomData.RepeatFreq"
+                  @handleBlurInput="validate('RepeatFreq')"
+                  @handleKeyupInput="removeError('RepeatFreq')"
+                  :error="Error['RepeatFreq']"
+                  type="Number"
+                  :isDisable="isDisable || !isUserBooking"
+                ></base-input>
+              </div>
+              <div class="text">{{ repeatText }}</div>
+              <div class="t-lable-date2">-&nbsp; Cho đến:</div>
+              <BaseDate
+                width="165"
+                class="mt-16"
+                :labelMode="'hidden'"
+                :stylingMode="'outlined'"
+                @onValueChanged="onEndDateChanged"
+                lable=""
+                :tabindex="4"
+                :value="bookingRoomData.EndDate"
+                :min="currentDate"
+                :disabled="disableEndDate"
+                :isError="isErrorEndDate"
+                :content="contentErrEndDate"
+              ></BaseDate>
+            </div>
+            <!-- <div class="t-row">
+              <div class="demo-button-style">
+                <el-checkbox-group v-model="checkboxGroup1">
+                  <el-checkbox-button
+                    v-for="day in weeks"
+                    :key="day"
+                    :label="day"
+                    >{{ day }}</el-checkbox-button
+                  >
+                </el-checkbox-group>
+              </div>
+            </div> -->
+            <div class="t-row flex">
+              <div class="t-row3">
+                <base-input
+                  lable="Số người tham gia"
+                  classInput="misa-input"
+                  class="misa-input-secondary mgb-8 input-number"
+                  :required="true"
+                  :tabindex="7"
+                  v-model="bookingRoomData.Quantity"
+                  @handleBlurInput="validate('Quantity')"
+                  @handleKeyupInput="removeError('Quantity')"
+                  :error="Error['Quantity']"
+                  type="Number"
+                  :isDisable="isDisable || !isUserBooking"
+                ></base-input>
+              </div>
+              <div class="text">người</div>
             </div>
           </div>
           <div class="t-right-content mgl-16">
@@ -347,6 +423,7 @@
 </template>
 
 <script>
+// import 'element-plus/dist/index.css'
 import BookingRoomApi from '@/apis/BookingRoomApi'
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
@@ -420,7 +497,10 @@ export default {
         EndDate: this.dateBooking,
         Quantity: null,
         Description: '',
+        RepeatValue: 'NONE',
+        RepeatFreq: 1,
       },
+      isShowPoperEdit: false,
       isDisable: false,
       isUserBooking: true,
       lstTime: [],
@@ -436,8 +516,12 @@ export default {
       isErrorStartDate: false,
       disableStartDate: true,
       disableEndDate: true,
-      contentErrStartDate: 'Ngày bắt đầu không được lớn hơn ngày kết thúc',
-      contentErrEndDate: 'Ngày kết thúc không được nhỏ hơn ngày bắt đầu',
+      contentErrStartDate: 'Ngày bắt đầu không được lớn hơn ngày lặp lại',
+      contentErrEndDate: 'Ngày lặp lại không được nhỏ hơn ngày bắt đầu',
+      /**mảng chứa số bản ghi trên 1 trang */
+      reapeatTimes: Resource.RepeatTime,
+      weeks: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
+      checkboxGroup1: ['T2'],
     }
   },
 
@@ -457,6 +541,17 @@ export default {
     onValueChangeRoom(value) {
       this.bookingRoomData.RoomID = value
       this.roomChoose = this.dataRoom.find((x) => x.RoomID == value)
+    },
+    /**
+     * Sự kiện thay đổi phòng
+     * @param {*} value
+     * PTTAM
+     */
+    onValueChangeRepeatValue(value) {
+      if (value == 'NONE') {
+        this.bookingRoomData.EndDate = this.bookingRoomData.StartDate
+      }
+      this.bookingRoomData.RepeatValue = value
     },
     /**
      * Mô tả : Hàm show/hide loading
@@ -637,6 +732,8 @@ export default {
             field = 'Tiêu đề'
           } else if (fieldName == 'Quantity') {
             field = 'Số lượng người tham gia'
+          } else if (fieldName == 'RepeatFreq') {
+            field = 'Chu kì lặp'
           }
 
           this.Error[fieldName] = field + ' ' + Resource.ErrForm.IsNotEmpty
@@ -732,22 +829,43 @@ export default {
           ).format('YYYY/MM/DD')
           BookingRoomApi.updated(me.bookingID, me.bookingRoomData).then(
             (res) => {
-              if (res && res.data) {
-                if (res.data.IsSusses) {
-                  ObjectFunction.toastMessage(
-                    Resource.Messenger.UpdateSucces,
-                    Resource.Messenger.Success,
-                  )
-                  this.$emit('onShowLoading')
-                  this.$emit('onCloseForm')
-                  this.$emit('onLoadData')
-                } else {
-                  ObjectFunction.toastMessage(
-                    'Cập nhật thất bại',
-                    Resource.Messenger.Error,
-                  )
+              if (res) {
+                if (res.data.IsSucess) {
+                  bookingData = res.data.BookingData
+                  me.$emit('onCloseForm')
 
-                  this.$emit('onCloseForm')
+                  me.$emit('onLoadData')
+                  if (me.isAdmin) {
+                    ObjectFunction.toastMessage(
+                      'Cập nhật phòng thành công.',
+                      Resource.Messenger.Success,
+                    )
+                  } else {
+                    ObjectFunction.toastMessage(
+                      'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
+                      Resource.Messenger.Success,
+                    )
+                  }
+                  me.$emit('onShowLoading') // hiển thị loading
+                  me.$emit('isSuccess', {
+                    popupMode: me.popupMode,
+                    bookingRoomData: bookingData,
+                  })
+                } else {
+                  me.showLoading(false)
+                  let data = res.data.Data
+                  let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
+                  message += data
+                    .map(
+                      (item, index) =>
+                        `<span style="display:block;margin-top:10px">${
+                          index + 1
+                        }. ${item.DescriptionError}</span>`,
+                    )
+                    .join('')
+                  this.showPopup('t-infomation', message, 'Đặt phòng bị trùng')
+
+                  this.popupNoticeMode = Enum.PopupMode.NotifyMode
                 }
               }
             },
@@ -784,13 +902,15 @@ export default {
             EndDate: data.EndDate,
             Quantity: data.Quantity,
             RefusalReason: data.RefusalReason,
+            RepeatFreq: data.RepeatFreq,
+            RepeatValue: data.RepeatValue,
           }
           me.lstTime = me.bookingRoomData.TimeSlots.split(',').map((id) =>
             id.trim(),
           )
           // console.log(this.lstTime)
           // this.lstTime1 = this.lstTime
-          me.isDisable = me.bookingRoomData.StatusBooking == 1 ? false : true
+          me.isDisable = me.bookingRoomData.StatusBooking == 1 ? true : true
           me.roomChoose = me.dataRoom.find((x) => x.RoomID == data.RoomID)
           me.bookingRoomData.AdminID = me.roomChoose.AdminID
           me.bookingRoomData.AdminEmail = me.roomChoose.AdminEmail
@@ -804,19 +924,22 @@ export default {
       })
     },
     onClickUpdate() {
+      this.isShowPoperEdit = true
       this.isDisable = false
     },
     // cập nhật lại ngày khi chọn lại
     onStartDateChanged(item) {
       this.bookingRoomData.StartDate = item.value
-      if (new Date(this.bookingRoomData.EndDate) < new Date(item.value)) {
-        this.isErrorStartDate = true
-        this.disableStartDate = false
-      } else {
-        this.isErrorStartDate = false
-        this.disableStartDate = true
-        this.isErrorEndDate = false
-        this.disableEndDate = true
+      if (this.bookingRoomData.RepeatValue != 'NONE') {
+        if (new Date(this.bookingRoomData.EndDate) < new Date(item.value)) {
+          this.isErrorStartDate = true
+          this.disableStartDate = false
+        } else {
+          this.isErrorStartDate = false
+          this.disableStartDate = true
+          this.isErrorEndDate = false
+          this.disableEndDate = true
+        }
       }
     },
     // cập nhật lại ngày khi chọn lại
@@ -962,6 +1085,7 @@ export default {
       this.bookingRoomData.RoomID = this.roomID
       this.titlePopupBooking = 'Đặt phòng'
       this.lableButtonBooking = 'Đặt phòng'
+      debugger
       this.roomChoose = this.dataRoom.find((x) => x.RoomID == this.roomID)
       this.bookingRoomData.AdminID = this.roomChoose.AdminID
       this.bookingRoomData.AdminEmail = this.roomChoose.AdminEmail
@@ -986,6 +1110,24 @@ export default {
     Enum() {
       return Enum
     },
+    repeatText() {
+      let value = ''
+      switch (this.bookingRoomData.RepeatValue) {
+        case 'DAY':
+          value = 'ngày'
+          break
+        case 'WEEK':
+          value = 'tuần'
+          break
+        case 'MONTH':
+          value = 'tháng'
+          break
+        default:
+          value = 'NONE'
+          break
+      }
+      return value
+    },
   },
 }
 </script>
@@ -995,6 +1137,11 @@ export default {
   margin: 10px;
   height: 38px;
   width: 100%;
+}
+.t-row2,
+.t-row3 {
+  height: 38px;
+  /* width: 50%; */
 }
 .t-row-infor {
   margin-left: 33%;
@@ -1010,6 +1157,12 @@ export default {
 }
 .t-lable-date {
   width: 30%;
+  font-size: 14px;
+}
+.t-lable-date2 {
+  margin-top: 10px;
+  margin-left: 20px;
+  width: 13%;
   font-size: 14px;
 }
 .content-reson {
@@ -1079,6 +1232,7 @@ export default {
 
 .font-weight {
   font-weight: 600;
+  font-family: sans-serif !important;
 }
 .font-italic {
   font-style: italic;
@@ -1086,5 +1240,8 @@ export default {
 .t-admin {
   padding-left: 28px;
   margin-bottom: 20px;
+}
+.demo-button-style {
+  margin-top: 24px;
 }
 </style>
