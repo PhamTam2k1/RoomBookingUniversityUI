@@ -840,52 +840,57 @@ export default {
           ).format('YYYY/MM/DD')
 
           // Nếu chọn update all bản ghi
-          if(this.isUpdateAll){ BookingRoomApi.updated(me.bookingID, me.bookingRoomData).then(
-            (res) => {
-              if (res) {
-                if (res.data.IsSucess) {
-                  bookingData = res.data.BookingData
-                  me.$emit('onCloseForm')
+          if (this.isUpdateAll) {
+            BookingRoomApi.updated(me.bookingID, me.bookingRoomData).then(
+              (res) => {
+                if (res) {
+                  if (res.data.IsSucess) {
+                    bookingData = res.data.BookingData
+                    me.$emit('onCloseForm')
 
-                  me.$emit('onLoadData')
-                  if (me.isAdmin) {
-                    ObjectFunction.toastMessage(
-                      'Cập nhật phòng thành công.',
-                      Resource.Messenger.Success,
-                    )
+                    me.$emit('onLoadData')
+                    if (me.isAdmin) {
+                      ObjectFunction.toastMessage(
+                        'Cập nhật phòng thành công.',
+                        Resource.Messenger.Success,
+                      )
+                    } else {
+                      ObjectFunction.toastMessage(
+                        'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
+                        Resource.Messenger.Success,
+                      )
+                    }
+                    me.$emit('onShowLoading') // hiển thị loading
+                    me.$emit('isSuccess', {
+                      popupMode: me.popupMode,
+                      bookingRoomData: bookingData,
+                    })
                   } else {
-                    ObjectFunction.toastMessage(
-                      'Yêu cầu đặt phòng đã được gửi đến quản trị viên phê duyệt.',
-                      Resource.Messenger.Success,
+                    me.showLoading(false)
+                    let data = res.data.Data
+                    let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
+                    message += data
+                      .map(
+                        (item, index) =>
+                          `<span style="display:block;margin-top:10px">${
+                            index + 1
+                          }. ${item.DescriptionError}</span>`,
+                      )
+                      .join('')
+                    this.showPopup(
+                      't-infomation',
+                      message,
+                      'Đặt phòng bị trùng',
                     )
-                  }
-                  me.$emit('onShowLoading') // hiển thị loading
-                  me.$emit('isSuccess', {
-                    popupMode: me.popupMode,
-                    bookingRoomData: bookingData,
-                  })
-                } else {
-                  me.showLoading(false)
-                  let data = res.data.Data
-                  let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
-                  message += data
-                    .map(
-                      (item, index) =>
-                        `<span style="display:block;margin-top:10px">${
-                          index + 1
-                        }. ${item.DescriptionError}</span>`,
-                    )
-                    .join('')
-                  this.showPopup('t-infomation', message, 'Đặt phòng bị trùng')
 
-                  this.popupNoticeMode = Enum.PopupMode.NotifyMode
+                    this.popupNoticeMode = Enum.PopupMode.NotifyMode
+                  }
                 }
-              }
-            },
-          )}else{
+              },
+            )
+          } else {
             // Gọi api update 1 bản ghi theo BookingRoomID
           }
-         
         } catch (error) {
           console.log(error)
         }
