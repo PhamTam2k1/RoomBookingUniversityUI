@@ -1,7 +1,7 @@
 <template>
   <div @keydown="eventFormDictionary" ref="popupDictionary">
     <BasePopup
-      class="misa-dialog font-weight"
+      class="misa-dialog"
       :titlePopup="titlePopupBooking"
       classPopup="popup-room-detail"
       @onClickClosePopup="onCloseForm"
@@ -14,33 +14,47 @@
     >
       <template #iconPopup>
         <div class="flex">
-          <el-tooltip content="Sửa" placement="bottom">
+          <el-tooltip
+            class="box-item"
+            effect="dark"
+            placement="bottom"
+            :visible="isShowPoperEdit"
+          >
             <div
               v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
               class="misa-icon misa-icon-pencil misa-icon-24"
               @click="onClickUpdate"
             ></div>
+            <template #content>
+              <div class="t-line" @click="onClickEditEvent(1)">
+                Sửa ngày đang chọn
+              </div>
+              <div class="t-line" @click="onClickEditEvent(2)">
+                Chỉnh sửa toàn bộ sự kiện
+              </div>
+            </template>
           </el-tooltip>
-          <el-popover
-            v-if="isShowPoperEdit"
-            :visible="isShowPoperEdit"
+          <el-tooltip
+            class="box-item"
+            effect="dark"
             placement="bottom"
-            trigger="click"
-            width="120"
-            height="200"
-            popper-class="my-popper-class-edit"
-            style="transform: translateX(-50%)"
+            :visible="isShowPoperCancel"
           >
-            <div class="t-">Chỉnh sửa lịch đặt</div>
-            <div class="t-">Chỉnh sửa tòa bộ</div>
-          </el-popover>
-          <el-tooltip content="Xóa" placement="bottom">
             <div
               v-if="popupMode == Enum.PopupMode.EditMode && isUserBooking"
               class="misa-icon-navbar misa-icon-delete-custom misa-icon-24 mgl-8p"
-              @click="onClickShowCacel"
+              @click="onClickCancel"
             ></div>
+            <template #content>
+              <div class="t-line" @click="onClickCancelEvent(1)">
+                Xóa ngày đang chọn
+              </div>
+              <div class="t-line" @click="onClickCancelEvent(2)">
+                Xóa toàn bộ sự kiện
+              </div>
+            </template>
           </el-tooltip>
+
           <el-tooltip content="Đóng" placement="bottom">
             <div
               class="misa-icon misa-icon-close misa-icon-24 mgl-8p"
@@ -188,27 +202,26 @@
                 :isDisable="isDisable || !isUserBooking"
               ></BaseDropdownbox>
             </div>
+            <div class="t-row" v-if="bookingRoomData.RepeatValue != 'NONE'">
+              <base-input
+                lable="Chu kì lặp"
+                classInput="misa-input "
+                class="misa-input-secondary mgb-8"
+                :required="true"
+                :tabindex="7"
+                v-model="bookingRoomData.RepeatFreq"
+                @handleBlurInput="validate('RepeatFreq')"
+                @handleKeyupInput="removeError('RepeatFreq')"
+                :error="Error['RepeatFreq']"
+                type="Number"
+                :isDisable="isDisable || !isUserBooking"
+              ></base-input>
+            </div>
             <div
               class="t-row flex"
               v-if="bookingRoomData.RepeatValue != 'NONE'"
             >
-              <div class="t-row2">
-                <base-input
-                  lable="Chu kì lặp"
-                  classInput="misa-input "
-                  class="misa-input-secondary mgb-8 input-number"
-                  :required="true"
-                  :tabindex="7"
-                  v-model="bookingRoomData.RepeatFreq"
-                  @handleBlurInput="validate('RepeatFreq')"
-                  @handleKeyupInput="removeError('RepeatFreq')"
-                  :error="Error['RepeatFreq']"
-                  type="Number"
-                  :isDisable="isDisable || !isUserBooking"
-                ></base-input>
-              </div>
-              <div class="text">{{ repeatText }}</div>
-              <div class="t-lable-date2">-&nbsp; Cho đến:</div>
+              <div class="t-lable-date">Cho đến ngày:</div>
               <BaseDate
                 width="165"
                 class="mt-16"
@@ -236,23 +249,20 @@
                 </el-checkbox-group>
               </div>
             </div> -->
-            <div class="t-row flex">
-              <div class="t-row3">
-                <base-input
-                  lable="Số người tham gia"
-                  classInput="misa-input"
-                  class="misa-input-secondary mgb-8 input-number"
-                  :required="true"
-                  :tabindex="7"
-                  v-model="bookingRoomData.Quantity"
-                  @handleBlurInput="validate('Quantity')"
-                  @handleKeyupInput="removeError('Quantity')"
-                  :error="Error['Quantity']"
-                  type="Number"
-                  :isDisable="isDisable || !isUserBooking"
-                ></base-input>
-              </div>
-              <div class="text">người</div>
+            <div class="t-row">
+              <base-input
+                lable="Số người tham gia"
+                classInput="misa-input"
+                class="misa-input-secondary mgb-8"
+                :required="true"
+                :tabindex="7"
+                v-model="bookingRoomData.Quantity"
+                @handleBlurInput="validate('Quantity')"
+                @handleKeyupInput="removeError('Quantity')"
+                :error="Error['Quantity']"
+                type="Number"
+                :isDisable="isDisable || !isUserBooking"
+              ></base-input>
             </div>
           </div>
           <div class="t-right-content mgl-16">
@@ -501,6 +511,7 @@ export default {
         RepeatFreq: 1,
       },
       isShowPoperEdit: false,
+      isShowPoperCancel: false,
       isDisable: false,
       isUserBooking: true,
       lstTime: [],
@@ -520,8 +531,8 @@ export default {
       contentErrEndDate: 'Ngày lặp lại không được nhỏ hơn ngày bắt đầu',
       /**mảng chứa số bản ghi trên 1 trang */
       reapeatTimes: Resource.RepeatTime,
-      weeks: ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'],
-      checkboxGroup1: ['T2'],
+      isUpdateAll: false,
+      isCancelAll: false,
     }
   },
 
@@ -827,7 +838,9 @@ export default {
           this.bookingRoomData.EndDate = moment(
             this.bookingRoomData.EndDate,
           ).format('YYYY/MM/DD')
-          BookingRoomApi.updated(me.bookingID, me.bookingRoomData).then(
+
+          // Nếu chọn update all bản ghi
+          if(this.isUpdateAll){ BookingRoomApi.updated(me.bookingID, me.bookingRoomData).then(
             (res) => {
               if (res) {
                 if (res.data.IsSucess) {
@@ -869,7 +882,10 @@ export default {
                 }
               }
             },
-          )
+          )}else{
+            // Gọi api update 1 bản ghi theo BookingRoomID
+          }
+         
         } catch (error) {
           console.log(error)
         }
@@ -924,8 +940,32 @@ export default {
       })
     },
     onClickUpdate() {
-      this.isShowPoperEdit = true
+      this.isShowPoperEdit = !this.isShowPoperEdit
+    },
+    onClickEditEvent(number) {
+      this.isShowPoperEdit = !this.isShowPoperEdit
       this.isDisable = false
+      if (number == 1) {
+        // Chỉnh sửa sự kiện duy nhất
+        this.isUpdateAll = false
+      } else {
+        this.isUpdateAll = true
+        // Chỉnh sửa toàn bộ sự kiện
+      }
+    },
+    onClickCancel() {
+      this.isShowPoperCancel = !this.isShowPoperCancel
+    },
+    onClickCancelEvent(number) {
+      this.isShowPoperCancel = !this.isShowPoperCancel
+      this.onClickShowCacel()
+      if (number == 1) {
+        this.isCancelAll = false
+        // Chỉnh sửa sự kiện duy nhất
+      } else {
+        this.isCancelAll = true
+        // Chỉnh sửa toàn bộ sự kiện
+      }
     },
     // cập nhật lại ngày khi chọn lại
     onStartDateChanged(item) {
@@ -1041,29 +1081,34 @@ export default {
     onClickCancelBooking() {
       try {
         let me = this
-        BookingRoomApi.cancelBookingRequest(me.bookingID).then((res) => {
-          if (res && res.data.IsSusses) {
-            me.$emit('onShowLoading')
-            me.$emit('onCloseForm')
-            me.$emit('onLoadData')
-            me.popupNoticeMode = -1
-            me.$emit('isSuccess', {
-              popupMode: 9,
-              bookingID: me.bookingID,
-            })
-            ObjectFunction.toastMessage(
-              'Hủy đặt phòng thành công',
-              Resource.Messenger.Success,
-            )
-          } else {
-            me.$emit('onCloseForm')
-            me.popupNoticeMode = -1
-            ObjectFunction.toastMessage(
-              'Hủy đặt phòng thất bại',
-              Resource.Messenger.Success,
-            )
-          }
-        })
+        // Nếu chọn xóa 1 sự lịch đăt
+        if (!this.isCancelAll) {
+          BookingRoomApi.cancelBookingRequest(me.bookingID).then((res) => {
+            if (res && res.data.IsSusses) {
+              me.$emit('onShowLoading')
+              me.$emit('onCloseForm')
+              me.$emit('onLoadData')
+              me.popupNoticeMode = -1
+              me.$emit('isSuccess', {
+                popupMode: 9,
+                bookingID: me.bookingID,
+              })
+              ObjectFunction.toastMessage(
+                'Hủy đặt phòng thành công',
+                Resource.Messenger.Success,
+              )
+            } else {
+              me.$emit('onCloseForm')
+              me.popupNoticeMode = -1
+              ObjectFunction.toastMessage(
+                'Hủy đặt phòng thất bại',
+                Resource.Messenger.Success,
+              )
+            }
+          })
+        } else {
+          // Gọi api xóa theo event ID
+        }
       } catch (error) {
         console.log(error)
       }
@@ -1232,7 +1277,6 @@ export default {
 
 .font-weight {
   font-weight: 600;
-  font-family: sans-serif !important;
 }
 .font-italic {
   font-style: italic;
@@ -1243,5 +1287,13 @@ export default {
 }
 .demo-button-style {
   margin-top: 24px;
+}
+.t-line:hover {
+  /* background-color: rgba(255, 255, 255, 0.1); */
+  cursor: pointer;
+}
+.t-line {
+  font-size: 15px;
+  margin: 10px;
 }
 </style>
