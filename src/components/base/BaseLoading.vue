@@ -1,7 +1,6 @@
 <template>
   <div class="t-loading" :class="{ 'show-loading': isShowLoading }">
-    <!-- <div class="t-loader"></div> -->
-    <span class="loader"></span>
+    <div class="loader"></div>
   </div>
 </template>
 
