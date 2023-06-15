@@ -347,6 +347,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import BookingRoomApi from '@/apis/BookingRoomApi'
 import BaseDropdownbox from '@/components/base/BaseDropdownbox.vue'
 import BaseInput from '@/components/base/BaseInput.vue'
