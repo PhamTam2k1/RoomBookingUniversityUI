@@ -7,7 +7,7 @@
 // Import Main styles for this application
 @import 'styles/style';
 #app {
-  font-style: 'Roboto';
+  font-family: 'Roboto', sans-serif;
 }
 .mgl-16 {
   margin-left: 16px !important;
