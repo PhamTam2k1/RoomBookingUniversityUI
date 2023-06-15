@@ -136,7 +136,7 @@
                 :tabindex="5"
                 :required="true"
                 classDropdownbox="drop-down-utc"
-                optionName="TimeSlotName"
+                optionName="NameTime"
                 optionValue="TimeSlotID"
                 placeholder="Chọn 1 hoặc nhiều ca học"
                 @onOptionChange="onValueChangeTimeSlot"
