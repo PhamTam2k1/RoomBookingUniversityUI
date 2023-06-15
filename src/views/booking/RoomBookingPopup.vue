@@ -742,12 +742,24 @@ export default {
                   this.$emit('onCloseForm')
                   this.$emit('onLoadData')
                 } else {
-                  ObjectFunction.toastMessage(
-                    'Cập nhật thất bại',
-                    Resource.Messenger.Error,
-                  )
+                  me.showLoading(false)
+                    let data = res.data.Data
+                    let message = `Hiện có <span style="font-weight:bold">${data.length}</span> lịch khác trùng với lịch đặt phòng của bạn:<br>`
+                    message += data
+                      .map(
+                        (item, index) =>
+                          `<span style="display:block;margin-top:10px">${
+                            index + 1
+                          }. ${item.DescriptionError}</span>`,
+                      )
+                      .join('')
+                    this.showPopup(
+                      't-infomation',
+                      message,
+                      'Đặt phòng bị trùng',
+                    )
 
-                  this.$emit('onCloseForm')
+                    this.popupNoticeMode = Enum.PopupMode.NotifyMode
                 }
               }
             },
