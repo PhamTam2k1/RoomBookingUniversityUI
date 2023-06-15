@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header-cell-template">
     <div :style="'background: red'" class="name">
       <h2>{{ rooms.data.text }}</h2>
     </div>
@@ -24,7 +24,10 @@ export default {
   },
 }
 </script>
-<style>
+<style scoped>
+.header-cell-template {
+  font-family: 'Roboto', sans-serif;
+}
 .avatar {
   width: 155px;
   float: left;
