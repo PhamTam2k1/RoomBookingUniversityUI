@@ -54,6 +54,7 @@ export default {
   height: 200px;
   font-size: 15px;
   padding: 10px;
+  font-family: 'Roboto', sans-serif;
 }
 .t-title-tooltip {
   font-weight: 700;
