@@ -48,6 +48,7 @@
 .dx-dropdowneditor-input-wrapper .dx-texteditor-input {
   text-overflow: ellipsis;
   box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
 
 .custom-item .product-name {
