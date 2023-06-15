@@ -15,7 +15,7 @@
               <div class="logo"></div>
               <div class="dx-fieldset-header">Đặt lịch phòng học</div>
               <div class="input-container">
-                <div class="mgb-8">Email</div>
+                <div class="mgb-8">Tên đăng nhập</div>
                 <DxTextBox
                   label-mode="static"
                   class="input-field"
@@ -33,7 +33,7 @@
                   </DxValidator>
                   <div class="input-field-icon icon-email"></div>
                 </DxTextBox>
-                <div class="mgb-8">Password</div>
+                <div class="mgb-8">Mật khẩu</div>
                 <DxTextBox
                   v-model:value="password"
                   label-mode="static"
@@ -57,7 +57,7 @@
                   class="mgt-16 btn-login"
                 /> -->
                 <BaseButton
-                  class="mgt-16"
+                  class="mgt-16 content-center"
                   :use-submit-behavior="true"
                   :tabindex="3"
                   lableButton="Đăng nhập"
@@ -147,6 +147,11 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.content-center {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
 aside {
   display: none;
 }
@@ -206,7 +211,9 @@ aside {
 
 .dx-fieldset-header {
   text-align: center;
-  font-size: 20px;
+  font-size: 30px;
+  font-family: 'Bungee Inline', cursive;
+  color: #068ac7;
 }
 .btn-login {
   width: 180px;
