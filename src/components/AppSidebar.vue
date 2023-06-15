@@ -57,10 +57,12 @@ export default {
   position: absolute;
 }
 .t-nav-title {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
   /* font-family: Notosans; */
+  font-family: 'Bungee Inline', cursive;
+
   color: #e6e8d3;
-  margin-left: 30px;
+  margin-left: 35px;
 }
 </style>
