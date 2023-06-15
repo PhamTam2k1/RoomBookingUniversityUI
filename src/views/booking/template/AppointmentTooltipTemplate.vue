@@ -138,6 +138,7 @@ export default {
 .booking-tooltip {
   font-size: 14px;
   width: 400px;
+  font-family: 'Roboto', sans-serif;
 }
 .header-popover {
   .text-title {
@@ -149,6 +150,7 @@ export default {
 
 .info {
   padding: 10px;
+  font-family: 'Roboto', sans-serif;
   .t-pending {
     height: 50px;
     background: #fff0f2;
