@@ -556,7 +556,7 @@ export default {
       const dataTime = this.dataTime
       return (
         dataTime?.unshift({
-          TimeSlotName: 'Tất cả',
+          NameTime: 'Tất cả',
           TimeSlotID: null,
         }) && dataTime
       )
